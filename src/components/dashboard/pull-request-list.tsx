@@ -68,75 +68,75 @@ const statusConfig = {
 
 export function PullRequestList() {
   return (
-    <div className="stripe-card p-6 lg:p-8">
+    <div className="stripe-card p-5 sm:p-6 lg:p-8">
       {/* Header */}
-      <div className="flex items-center justify-between pb-6 mb-6 border-b border-white/10">
-        <div className="flex items-center gap-3">
-          <div className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-xl text-indigo-300">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 mb-5 border-b border-white/10">
+        <div className="flex items-center gap-3.5 min-w-0">
+          <div className="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-lg text-indigo-300 shrink-0">
             🔀
           </div>
-          <div>
-            <h2 className="text-lg font-bold text-white tracking-tight">
+          <div className="min-w-0">
+            <h2 className="text-base sm:text-lg font-bold text-white tracking-tight truncate">
               Active Pull Requests
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-400 truncate">
               Showing 4 open PRs across active repositories
             </p>
           </div>
         </div>
 
-        <button className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-semibold text-slate-200 transition-all">
+        <button className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-semibold text-slate-200 transition-all shrink-0 whitespace-nowrap inline-flex items-center justify-center">
           View All PRs →
         </button>
       </div>
 
       {/* PR Table Rows */}
-      <div className="space-y-4">
+      <div className="space-y-3.5">
         {mockPRs.map((pr) => {
           const status = statusConfig[pr.status];
           return (
             <div
               key={pr.id}
-              className="p-5 rounded-2xl bg-[#0b0e17]/60 border border-white/5 hover:border-indigo-500/30 hover:bg-[#0f1322] transition-all duration-200 cursor-pointer group"
+              className="p-4 sm:p-5 rounded-2xl bg-[#0b0e17]/60 border border-white/5 hover:border-indigo-500/30 hover:bg-[#0f1322] transition-all duration-200 cursor-pointer group"
             >
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 {/* Left PR Meta */}
-                <div className="flex items-start gap-4 flex-1 min-w-0">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 p-[1px] flex-shrink-0 mt-0.5">
+                <div className="flex items-start gap-3.5 flex-1 min-w-0">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 p-[1px] shrink-0 mt-0.5">
                     <div className="w-full h-full bg-[#0f1322] rounded-[11px] flex items-center justify-center text-white text-xs font-bold">
                       {pr.avatar}
                     </div>
                   </div>
 
-                  <div className="space-y-1.5 flex-1 min-w-0">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-mono text-xs font-semibold text-indigo-400">
+                  <div className="space-y-1 flex-1 min-w-0">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="font-mono text-xs font-semibold text-indigo-400 shrink-0">
                         #{pr.number}
                       </span>
-                      <h3 className="text-sm font-semibold text-white group-hover:text-indigo-200 transition-colors truncate">
+                      <h3 className="text-xs sm:text-sm font-semibold text-white group-hover:text-indigo-200 transition-colors truncate">
                         {pr.title}
                       </h3>
                     </div>
 
-                    <div className="flex items-center gap-4 text-xs text-slate-400 flex-wrap">
-                      <span className="font-mono text-slate-300 bg-white/5 px-2 py-0.5 rounded border border-white/5">
+                    <div className="flex items-center gap-3 text-xs text-slate-400 flex-wrap">
+                      <span className="font-mono text-slate-300 bg-white/5 px-2 py-0.5 rounded border border-white/5 shrink-0">
                         {pr.repo}
                       </span>
-                      <span>opened by <strong className="text-slate-200">@{pr.author}</strong></span>
-                      <span>{pr.createdAt}</span>
-                      <span>💬 {pr.comments} comments</span>
+                      <span className="truncate">opened by <strong className="text-slate-200">@{pr.author}</strong></span>
+                      <span className="shrink-0">{pr.createdAt}</span>
+                      <span className="shrink-0">💬 {pr.comments}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Right Labels, Diff & Status Badge */}
-                <div className="flex items-center gap-4 flex-wrap md:flex-nowrap justify-between md:justify-end">
+                <div className="flex items-center gap-3 flex-wrap lg:flex-nowrap justify-between lg:justify-end shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-white/5">
                   {/* Labels */}
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 flex-wrap">
                     {pr.labels.map((label) => (
                       <span
                         key={label.name}
-                        className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-medium border"
+                        className="px-2 py-0.5 rounded-md text-[11px] font-mono font-medium border shrink-0 whitespace-nowrap"
                         style={{
                           backgroundColor: label.color + "15",
                           color: label.color,
@@ -149,13 +149,13 @@ export function PullRequestList() {
                   </div>
 
                   {/* Diff Stats */}
-                  <div className="flex items-center gap-2 font-mono text-xs font-medium px-3 py-1 rounded-lg bg-white/5">
+                  <div className="flex items-center gap-2 font-mono text-xs font-semibold px-2.5 py-1 rounded-lg bg-white/5 shrink-0 whitespace-nowrap">
                     <span className="text-emerald-400">+{pr.additions}</span>
                     <span className="text-rose-400">-{pr.deletions}</span>
                   </div>
 
                   {/* Status Badge */}
-                  <span className={`stripe-badge ${status.badge} flex-shrink-0`}>
+                  <span className={`stripe-badge ${status.badge} shrink-0 whitespace-nowrap`}>
                     {status.label}
                   </span>
                 </div>

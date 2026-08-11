@@ -37,15 +37,15 @@ const stats = [
 
 export function StatsOverview() {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
       {stats.map((stat) => (
         <div key={stat.label} className="stripe-stat-card group">
-          <div className="flex items-start justify-between mb-4">
-            <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-xl group-hover:bg-indigo-500/10 group-hover:border-indigo-500/30 transition-all duration-300">
+          <div className="flex items-center justify-between gap-2 mb-4">
+            <div className="p-2.5 rounded-xl bg-white/5 border border-white/10 text-lg group-hover:bg-indigo-500/10 group-hover:border-indigo-500/30 transition-all duration-300 shrink-0">
               {stat.icon}
             </div>
             <span
-              className={`stripe-badge ${
+              className={`stripe-badge shrink-0 whitespace-nowrap ${
                 stat.changeType === "positive"
                   ? "stripe-badge-success"
                   : "stripe-badge-primary"
@@ -55,16 +55,16 @@ export function StatsOverview() {
             </span>
           </div>
 
-          <div className="space-y-1">
-            <h3 className="text-3xl font-black text-white tracking-tight font-mono">
+          <div className="space-y-1 min-w-0">
+            <h3 className="text-2xl sm:text-3xl font-black text-white tracking-tight font-mono truncate">
               {stat.value}
             </h3>
-            <p className="text-xs font-semibold text-slate-300 tracking-wide uppercase">
+            <p className="text-xs font-semibold text-slate-300 tracking-wide uppercase truncate">
               {stat.label}
             </p>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-white/5 text-[11px] text-slate-400">
+          <div className="mt-4 pt-3 border-t border-white/5 text-[11px] text-slate-400 truncate">
             {stat.subtext}
           </div>
         </div>
