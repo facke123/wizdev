@@ -26,14 +26,14 @@ export default function DashboardPage() {
       <div className="flex-1 flex flex-col min-w-0 w-full">
         <Header />
 
-        {/* Full-Screen Scrollable Content */}
+        {/* Full-Screen Scrollable Content with Generous Inter-Module Spacing */}
         <main className="flex-1 overflow-y-auto w-full">
-          <div className="w-full p-4 sm:p-6 lg:p-8 space-y-6">
+          <div className="w-full p-6 sm:p-8 lg:p-10 xl:p-12 space-y-8 sm:space-y-10 lg:space-y-12">
             {/* Top Metric Cards */}
             <StatsOverview />
 
             {/* AI Executive Briefing & Quick Copilot Actions */}
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 w-full">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 lg:gap-10 w-full">
               <div className="xl:col-span-2 w-full">
                 <AIBriefing />
               </div>
@@ -43,7 +43,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Engineering Velocity Chart & CI/CD Pipelines */}
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 w-full">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 lg:gap-10 w-full">
               <div className="xl:col-span-2 w-full">
                 <ActivityChart />
               </div>
