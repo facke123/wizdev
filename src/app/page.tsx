@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
+
 import { StatsOverview } from "@/components/dashboard/stats-overview";
 import { AIBriefing } from "@/components/dashboard/ai-briefing";
 import { PullRequestList } from "@/components/dashboard/pull-request-list";
@@ -14,45 +15,50 @@ export default function DashboardPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[#080a11]">
+    <div className="flex min-h-[100dvh] w-full bg-[var(--surface-root)] overflow-x-hidden">
       {/* Sidebar Navigation */}
       <Sidebar
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
 
-      {/* Main Content View */}
-      <main className="flex-1 overflow-y-auto min-w-0">
+      {/* Main Content Area — Full Screen Width */}
+      <div className="flex-1 flex flex-col min-w-0 w-full">
         <Header />
 
-        <div className="p-8 lg:p-10 space-y-8 max-w-[1600px] mx-auto">
-          {/* Top Metric Cards */}
-          <StatsOverview />
+        {/* Full-Screen Scrollable Content */}
+        <main className="flex-1 overflow-y-auto w-full">
+          <div className="w-full p-4 sm:p-6 lg:p-8 space-y-6">
+            {/* Top Metric Cards */}
+            <StatsOverview />
 
-          {/* AI Executive Briefing & Quick Copilot Actions */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <AIBriefing />
+            {/* AI Executive Briefing & Quick Copilot Actions */}
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 w-full">
+              <div className="xl:col-span-2 w-full">
+                <AIBriefing />
+              </div>
+              <div className="w-full">
+                <QuickActions />
+              </div>
             </div>
-            <div>
-              <QuickActions />
+
+            {/* Engineering Velocity Chart & CI/CD Pipelines */}
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 w-full">
+              <div className="xl:col-span-2 w-full">
+                <ActivityChart />
+              </div>
+              <div className="w-full">
+                <CIStatusPanel />
+              </div>
+            </div>
+
+            {/* Active Pull Requests Section */}
+            <div className="w-full">
+              <PullRequestList />
             </div>
           </div>
-
-          {/* Engineering Velocity Chart & CI/CD Pipelines */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <ActivityChart />
-            </div>
-            <div>
-              <CIStatusPanel />
-            </div>
-          </div>
-
-          {/* Active Pull Requests Section */}
-          <PullRequestList />
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   );
 }

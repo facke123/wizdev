@@ -1,16 +1,21 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const geistSans = Geist({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-geist-sans",
+});
+
+const geistMono = Geist_Mono({
+  subsets: ["latin"],
+  variable: "--font-geist-mono",
 });
 
 export const metadata: Metadata = {
   title: "WizDev — AI-Powered Developer Dashboard",
   description:
-    "Your AI copilot dashboard for development workflows. Get AI-generated daily briefs, smart PR triage, team velocity insights, and more. Self-hosted & open source.",
+    "Your AI copilot dashboard for development workflows. AI-generated daily briefs, smart PR triage, team velocity insights, and more. Self-hosted and open source.",
   keywords: [
     "developer dashboard",
     "AI",
@@ -22,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "WizDev — AI-Powered Developer Dashboard",
     description:
-      "AI-generated daily briefs · Smart PR triage · Team velocity insights · Self-hosted",
+      "AI-generated daily briefs. Smart PR triage. Team velocity insights. Self-hosted.",
     type: "website",
   },
 };
@@ -34,8 +39,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={`${inter.variable} antialiased`} suppressHydrationWarning>
-        <div className="stripe-bg-mesh" />
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
+      >
+        <div className="bg-mesh" />
         {children}
       </body>
     </html>

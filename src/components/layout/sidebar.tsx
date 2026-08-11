@@ -1,106 +1,175 @@
 "use client";
 
+import {
+  LayoutDashboard,
+  GitPullRequest,
+  Bug,
+  Zap,
+  BarChart3,
+  Bot,
+  Settings,
+  PanelLeftClose,
+  PanelLeft,
+} from "lucide-react";
+
 interface SidebarProps {
   collapsed: boolean;
   onToggle: () => void;
 }
 
 const navItems = [
-  { icon: "📊", label: "Dashboard", href: "/", active: true },
-  { icon: "🔀", label: "Pull Requests", href: "/prs", active: false, badge: "12" },
-  { icon: "🐛", label: "Issues", href: "/issues", active: false, badge: "28" },
-  { icon: "⚡", label: "CI/CD Pipeline", href: "/ci", active: false },
-  { icon: "📈", label: "Analytics", href: "/analytics", active: false },
-  { icon: "🤖", label: "AI Copilot", href: "/chat", active: false },
-  { icon: "⚙️", label: "Settings", href: "/settings", active: false },
+  {
+    icon: LayoutDashboard,
+    label: "Dashboard",
+    href: "/",
+    active: true,
+  },
+  {
+    icon: GitPullRequest,
+    label: "Pull Requests",
+    href: "/prs",
+    active: false,
+    badge: "12",
+  },
+  {
+    icon: Bug,
+    label: "Issues",
+    href: "/issues",
+    active: false,
+    badge: "28",
+  },
+  {
+    icon: Zap,
+    label: "CI/CD",
+    href: "/ci",
+    active: false,
+  },
+  {
+    icon: BarChart3,
+    label: "Analytics",
+    href: "/analytics",
+    active: false,
+  },
+  {
+    icon: Bot,
+    label: "AI Copilot",
+    href: "/chat",
+    active: false,
+  },
+  {
+    icon: Settings,
+    label: "Settings",
+    href: "/settings",
+    active: false,
+  },
 ];
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside
       className={`
-        h-screen sticky top-0
-        bg-[#0b0e17]/90 backdrop-blur-xl border-r border-white/10
+        h-[100dvh] sticky top-0
+        bg-[var(--surface-base)]/95 backdrop-blur-xl
+        border-r border-white/[0.06]
         flex flex-col z-40
-        transition-all duration-300 cubic-bezier(0.16, 1, 0.3, 1)
-        ${collapsed ? "w-[72px]" : "w-[260px]"}
+        transition-all duration-300 ease-out
+        ${collapsed ? "w-[68px]" : "w-[248px]"}
       `}
     >
       {/* Logo Area */}
-      <div className="flex items-center gap-3 px-6 h-20 border-b border-white/5">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-400 p-[1px] shadow-lg shadow-indigo-500/20 flex-shrink-0">
-          <div className="w-full h-full bg-[#0b0e17] rounded-[11px] flex items-center justify-center text-white font-black text-base">
+      <div
+        className={`flex items-center h-16 border-b border-white/[0.05] ${
+          collapsed ? "justify-center px-0" : "gap-3 px-5"
+        }`}
+      >
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--color-accent)] via-[var(--color-accent-hover)] to-[var(--color-info)] flex items-center justify-center shadow-lg shadow-[var(--color-accent)]/20 flex-shrink-0">
+          <span className="text-white font-black text-sm tracking-tighter">
             W
-          </div>
+          </span>
         </div>
         {!collapsed && (
-          <div className="flex flex-col">
-            <span className="font-bold text-lg stripe-gradient-text tracking-tight">
+          <div className="flex flex-col min-w-0">
+            <span className="font-bold text-sm text-[var(--text-primary)] tracking-tight leading-tight">
               WizDev
             </span>
-            <span className="text-[10px] text-indigo-400 font-mono font-medium tracking-wider uppercase">
-              AI Copilot v1.0
+            <span className="text-[10px] text-[var(--color-accent-hover)] font-mono font-medium tracking-wide leading-tight">
+              v1.0
             </span>
           </div>
         )}
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-1 py-6 px-3 space-y-1.5 overflow-y-auto">
-        {navItems.map((item) => (
-          <a
-            key={item.label}
-            href={item.href}
-            className={`
-              flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium
-              transition-all duration-200 group relative
-              ${
-                item.active
-                  ? "bg-gradient-to-r from-indigo-500/15 to-purple-500/10 text-white border border-indigo-500/30 shadow-md shadow-indigo-500/10"
-                  : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
-              }
-            `}
-          >
-            <div className="flex items-center gap-3.5 min-w-0">
-              <span className="text-lg flex-shrink-0 transition-transform group-hover:scale-110">
-                {item.icon}
-              </span>
+      <nav className="flex-1 py-4 px-2.5 space-y-0.5 overflow-y-auto">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          return (
+            <a
+              key={item.label}
+              href={item.href}
+              className={`
+                flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
+                transition-all duration-150 group relative
+                ${
+                  item.active
+                    ? "bg-[var(--color-accent-muted)] text-[var(--text-primary)] border border-[var(--color-accent-border)]"
+                    : "text-[var(--text-tertiary)] hover:bg-white/[0.04] hover:text-[var(--text-secondary)] border border-transparent"
+                }
+                ${collapsed ? "justify-center" : ""}
+              `}
+            >
+              <Icon
+                className={`w-[18px] h-[18px] flex-shrink-0 transition-transform duration-150 group-hover:scale-110 ${
+                  item.active
+                    ? "text-[var(--color-accent-hover)]"
+                    : "text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)]"
+                }`}
+                strokeWidth={item.active ? 2 : 1.75}
+              />
+
               {!collapsed && (
-                <span className="truncate tracking-wide">{item.label}</span>
+                <>
+                  <span className="truncate">{item.label}</span>
+                  {item.badge && (
+                    <span
+                      className={`
+                        ml-auto px-1.5 py-0.5 rounded-full text-[11px] font-semibold font-mono leading-none
+                        ${
+                          item.active
+                            ? "bg-[rgba(99,91,255,0.25)] text-[#a5b4fc]"
+                            : "bg-white/[0.06] text-[var(--text-tertiary)] group-hover:bg-white/[0.10] group-hover:text-[var(--text-secondary)]"
+                        }
+                      `}
+                    >
+                      {item.badge}
+                    </span>
+                  )}
+                </>
               )}
-            </div>
 
-            {!collapsed && item.badge && (
-              <span
-                className={`
-                  px-2 py-0.5 rounded-full text-[11px] font-semibold font-mono
-                  ${
-                    item.active
-                      ? "bg-indigo-500/30 text-indigo-200"
-                      : "bg-white/10 text-slate-400 group-hover:bg-white/20 group-hover:text-white"
-                  }
-                `}
-              >
-                {item.badge}
-              </span>
-            )}
-
-            {/* Active Indicator Bar */}
-            {item.active && (
-              <div className="absolute left-0 top-2 bottom-2 w-1 bg-gradient-to-b from-indigo-400 to-cyan-400 rounded-r-full" />
-            )}
-          </a>
-        ))}
+              {/* Active indicator */}
+              {item.active && collapsed && (
+                <div className="absolute left-0 top-1.5 bottom-1.5 w-0.5 bg-[var(--color-accent)] rounded-r-full" />
+              )}
+            </a>
+          );
+        })}
       </nav>
 
       {/* Collapse Action Footer */}
-      <div className="p-4 border-t border-white/5">
+      <div className="p-3 border-t border-white/[0.05]">
         <button
           onClick={onToggle}
-          className="w-full flex items-center justify-center gap-2.5 px-3 py-2.5 rounded-xl text-slate-400 hover:bg-white/5 hover:text-white border border-transparent hover:border-white/10 transition-all duration-200 text-xs font-medium"
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-[var(--text-tertiary)] hover:bg-white/[0.04] hover:text-[var(--text-secondary)] border border-transparent hover:border-white/[0.08] transition-all duration-150 text-xs font-medium"
         >
-          <span className="text-sm">{collapsed ? "→" : "←"}</span>
-          {!collapsed && <span>Collapse Sidebar</span>}
+          {collapsed ? (
+            <PanelLeft className="w-4 h-4" />
+          ) : (
+            <>
+              <PanelLeftClose className="w-4 h-4" />
+              <span>Collapse</span>
+            </>
+          )}
         </button>
       </div>
     </aside>

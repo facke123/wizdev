@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "framer-motion";
+
 const mockData = [
   { day: "Mon", commits: 12, prs: 3, reviews: 5 },
   { day: "Tue", commits: 19, prs: 5, reviews: 8 },
@@ -12,67 +14,124 @@ const mockData = [
 
 const maxCommits = Math.max(...mockData.map((d) => d.commits));
 
+function getBarHeight(value: number): string {
+  return `${Math.max((value / maxCommits) * 100, 2)}%`;
+}
+
 export function ActivityChart() {
+  const totalCommits = mockData.reduce((s, d) => s + d.commits, 0);
+  const totalPRs = mockData.reduce((s, d) => s + d.prs, 0);
+  const totalReviews = mockData.reduce((s, d) => s + d.reviews, 0);
+
   return (
-    <div className="stripe-card p-5 sm:p-6 lg:p-8 flex flex-col justify-between h-full">
+    <div className="card p-5 sm:p-6 lg:p-7 flex flex-col justify-between h-full">
       <div>
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 mb-5 border-b border-white/10">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 mb-5 border-b border-white/[0.06]">
           <div className="flex items-center gap-3.5 min-w-0">
-            <div className="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-lg text-purple-300 shrink-0">
-              📈
+            <div className="p-2 rounded-lg bg-[rgba(139,92,246,0.10)] border border-[rgba(139,92,246,0.20)]">
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.75"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="text-[#a78bfa]"
+              >
+                <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+              </svg>
             </div>
             <div className="min-w-0">
-              <h2 className="text-base sm:text-lg font-bold text-white tracking-tight truncate">
-                Team Engineering Velocity
+              <h2 className="text-sm sm:text-base font-semibold text-[var(--text-primary)] tracking-tight truncate">
+                Engineering Velocity
               </h2>
-              <p className="text-xs text-slate-400 truncate">
-                Weekly breakdown of commits, PRs, and peer code reviews
+              <p className="text-[11px] text-[var(--text-tertiary)] truncate">
+                Weekly commits, PRs, and code reviews
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3.5 text-xs font-medium flex-wrap shrink-0">
+          {/* Legend */}
+          <div className="flex items-center gap-4 text-[11px] font-medium flex-wrap shrink-0">
             <div className="flex items-center gap-1.5 whitespace-nowrap">
-              <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 shadow-sm shadow-indigo-500/50 shrink-0" />
-              <span className="text-slate-300">Commits</span>
+              <div className="w-2.5 h-2.5 rounded-full bg-[var(--color-accent)]" />
+              <span className="text-[var(--text-secondary)]">Commits</span>
             </div>
             <div className="flex items-center gap-1.5 whitespace-nowrap">
-              <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400/50 shrink-0" />
-              <span className="text-slate-300">PRs</span>
+              <div className="w-2.5 h-2.5 rounded-full bg-[var(--color-info)]" />
+              <span className="text-[var(--text-secondary)]">PRs</span>
             </div>
             <div className="flex items-center gap-1.5 whitespace-nowrap">
-              <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50 shrink-0" />
-              <span className="text-slate-300">Reviews</span>
+              <div className="w-2.5 h-2.5 rounded-full bg-[var(--color-success)]" />
+              <span className="text-[var(--text-secondary)]">Reviews</span>
             </div>
           </div>
         </div>
 
-        {/* Bar Chart Visualization */}
-        <div className="flex items-end gap-2 sm:gap-4 h-48 sm:h-52 px-1 pt-4">
-          {mockData.map((day) => (
-            <div key={day.day} className="flex-1 flex flex-col items-center gap-2.5">
-              <div className="w-full flex items-end justify-center gap-1 sm:gap-1.5 h-40 sm:h-44">
-                {/* Commits bar */}
-                <div
-                  className="w-1/3 rounded-t-lg bg-gradient-to-t from-indigo-600 to-indigo-400 transition-all duration-300 hover:brightness-125 cursor-pointer"
-                  style={{ height: `${(day.commits / maxCommits) * 100}%` }}
-                  title={`${day.commits} commits`}
+        {/* Bar Chart */}
+        <div className="flex items-end gap-2 sm:gap-4 h-44 sm:h-48 px-1 pt-2">
+          {mockData.map((day, dayIdx) => (
+            <div
+              key={day.day}
+              className="flex-1 flex flex-col items-center gap-2.5"
+            >
+              <div className="w-full flex items-end justify-center gap-1 sm:gap-1.5 h-36 sm:h-40">
+                {/* Commits */}
+                <motion.div
+                  className="w-[28%] rounded-t-md origin-bottom cursor-pointer"
+                  style={{
+                    height: getBarHeight(day.commits),
+                    background:
+                      "linear-gradient(to top, var(--color-accent), var(--color-accent-hover))",
+                  }}
+                  initial={{ scaleY: 0 }}
+                  animate={{ scaleY: 1 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: dayIdx * 3 * 0.05,
+                    ease: "easeOut",
+                  }}
+                  whileHover={{ filter: "brightness(1.3)" }}
                 />
-                {/* PRs bar */}
-                <div
-                  className="w-1/3 rounded-t-lg bg-gradient-to-t from-cyan-600 to-cyan-400 transition-all duration-300 hover:brightness-125 cursor-pointer"
-                  style={{ height: `${(day.prs / maxCommits) * 100}%` }}
-                  title={`${day.prs} PRs`}
+                {/* PRs */}
+                <motion.div
+                  className="w-[28%] rounded-t-md origin-bottom cursor-pointer"
+                  style={{
+                    height: getBarHeight(day.prs),
+                    background:
+                      "linear-gradient(to top, #00b8e0, var(--color-info))",
+                  }}
+                  initial={{ scaleY: 0 }}
+                  animate={{ scaleY: 1 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: (dayIdx * 3 + 1) * 0.05,
+                    ease: "easeOut",
+                  }}
+                  whileHover={{ filter: "brightness(1.3)" }}
                 />
-                {/* Reviews bar */}
-                <div
-                  className="w-1/3 rounded-t-lg bg-gradient-to-t from-emerald-600 to-emerald-400 transition-all duration-300 hover:brightness-125 cursor-pointer"
-                  style={{ height: `${(day.reviews / maxCommits) * 100}%` }}
-                  title={`${day.reviews} reviews`}
+                {/* Reviews */}
+                <motion.div
+                  className="w-[28%] rounded-t-md origin-bottom cursor-pointer"
+                  style={{
+                    height: getBarHeight(day.reviews),
+                    background:
+                      "linear-gradient(to top, #00c26a, var(--color-success))",
+                  }}
+                  initial={{ scaleY: 0 }}
+                  animate={{ scaleY: 1 }}
+                  transition={{
+                    duration: 0.5,
+                    delay: (dayIdx * 3 + 2) * 0.05,
+                    ease: "easeOut",
+                  }}
+                  whileHover={{ filter: "brightness(1.3)" }}
                 />
               </div>
-              <span className="text-xs font-mono font-medium text-slate-400">
+              <span className="text-[11px] font-mono font-medium text-[var(--text-tertiary)]">
                 {day.day}
               </span>
             </div>
@@ -80,29 +139,39 @@ export function ActivityChart() {
         </div>
       </div>
 
-      {/* Summary Footer Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-5 border-t border-white/10 text-center">
-        <div className="p-2.5 sm:p-3 rounded-xl bg-white/[0.02]">
-          <p className="text-xl sm:text-2xl font-black text-white font-mono">
-            {mockData.reduce((s, d) => s + d.commits, 0)}
+      {/* Summary Footer */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-6 pt-5 border-t border-white/[0.06]">
+        <div className="p-2.5 sm:p-3 rounded-xl bg-white/[0.02] text-center">
+          <p className="text-lg sm:text-xl font-bold text-[var(--text-primary)] font-mono">
+            {totalCommits}
           </p>
-          <p className="text-[10px] sm:text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5 truncate">Total Commits</p>
-        </div>
-        <div className="p-2.5 sm:p-3 rounded-xl bg-white/[0.02]">
-          <p className="text-xl sm:text-2xl font-black text-white font-mono">
-            {mockData.reduce((s, d) => s + d.prs, 0)}
+          <p className="text-[10px] sm:text-[11px] text-[var(--text-tertiary)] font-medium uppercase tracking-wider mt-0.5 truncate">
+            Commits
           </p>
-          <p className="text-[10px] sm:text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5 truncate">PRs Opened</p>
         </div>
-        <div className="p-2.5 sm:p-3 rounded-xl bg-white/[0.02]">
-          <p className="text-xl sm:text-2xl font-black text-white font-mono">
-            {mockData.reduce((s, d) => s + d.reviews, 0)}
+        <div className="p-2.5 sm:p-3 rounded-xl bg-white/[0.02] text-center">
+          <p className="text-lg sm:text-xl font-bold text-[var(--text-primary)] font-mono">
+            {totalPRs}
           </p>
-          <p className="text-[10px] sm:text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5 truncate">Reviews Completed</p>
+          <p className="text-[10px] sm:text-[11px] text-[var(--text-tertiary)] font-medium uppercase tracking-wider mt-0.5 truncate">
+            PRs Opened
+          </p>
         </div>
-        <div className="p-2.5 sm:p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
-          <p className="text-xl sm:text-2xl font-black stripe-gradient-accent font-mono">A+</p>
-          <p className="text-[10px] sm:text-[11px] text-indigo-300 font-medium uppercase tracking-wider mt-0.5 truncate">Velocity Score</p>
+        <div className="p-2.5 sm:p-3 rounded-xl bg-white/[0.02] text-center">
+          <p className="text-lg sm:text-xl font-bold text-[var(--text-primary)] font-mono">
+            {totalReviews}
+          </p>
+          <p className="text-[10px] sm:text-[11px] text-[var(--text-tertiary)] font-medium uppercase tracking-wider mt-0.5 truncate">
+            Reviewed
+          </p>
+        </div>
+        <div className="p-2.5 sm:p-3 rounded-xl bg-[var(--color-accent-muted)] border border-[var(--color-accent-border)] text-center">
+          <p className="text-lg sm:text-xl font-bold text-[var(--color-accent-hover)] font-mono">
+            A+
+          </p>
+          <p className="text-[10px] sm:text-[11px] text-[#a5b4fc] font-medium uppercase tracking-wider mt-0.5 truncate">
+            Velocity
+          </p>
         </div>
       </div>
     </div>
