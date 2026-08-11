@@ -1,27 +1,42 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 export function Header() {
+  const [mounted, setMounted] = useState(false);
+  const [greeting, setGreeting] = useState("Welcome back 👋");
+  const [formattedDate, setFormattedDate] = useState("");
+
+  useEffect(() => {
+    setMounted(true);
+    const hour = new Date().getHours();
+    const g =
+      hour < 12
+        ? "Good morning 👋"
+        : hour < 18
+        ? "Good afternoon 👋"
+        : "Good evening 👋";
+    setGreeting(g);
+    setFormattedDate(
+      new Date().toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
+    );
+  }, []);
+
   return (
     <header className="sticky top-0 z-30 h-16 border-b border-[var(--border-primary)] bg-[var(--bg-primary)]/80 backdrop-blur-xl">
       <div className="flex items-center justify-between h-full px-6">
         {/* Left: Greeting */}
         <div>
           <h1 className="text-lg font-semibold text-[var(--text-primary)]">
-            Good{" "}
-            {new Date().getHours() < 12
-              ? "morning"
-              : new Date().getHours() < 18
-              ? "afternoon"
-              : "evening"}
-            {" "}👋
+            {greeting}
           </h1>
-          <p className="text-xs text-[var(--text-muted)]">
-            {new Date().toLocaleDateString("en-US", {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
+          <p className="text-xs text-[var(--text-muted)] min-h-[16px]">
+            {formattedDate}
           </p>
         </div>
 
@@ -45,7 +60,9 @@ export function Header() {
           {/* AI Model Selector */}
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--bg-card)] border border-[var(--border-primary)] text-sm cursor-pointer hover:border-[var(--wiz-primary)]/30 transition-colors">
             <span>🟢</span>
-            <span className="text-[var(--text-secondary)] text-xs">GPT-4o-mini</span>
+            <span className="text-[var(--text-secondary)] text-xs">
+              GPT-4o-mini
+            </span>
             <span className="text-[var(--text-muted)] text-xs">▾</span>
           </div>
 
