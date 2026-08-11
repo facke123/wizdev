@@ -14,21 +14,23 @@ export default function DashboardPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden bg-[#080a11]">
+      {/* Sidebar Navigation */}
       <Sidebar
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
 
-      <main className="flex-1 overflow-y-auto">
+      {/* Main Content View */}
+      <main className="flex-1 overflow-y-auto min-w-0">
         <Header />
 
-        <div className="p-6 space-y-6 max-w-[1600px] mx-auto">
-          {/* Stats Overview Row */}
+        <div className="p-8 lg:p-10 space-y-8 max-w-[1600px] mx-auto">
+          {/* Top Metric Cards */}
           <StatsOverview />
 
-          {/* AI Briefing + Quick Actions */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* AI Executive Briefing & Quick Copilot Actions */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
               <AIBriefing />
             </div>
@@ -37,8 +39,8 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Activity Chart + CI Status */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Engineering Velocity Chart & CI/CD Pipelines */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
               <ActivityChart />
             </div>
@@ -47,7 +49,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Pull Requests */}
+          {/* Active Pull Requests Section */}
           <PullRequestList />
         </div>
       </main>

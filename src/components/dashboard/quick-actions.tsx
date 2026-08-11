@@ -3,67 +3,64 @@
 const actions = [
   {
     icon: "📝",
-    label: "Generate Standup",
-    description: "AI writes your daily standup report",
-    gradient: "from-violet-500/20 to-purple-500/20",
-    border: "border-violet-500/20",
+    label: "Generate Standup Report",
+    description: "AI compiles your daily standup notes",
   },
   {
     icon: "📊",
-    label: "Weekly Report",
-    description: "Summarize this week's progress",
-    gradient: "from-cyan-500/20 to-blue-500/20",
-    border: "border-cyan-500/20",
+    label: "Weekly Velocity Summary",
+    description: "Generate executive summary of progress",
   },
   {
     icon: "🔍",
-    label: "PR Risk Analysis",
-    description: "Identify high-risk pull requests",
-    gradient: "from-amber-500/20 to-orange-500/20",
-    border: "border-amber-500/20",
+    label: "PR Risk Assessment",
+    description: "AI analyzes high-risk code changes",
   },
   {
     icon: "🧹",
-    label: "Stale Cleanup",
-    description: "Find stale branches and issues",
-    gradient: "from-emerald-500/20 to-green-500/20",
-    border: "border-emerald-500/20",
+    label: "Stale Branch Cleanup",
+    description: "Identify inactive branches & issues",
   },
 ];
 
 export function QuickActions() {
   return (
-    <div className="glass-card p-6 h-full">
-      <div className="flex items-center gap-2 mb-4">
-        <span className="text-xl">⚡</span>
-        <h2 className="font-semibold text-[var(--text-primary)]">
-          Quick Actions
-        </h2>
-      </div>
+    <div className="stripe-card p-6 lg:p-8 flex flex-col justify-between h-full">
+      <div>
+        <div className="flex items-center gap-3 pb-4 mb-5 border-b border-white/10">
+          <div className="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-lg text-indigo-300">
+            ⚡
+          </div>
+          <div>
+            <h2 className="text-base font-bold text-white tracking-tight">
+              Copilot Actions
+            </h2>
+            <p className="text-xs text-slate-400">
+              One-click AI developer automation
+            </p>
+          </div>
+        </div>
 
-      <div className="space-y-2.5">
-        {actions.map((action) => (
-          <button
-            key={action.label}
-            className={`
-              w-full flex items-center gap-3 p-3.5 rounded-xl
-              bg-gradient-to-r ${action.gradient}
-              border ${action.border}
-              hover:scale-[1.02] active:scale-[0.98]
-              transition-all duration-200 text-left group
-            `}
-          >
-            <span className="text-xl">{action.icon}</span>
-            <div>
-              <p className="text-sm font-medium text-[var(--text-primary)] group-hover:text-white transition-colors">
-                {action.label}
-              </p>
-              <p className="text-[11px] text-[var(--text-muted)]">
-                {action.description}
-              </p>
-            </div>
-          </button>
-        ))}
+        <div className="space-y-3">
+          {actions.map((action) => (
+            <button
+              key={action.label}
+              className="w-full flex items-center gap-3.5 p-4 rounded-xl bg-[#0b0e17]/60 border border-white/5 hover:border-indigo-500/30 hover:bg-[#0f1322] transition-all duration-200 text-left group"
+            >
+              <span className="text-xl p-2 rounded-lg bg-white/5 group-hover:bg-indigo-500/10 group-hover:scale-110 transition-all flex-shrink-0">
+                {action.icon}
+              </span>
+              <div>
+                <p className="text-xs font-bold text-white group-hover:text-indigo-200 transition-colors">
+                  {action.label}
+                </p>
+                <p className="text-[11px] text-slate-400 mt-0.5">
+                  {action.description}
+                </p>
+              </div>
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

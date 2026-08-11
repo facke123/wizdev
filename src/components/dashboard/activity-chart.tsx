@@ -14,84 +14,95 @@ const maxCommits = Math.max(...mockData.map((d) => d.commits));
 
 export function ActivityChart() {
   return (
-    <div className="glass-card p-6">
-      <div className="flex items-center justify-between mb-5">
-        <div className="flex items-center gap-2">
-          <span className="text-xl">📈</span>
-          <h2 className="font-semibold text-[var(--text-primary)]">
-            Weekly Activity
-          </h2>
-        </div>
-        <div className="flex items-center gap-4 text-xs">
-          <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-sm bg-[var(--wiz-primary)]" />
-            <span className="text-[var(--text-muted)]">Commits</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-sm bg-[var(--wiz-accent)]" />
-            <span className="text-[var(--text-muted)]">PRs</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-sm bg-[var(--wiz-success)]" />
-            <span className="text-[var(--text-muted)]">Reviews</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Simple Bar Chart */}
-      <div className="flex items-end gap-3 h-48 px-2">
-        {mockData.map((day) => (
-          <div key={day.day} className="flex-1 flex flex-col items-center gap-2">
-            <div className="w-full flex items-end gap-0.5 h-40">
-              {/* Commits bar */}
-              <div
-                className="flex-1 rounded-t-sm bg-[var(--wiz-primary)] transition-all duration-500 hover:opacity-80"
-                style={{ height: `${(day.commits / maxCommits) * 100}%` }}
-                title={`${day.commits} commits`}
-              />
-              {/* PRs bar */}
-              <div
-                className="flex-1 rounded-t-sm bg-[var(--wiz-accent)] transition-all duration-500 hover:opacity-80"
-                style={{ height: `${(day.prs / maxCommits) * 100}%` }}
-                title={`${day.prs} PRs`}
-              />
-              {/* Reviews bar */}
-              <div
-                className="flex-1 rounded-t-sm bg-[var(--wiz-success)] transition-all duration-500 hover:opacity-80"
-                style={{ height: `${(day.reviews / maxCommits) * 100}%` }}
-                title={`${day.reviews} reviews`}
-              />
+    <div className="stripe-card p-6 lg:p-8 flex flex-col justify-between h-full">
+      <div>
+        {/* Header */}
+        <div className="flex items-center justify-between pb-6 mb-6 border-b border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20 text-xl text-purple-300">
+              📈
             </div>
-            <span className="text-[11px] text-[var(--text-muted)]">
-              {day.day}
-            </span>
+            <div>
+              <h2 className="text-lg font-bold text-white tracking-tight">
+                Team Engineering Velocity
+              </h2>
+              <p className="text-xs text-slate-400">
+                Weekly breakdown of commits, PRs, and peer code reviews
+              </p>
+            </div>
           </div>
-        ))}
+
+          <div className="flex items-center gap-4 text-xs font-medium">
+            <div className="flex items-center gap-2">
+              <div className="w-2.5 h-2.5 rounded-full bg-indigo-500 shadow-sm shadow-indigo-500/50" />
+              <span className="text-slate-300">Commits</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400/50" />
+              <span className="text-slate-300">PRs</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50" />
+              <span className="text-slate-300">Reviews</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Bar Chart Visualization */}
+        <div className="flex items-end gap-4 h-52 px-2 pt-4">
+          {mockData.map((day) => (
+            <div key={day.day} className="flex-1 flex flex-col items-center gap-3">
+              <div className="w-full flex items-end justify-center gap-1.5 h-44">
+                {/* Commits bar */}
+                <div
+                  className="w-1/3 rounded-t-lg bg-gradient-to-t from-indigo-600 to-indigo-400 transition-all duration-300 hover:brightness-125"
+                  style={{ height: `${(day.commits / maxCommits) * 100}%` }}
+                  title={`${day.commits} commits`}
+                />
+                {/* PRs bar */}
+                <div
+                  className="w-1/3 rounded-t-lg bg-gradient-to-t from-cyan-600 to-cyan-400 transition-all duration-300 hover:brightness-125"
+                  style={{ height: `${(day.prs / maxCommits) * 100}%` }}
+                  title={`${day.prs} PRs`}
+                />
+                {/* Reviews bar */}
+                <div
+                  className="w-1/3 rounded-t-lg bg-gradient-to-t from-emerald-600 to-emerald-400 transition-all duration-300 hover:brightness-125"
+                  style={{ height: `${(day.reviews / maxCommits) * 100}%` }}
+                  title={`${day.reviews} reviews`}
+                />
+              </div>
+              <span className="text-xs font-mono font-medium text-slate-400">
+                {day.day}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Summary row */}
-      <div className="flex items-center justify-between mt-5 pt-4 border-t border-[var(--border-secondary)]">
-        <div className="text-center">
-          <p className="text-lg font-bold text-[var(--text-primary)]">
+      {/* Summary Footer */}
+      <div className="grid grid-cols-4 gap-4 mt-6 pt-5 border-t border-white/10 text-center">
+        <div className="p-3 rounded-xl bg-white/[0.02]">
+          <p className="text-2xl font-black text-white font-mono">
             {mockData.reduce((s, d) => s + d.commits, 0)}
           </p>
-          <p className="text-[11px] text-[var(--text-muted)]">Total Commits</p>
+          <p className="text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">Total Commits</p>
         </div>
-        <div className="text-center">
-          <p className="text-lg font-bold text-[var(--text-primary)]">
+        <div className="p-3 rounded-xl bg-white/[0.02]">
+          <p className="text-2xl font-black text-white font-mono">
             {mockData.reduce((s, d) => s + d.prs, 0)}
           </p>
-          <p className="text-[11px] text-[var(--text-muted)]">PRs Opened</p>
+          <p className="text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">PRs Opened</p>
         </div>
-        <div className="text-center">
-          <p className="text-lg font-bold text-[var(--text-primary)]">
+        <div className="p-3 rounded-xl bg-white/[0.02]">
+          <p className="text-2xl font-black text-white font-mono">
             {mockData.reduce((s, d) => s + d.reviews, 0)}
           </p>
-          <p className="text-[11px] text-[var(--text-muted)]">Reviews Done</p>
+          <p className="text-[11px] text-slate-400 font-medium uppercase tracking-wider mt-0.5">Reviews Completed</p>
         </div>
-        <div className="text-center">
-          <p className="text-lg font-bold gradient-text">A+</p>
-          <p className="text-[11px] text-[var(--text-muted)]">Velocity Score</p>
+        <div className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
+          <p className="text-2xl font-black stripe-gradient-accent font-mono">A+</p>
+          <p className="text-[11px] text-indigo-300 font-medium uppercase tracking-wider mt-0.5">Velocity Score</p>
         </div>
       </div>
     </div>

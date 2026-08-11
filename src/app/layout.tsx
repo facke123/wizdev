@@ -35,9 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
       <body className={`${inter.variable} antialiased`} suppressHydrationWarning>
-        {/* Background gradient orbs */}
-        <div className="bg-gradient-orb purple" />
-        <div className="bg-gradient-orb cyan" />
+        <div className="stripe-bg-mesh" />
         {children}
       </body>
     </html>

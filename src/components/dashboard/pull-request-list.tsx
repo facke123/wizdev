@@ -4,7 +4,7 @@ const mockPRs = [
   {
     id: 1,
     number: 142,
-    title: "feat: Add user analytics dashboard",
+    title: "feat: Add user analytics dashboard and retention funnel charts",
     repo: "wizdev-app",
     author: "alice",
     avatar: "A",
@@ -12,14 +12,13 @@ const mockPRs = [
     additions: 342,
     deletions: 28,
     comments: 5,
-    createdAt: "2h ago",
+    createdAt: "2 hours ago",
     labels: [{ name: "feature", color: "#6366f1" }, { name: "frontend", color: "#06b6d4" }],
-    draft: false,
   },
   {
     id: 2,
     number: 156,
-    title: "fix: Memory leak in WebSocket connection handler",
+    title: "fix: Memory leak in WebSocket connection handler pool",
     repo: "wizdev-api",
     author: "bob",
     avatar: "B",
@@ -27,14 +26,13 @@ const mockPRs = [
     additions: 23,
     deletions: 45,
     comments: 3,
-    createdAt: "5h ago",
+    createdAt: "5 hours ago",
     labels: [{ name: "bug", color: "#ef4444" }, { name: "critical", color: "#f59e0b" }],
-    draft: false,
   },
   {
     id: 3,
     number: 158,
-    title: "refactor: Migrate auth module to OAuth 2.1",
+    title: "refactor: Migrate authentication provider layer to OAuth 2.1 specification",
     repo: "wizdev-api",
     author: "charlie",
     avatar: "C",
@@ -42,14 +40,13 @@ const mockPRs = [
     additions: 567,
     deletions: 312,
     comments: 12,
-    createdAt: "1d ago",
+    createdAt: "1 day ago",
     labels: [{ name: "refactor", color: "#8b5cf6" }],
-    draft: false,
   },
   {
     id: 4,
     number: 160,
-    title: "WIP: Implement AI-powered code review suggestions",
+    title: "WIP: Implement AI-powered code review suggestions engine",
     repo: "wizdev-app",
     author: "alice",
     avatar: "A",
@@ -57,97 +54,111 @@ const mockPRs = [
     additions: 128,
     deletions: 0,
     comments: 0,
-    createdAt: "3h ago",
+    createdAt: "3 hours ago",
     labels: [{ name: "ai", color: "#10b981" }],
-    draft: true,
   },
 ];
 
 const statusConfig = {
-  review: { label: "In Review", color: "bg-yellow-500/10 text-yellow-400", dot: "warning" },
-  approved: { label: "Approved", color: "bg-emerald-500/10 text-emerald-400", dot: "success" },
-  changes: { label: "Changes Req.", color: "bg-red-500/10 text-red-400", dot: "danger" },
-  draft: { label: "Draft", color: "bg-gray-500/10 text-gray-400", dot: "info" },
+  review: { label: "Review Required", badge: "stripe-badge-warning" },
+  approved: { label: "Approved", badge: "stripe-badge-success" },
+  changes: { label: "Changes Requested", badge: "stripe-badge-danger" },
+  draft: { label: "Draft", badge: "stripe-badge-primary" },
 };
 
 export function PullRequestList() {
   return (
-    <div className="glass-card p-6">
-      <div className="flex items-center justify-between mb-5">
+    <div className="stripe-card p-6 lg:p-8">
+      {/* Header */}
+      <div className="flex items-center justify-between pb-6 mb-6 border-b border-white/10">
         <div className="flex items-center gap-3">
-          <span className="text-xl">🔀</span>
-          <h2 className="font-semibold text-[var(--text-primary)]">
-            Pull Requests
-          </h2>
-          <span className="px-2 py-0.5 rounded-full bg-[var(--wiz-primary)]/10 text-[var(--wiz-primary-light)] text-xs font-medium">
-            {mockPRs.length} open
-          </span>
+          <div className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-xl text-indigo-300">
+            🔀
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-white tracking-tight">
+              Active Pull Requests
+            </h2>
+            <p className="text-xs text-slate-400">
+              Showing 4 open PRs across active repositories
+            </p>
+          </div>
         </div>
-        <button className="text-xs text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors">
-          View all →
+
+        <button className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-xs font-semibold text-slate-200 transition-all">
+          View All PRs →
         </button>
       </div>
 
-      <div className="space-y-3">
+      {/* PR Table Rows */}
+      <div className="space-y-4">
         {mockPRs.map((pr) => {
           const status = statusConfig[pr.status];
           return (
             <div
               key={pr.id}
-              className="flex items-center gap-4 p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border-secondary)] hover:border-[var(--border-primary)] transition-all duration-200 cursor-pointer group"
+              className="p-5 rounded-2xl bg-[#0b0e17]/60 border border-white/5 hover:border-indigo-500/30 hover:bg-[#0f1322] transition-all duration-200 cursor-pointer group"
             >
-              {/* Author Avatar */}
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[var(--wiz-primary)]/60 to-[var(--wiz-accent)]/60 flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-                {pr.avatar}
-              </div>
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                {/* Left PR Meta */}
+                <div className="flex items-start gap-4 flex-1 min-w-0">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 p-[1px] flex-shrink-0 mt-0.5">
+                    <div className="w-full h-full bg-[#0f1322] rounded-[11px] flex items-center justify-center text-white text-xs font-bold">
+                      {pr.avatar}
+                    </div>
+                  </div>
 
-              {/* PR Info */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="font-medium text-sm text-[var(--text-primary)] truncate group-hover:text-[var(--wiz-primary-light)] transition-colors">
-                    {pr.title}
+                  <div className="space-y-1.5 flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-mono text-xs font-semibold text-indigo-400">
+                        #{pr.number}
+                      </span>
+                      <h3 className="text-sm font-semibold text-white group-hover:text-indigo-200 transition-colors truncate">
+                        {pr.title}
+                      </h3>
+                    </div>
+
+                    <div className="flex items-center gap-4 text-xs text-slate-400 flex-wrap">
+                      <span className="font-mono text-slate-300 bg-white/5 px-2 py-0.5 rounded border border-white/5">
+                        {pr.repo}
+                      </span>
+                      <span>opened by <strong className="text-slate-200">@{pr.author}</strong></span>
+                      <span>{pr.createdAt}</span>
+                      <span>💬 {pr.comments} comments</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Labels, Diff & Status Badge */}
+                <div className="flex items-center gap-4 flex-wrap md:flex-nowrap justify-between md:justify-end">
+                  {/* Labels */}
+                  <div className="flex items-center gap-1.5">
+                    {pr.labels.map((label) => (
+                      <span
+                        key={label.name}
+                        className="px-2.5 py-0.5 rounded-md text-[11px] font-mono font-medium border"
+                        style={{
+                          backgroundColor: label.color + "15",
+                          color: label.color,
+                          borderColor: label.color + "30",
+                        }}
+                      >
+                        {label.name}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Diff Stats */}
+                  <div className="flex items-center gap-2 font-mono text-xs font-medium px-3 py-1 rounded-lg bg-white/5">
+                    <span className="text-emerald-400">+{pr.additions}</span>
+                    <span className="text-rose-400">-{pr.deletions}</span>
+                  </div>
+
+                  {/* Status Badge */}
+                  <span className={`stripe-badge ${status.badge} flex-shrink-0`}>
+                    {status.label}
                   </span>
                 </div>
-                <div className="flex items-center gap-3 text-xs text-[var(--text-muted)]">
-                  <span>{pr.repo}</span>
-                  <span>#{pr.number}</span>
-                  <span>by @{pr.author}</span>
-                  <span>{pr.createdAt}</span>
-                </div>
-              </div>
-
-              {/* Labels */}
-              <div className="hidden md:flex items-center gap-1.5">
-                {pr.labels.map((label) => (
-                  <span
-                    key={label.name}
-                    className="px-2 py-0.5 rounded-full text-[10px] font-medium border"
-                    style={{
-                      backgroundColor: label.color + "15",
-                      color: label.color,
-                      borderColor: label.color + "30",
-                    }}
-                  >
-                    {label.name}
-                  </span>
-                ))}
-              </div>
-
-              {/* Stats */}
-              <div className="hidden sm:flex items-center gap-3 text-xs text-[var(--text-muted)]">
-                <span className="text-emerald-400">+{pr.additions}</span>
-                <span className="text-red-400">-{pr.deletions}</span>
-                <span>💬 {pr.comments}</span>
-              </div>
-
-              {/* Status */}
-              <div className="flex items-center gap-1.5">
-                <span className={`status-dot ${status.dot}`} />
-                <span
-                  className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${status.color}`}
-                >
-                  {status.label}
-                </span>
               </div>
             </div>
           );

@@ -2,64 +2,71 @@
 
 const stats = [
   {
-    label: "Open PRs",
+    label: "Open Pull Requests",
     value: "12",
-    change: "+3",
-    changeType: "up" as const,
+    change: "+3 this week",
+    changeType: "neutral" as const,
     icon: "🔀",
-    color: "var(--wiz-primary)",
+    subtext: "4 awaiting your review",
   },
   {
-    label: "Issues",
+    label: "Active Issues",
     value: "28",
-    change: "-5",
-    changeType: "down" as const,
+    change: "-5 resolved",
+    changeType: "positive" as const,
     icon: "🐛",
-    color: "var(--wiz-warning)",
+    subtext: "8 critical priority",
   },
   {
-    label: "CI Passing",
-    value: "94%",
-    change: "+2%",
-    changeType: "up" as const,
-    icon: "✅",
-    color: "var(--wiz-success)",
+    label: "CI Test Pass Rate",
+    value: "94.2%",
+    change: "+2.1%",
+    changeType: "positive" as const,
+    icon: "⚡",
+    subtext: "Across 5 main repositories",
   },
   {
-    label: "Avg Review Time",
+    label: "Avg Code Review Time",
     value: "4.2h",
-    change: "-1.3h",
-    changeType: "down" as const,
+    change: "-1.3h faster",
+    changeType: "positive" as const,
     icon: "⏱️",
-    color: "var(--wiz-accent)",
+    subtext: "Top 10% team velocity",
   },
 ];
 
 export function StatsOverview() {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {stats.map((stat) => (
-        <div key={stat.label} className="stat-card">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-2xl">{stat.icon}</span>
+        <div key={stat.label} className="stripe-stat-card group">
+          <div className="flex items-start justify-between mb-4">
+            <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-xl group-hover:bg-indigo-500/10 group-hover:border-indigo-500/30 transition-all duration-300">
+              {stat.icon}
+            </div>
             <span
-              className={`text-xs font-medium px-2 py-0.5 rounded-full ${
-                stat.changeType === "up"
-                  ? stat.label === "Issues"
-                    ? "bg-red-500/10 text-red-400"
-                    : "bg-emerald-500/10 text-emerald-400"
-                  : stat.label === "Issues" || stat.label === "Avg Review Time"
-                  ? "bg-emerald-500/10 text-emerald-400"
-                  : "bg-red-500/10 text-red-400"
+              className={`stripe-badge ${
+                stat.changeType === "positive"
+                  ? "stripe-badge-success"
+                  : "stripe-badge-primary"
               }`}
             >
               {stat.change}
             </span>
           </div>
-          <p className="text-3xl font-bold text-[var(--text-primary)]">
-            {stat.value}
-          </p>
-          <p className="text-sm text-[var(--text-muted)] mt-1">{stat.label}</p>
+
+          <div className="space-y-1">
+            <h3 className="text-3xl font-black text-white tracking-tight font-mono">
+              {stat.value}
+            </h3>
+            <p className="text-xs font-semibold text-slate-300 tracking-wide uppercase">
+              {stat.label}
+            </p>
+          </div>
+
+          <div className="mt-4 pt-3 border-t border-white/5 text-[11px] text-slate-400">
+            {stat.subtext}
+          </div>
         </div>
       ))}
     </div>

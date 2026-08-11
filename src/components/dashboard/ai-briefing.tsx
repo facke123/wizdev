@@ -3,23 +3,6 @@
 import { useEffect, useState } from "react";
 
 const mockBriefing = {
-  summary: `## 📋 Today's Development Briefing
-
-### 🔥 High Priority
-- **3 PRs awaiting your review** — oldest is from @alice (2 days ago)
-- **CI failing** on \`main\` branch of \`wizdev-api\` — test timeout in auth module
-- **Release v2.3.1** is tagged but not deployed
-
-### 📊 Overnight Activity
-- **7 commits** pushed across 3 repos
-- **2 PRs merged**: Feature/user-analytics (#142), Fix/memory-leak (#156)
-- **1 new issue** filed: Performance regression in dashboard load (#203)
-
-### 🎯 Suggested Focus
-1. Review the stale PRs to unblock the team
-2. Investigate CI failure on main — likely related to the auth refactor
-3. Deploy v2.3.1 to staging for QA
-`,
   defaultGeneratedAt: "09:00 AM",
   model: "GPT-4o-mini",
 };
@@ -42,135 +25,131 @@ export function AIBriefing() {
   };
 
   return (
-    <div className="glass-card p-6">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[var(--wiz-primary)] to-[var(--wiz-accent)] flex items-center justify-center">
-            <span className="text-lg">🤖</span>
+    <div className="stripe-card p-6 lg:p-8">
+      {/* Header Bar */}
+      <div className="flex items-center justify-between pb-6 mb-6 border-b border-white/10">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 p-[1px] shadow-lg shadow-indigo-500/25">
+            <div className="w-full h-full bg-[#0f1322] rounded-[15px] flex items-center justify-center text-2xl">
+              🤖
+            </div>
           </div>
           <div>
-            <h2 className="font-semibold text-[var(--text-primary)]">
-              AI Daily Briefing
-            </h2>
-            <p className="text-xs text-[var(--text-muted)]">
-              Generated at {generatedAt} · {mockBriefing.model}
+            <div className="flex items-center gap-2">
+              <h2 className="text-lg font-bold text-white tracking-tight">
+                AI Executive Daily Briefing
+              </h2>
+              <span className="stripe-badge stripe-badge-primary">Auto Synthesized</span>
+            </div>
+            <p className="text-xs text-slate-400 mt-0.5">
+              Generated at <span className="font-mono text-slate-300">{generatedAt}</span> · Powered by{" "}
+              <span className="text-indigo-400 font-medium">{mockBriefing.model}</span>
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <button
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className={`
-              px-3 py-1.5 rounded-lg text-xs font-medium
-              bg-[var(--wiz-primary)]/10 text-[var(--wiz-primary-light)]
-              hover:bg-[var(--wiz-primary)]/20 transition-all duration-200
-              disabled:opacity-50
-              ${isRefreshing ? "animate-pulse" : ""}
-            `}
+            className="stripe-btn-primary px-4 py-2 text-xs font-semibold flex items-center gap-2 disabled:opacity-50"
           >
-            {isRefreshing ? "⟳ Generating..." : "⟳ Refresh"}
+            <span className={isRefreshing ? "animate-spin" : ""}>⟳</span>
+            <span>{isRefreshing ? "Generating Brief..." : "Refresh Brief"}</span>
           </button>
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-1.5 rounded-lg text-[var(--text-muted)] hover:bg-[var(--bg-card-hover)] transition-colors"
+            className="p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-slate-300 transition-colors text-xs"
           >
-            {isExpanded ? "▲" : "▼"}
+            {isExpanded ? "Collapse ▲" : "Expand ▼"}
           </button>
         </div>
       </div>
 
-      {/* Content */}
+      {/* Briefing Content */}
       {isExpanded && (
-        <div className="prose prose-invert prose-sm max-w-none">
-          <div className="bg-[var(--bg-card)] rounded-xl p-5 border border-[var(--border-secondary)]">
-            <div className="text-sm text-[var(--text-secondary)] leading-relaxed space-y-3">
-              <h3 className="text-base font-semibold text-[var(--text-primary)] mt-1 mb-2">
-                📋 Today's Development Briefing
-              </h3>
-
-              <h4 className="text-sm font-semibold text-[var(--text-primary)] mt-3 mb-1.5">
-                🔥 High Priority
-              </h4>
-              <ul className="space-y-1 pl-1">
-                <li className="flex items-start gap-2">
-                  <span className="text-[var(--wiz-primary-light)]">•</span>
+        <div className="space-y-6">
+          {/* Main Brief Panel */}
+          <div className="bg-[#0b0e17]/80 rounded-2xl p-6 border border-white/10 space-y-6">
+            {/* High Priority Section */}
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-base">🔥</span>
+                <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
+                  Critical Focus Areas
+                </h3>
+              </div>
+              <ul className="space-y-2.5 pl-1">
+                <li className="flex items-start gap-3 text-sm text-slate-300">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-2 flex-shrink-0" />
                   <span>
-                    <strong className="text-[var(--text-primary)]">3 PRs awaiting your review</strong> — oldest is from @alice (2 days ago)
+                    <strong className="text-white font-semibold">3 PRs awaiting your review</strong> — oldest from @alice in review queue for 2 days.
                   </span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[var(--wiz-primary-light)]">•</span>
+                <li className="flex items-start gap-3 text-sm text-slate-300">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-400 mt-2 flex-shrink-0" />
                   <span>
-                    <strong className="text-[var(--text-primary)]">CI failing</strong> on{" "}
-                    <code className="px-1.5 py-0.5 rounded bg-[var(--bg-elevated)] text-[var(--wiz-accent)] text-xs font-mono">
+                    <strong className="text-white font-semibold">CI Build Timeout Failure</strong> on{" "}
+                    <code className="px-2 py-0.5 rounded-md bg-white/10 text-cyan-300 text-xs font-mono border border-white/10">
                       main
                     </code>{" "}
                     branch of{" "}
-                    <code className="px-1.5 py-0.5 rounded bg-[var(--bg-elevated)] text-[var(--wiz-accent)] text-xs font-mono">
+                    <code className="px-2 py-0.5 rounded-md bg-white/10 text-cyan-300 text-xs font-mono border border-white/10">
                       wizdev-api
                     </code>{" "}
-                    — test timeout in auth module
+                    — auth test suite timeout.
                   </span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[var(--wiz-primary-light)]">•</span>
+                <li className="flex items-start gap-3 text-sm text-slate-300">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-2 flex-shrink-0" />
                   <span>
-                    <strong className="text-[var(--text-primary)]">Release v2.3.1</strong> is tagged but not deployed
+                    <strong className="text-white font-semibold">Release Candidate v2.3.1</strong> is tagged and ready for staging deployment.
                   </span>
                 </li>
               </ul>
+            </div>
 
-              <h4 className="text-sm font-semibold text-[var(--text-primary)] mt-4 mb-1.5">
-                📊 Overnight Activity
-              </h4>
-              <ul className="space-y-1 pl-1">
-                <li className="flex items-start gap-2">
-                  <span className="text-[var(--wiz-primary-light)]">•</span>
-                  <span>
-                    <strong className="text-[var(--text-primary)]">7 commits</strong> pushed across 3 repos
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[var(--wiz-primary-light)]">•</span>
-                  <span>
-                    <strong className="text-[var(--text-primary)]">2 PRs merged</strong>: Feature/user-analytics (#142), Fix/memory-leak (#156)
-                  </span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-[var(--wiz-primary-light)]">•</span>
-                  <span>
-                    <strong className="text-[var(--text-primary)]">1 new issue</strong> filed: Performance regression in dashboard load (#203)
-                  </span>
-                </li>
-              </ul>
-
-              <h4 className="text-sm font-semibold text-[var(--text-primary)] mt-4 mb-1.5">
-                🎯 Suggested Focus
-              </h4>
-              <ol className="list-decimal pl-5 space-y-1 text-[var(--text-secondary)]">
-                <li>Review the stale PRs to unblock the team</li>
-                <li>Investigate CI failure on main — likely related to the auth refactor</li>
-                <li>Deploy v2.3.1 to staging for QA</li>
-              </ol>
+            {/* Overnight Activity */}
+            <div className="pt-4 border-t border-white/5">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-base">📊</span>
+                <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
+                  Overnight Activity Summary
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/5">
+                  <p className="text-xs text-slate-400">Commits Pushed</p>
+                  <p className="text-lg font-bold text-white mt-1">7 commits</p>
+                  <p className="text-[11px] text-indigo-400 mt-0.5">Across 3 repositories</p>
+                </div>
+                <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/5">
+                  <p className="text-xs text-slate-400">PRs Merged</p>
+                  <p className="text-lg font-bold text-emerald-400 mt-1">2 PRs</p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">#142 Analytics, #156 Fix</p>
+                </div>
+                <div className="p-3.5 rounded-xl bg-white/[0.03] border border-white/5">
+                  <p className="text-xs text-slate-400">New Issues</p>
+                  <p className="text-lg font-bold text-amber-400 mt-1">1 issue</p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">#203 Perf regression</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* AI Chat input */}
-      <div className="mt-4 flex items-center gap-3">
+      {/* AI Prompt Bar */}
+      <div className="mt-6 flex items-center gap-3">
         <div className="flex-1 relative">
           <input
             type="text"
-            placeholder="Ask AI about your repos... e.g. 'Which PRs are risky?'"
-            className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-primary)] text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-[var(--wiz-primary)]/50 focus:ring-1 focus:ring-[var(--wiz-primary)]/20 transition-all"
+            placeholder="Ask AI Copilot... e.g. 'Summarize PR #142 changes' or 'Draft team standup note'"
+            className="w-full px-5 py-3 rounded-xl bg-[#0b0e17] border border-white/10 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500/50 focus:ring-2 focus:ring-indigo-500/20 transition-all"
           />
         </div>
-        <button className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-[var(--wiz-primary)] to-[var(--wiz-accent)] text-white text-sm font-medium hover:opacity-90 transition-opacity">
-          Send
+        <button className="stripe-btn-primary px-6 py-3 text-sm font-semibold flex-shrink-0">
+          Ask AI
         </button>
       </div>
     </div>
