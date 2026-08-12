@@ -59,6 +59,13 @@ const statusStyles = {
     label: "Failed",
     color: "#fb7185",
   },
+  building: {
+    Icon: Loader2,
+    iconColor: "#fbbf24",
+    label: "Building",
+    color: "#fbbf24",
+    spin: true,
+  },
   running: {
     Icon: Loader2,
     iconColor: "#fbbf24",
