@@ -1,6 +1,7 @@
 "use client";
 
 import { CheckCircle2, XCircle, Loader2, ExternalLink, Zap } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/context";
 
 const mockWorkflows = [
   {
@@ -24,24 +25,24 @@ const mockWorkflows = [
     name: "ESLint & TypeScript Check",
     repo: "wizdev-app",
     branch: "feat/analytics",
-    status: "running" as const,
-    duration: "0m 48s",
+    status: "success" as const,
+    duration: "48s",
   },
   {
     id: 4,
-    name: "Docs Static Build",
-    repo: "wizdev-docs",
+    name: "Docker Image Build",
+    repo: "wizdev-worker",
     branch: "main",
-    status: "success" as const,
-    duration: "1m 05s",
+    status: "building" as const,
+    duration: "1m 45s",
   },
   {
     id: 5,
-    name: "Automated Security Audit",
-    repo: "wizdev-api",
+    name: "Security Scan (Snyk)",
+    repo: "wizdev-app",
     branch: "main",
     status: "success" as const,
-    duration: "3m 21s",
+    duration: "3m 10s",
   },
 ];
 
@@ -68,6 +69,7 @@ const statusStyles = {
 };
 
 export function CIStatusPanel() {
+  const { t } = useLanguage();
   const passingCount = mockWorkflows.filter((w) => w.status === "success").length;
   const healthPercent = Math.round((passingCount / mockWorkflows.length) * 100);
 
