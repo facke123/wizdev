@@ -88,31 +88,32 @@ export function AIBriefing() {
             <button
               onClick={handleRefresh}
               disabled={isRefreshing}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold text-white transition-all disabled:opacity-50 whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-semibold text-white transition-all disabled:opacity-50 shrink-0"
               style={{
                 background: "linear-gradient(135deg, #7c6dfa 0%, #5b4fdf 100%)",
                 boxShadow: "0 2px 8px rgba(124,109,250,0.45), inset 0 1px 0 rgba(255,255,255,0.12)",
               }}
             >
               <RefreshCw
-                className={`w-3 h-3 ${isRefreshing ? "animate-spin" : ""}`}
+                className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin" : ""}`}
               />
-              <span className="hidden sm:inline">{isRefreshing ? "Generating..." : "Refresh"}</span>
+              <span>{isRefreshing ? "Generating..." : "Refresh"}</span>
             </button>
 
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[12px] font-semibold transition-all whitespace-nowrap"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all shrink-0"
               style={{
                 background: "rgba(255,255,255,0.04)",
                 border: "1px solid rgba(255,255,255,0.08)",
                 color: "var(--text-secondary)",
               }}
             >
+              <span>{isExpanded ? "Collapse" : "Expand"}</span>
               {isExpanded ? (
-                <><span className="hidden sm:inline">Collapse</span><ChevronUp className="w-3.5 h-3.5" /></>
+                <ChevronUp className="w-3.5 h-3.5" />
               ) : (
-                <><span className="hidden sm:inline">Expand</span><ChevronDown className="w-3.5 h-3.5" /></>
+                <ChevronDown className="w-3.5 h-3.5" />
               )}
             </button>
           </div>
@@ -261,7 +262,7 @@ export function AIBriefing() {
 
       {/* ── AI Input Bar ─────────────────────────────── */}
       <div
-        className="px-5 sm:px-6 py-4 flex items-center gap-2 sm:gap-3"
+        className="px-5 sm:px-6 py-3.5 flex items-center gap-3"
         style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
       >
         <div className="flex-1 min-w-0">
@@ -270,7 +271,7 @@ export function AIBriefing() {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             placeholder="Ask AI Copilot..."
-            className="w-full px-4 py-2.5 rounded-xl text-[13px] text-[var(--text-primary)] placeholder:text-[var(--text-disabled)] focus:outline-none transition-all"
+            className="w-full px-4 py-2 rounded-xl text-[13px] text-[var(--text-primary)] placeholder:text-[var(--text-disabled)] focus:outline-none transition-all"
             style={{
               background: "rgba(7, 11, 20, 0.7)",
               border: "1px solid rgba(255,255,255,0.08)",
@@ -286,14 +287,14 @@ export function AIBriefing() {
           />
         </div>
         <button
-          className="flex items-center gap-1.5 px-3 sm:px-4 py-2.5 rounded-xl text-[12px] sm:text-[13px] font-semibold text-white shrink-0 transition-all hover:opacity-90 active:scale-95 whitespace-nowrap"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[13px] font-semibold text-white shrink-0 transition-all hover:opacity-90 active:scale-95"
           style={{
             background: "linear-gradient(135deg, #7c6dfa 0%, #5b4fdf 100%)",
             boxShadow: "0 2px 8px rgba(124,109,250,0.4), inset 0 1px 0 rgba(255,255,255,0.10)",
           }}
         >
           <Send className="w-3.5 h-3.5 shrink-0" />
-          <span>Ask AI</span>
+          <span className="shrink-0 font-bold">Ask AI</span>
         </button>
       </div>
     </div>

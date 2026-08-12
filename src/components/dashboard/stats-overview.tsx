@@ -89,7 +89,7 @@ export function StatsOverview() {
             />
 
             {/* Header Row */}
-            <div className="flex items-center justify-between gap-2 mb-5">
+            <div className="flex items-center justify-between gap-2 mb-4">
               <div
                 className="p-2 rounded-xl transition-all duration-300 group-hover:scale-105"
                 style={{
@@ -128,8 +128,8 @@ export function StatsOverview() {
             </div>
 
             {/* Value */}
-            <div className="space-y-1 mb-5">
-              <p className="text-[30px] font-extrabold text-[var(--text-primary)] tracking-tight font-mono leading-none">
+            <div className="space-y-0.5 mb-4">
+              <p className="text-[28px] font-extrabold text-[var(--text-primary)] tracking-tight font-mono leading-none">
                 {stat.value}
               </p>
               <p className="text-[11px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider truncate">

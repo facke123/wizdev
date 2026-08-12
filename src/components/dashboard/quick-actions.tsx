@@ -104,20 +104,9 @@ export function QuickActions() {
                   {action.description}
                 </p>
               </div>
-              <div className="flex items-center gap-1.5 shrink-0">
-                <span
-                  className="hidden sm:block text-[10px] font-mono font-medium px-1.5 py-0.5 rounded"
-                  style={{
-                    background: "rgba(255,255,255,0.05)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                    color: "var(--text-disabled)",
-                  }}
-                >
-                  {action.shortcut}
-                </span>
+              <div className="flex items-center gap-2 shrink-0">
                 <ArrowRight
-                  className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"
-                  style={{ color: action.color }}
+                  className="w-4 h-4 text-[var(--text-tertiary)] group-hover:text-white transition-all group-hover:translate-x-1"
                   strokeWidth={2}
                 />
               </div>

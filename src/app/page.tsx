@@ -32,7 +32,7 @@ export default function DashboardPage() {
         <Header />
 
         <main className="flex-1 overflow-y-auto">
-          <div className="w-full max-w-[1600px] mx-auto px-5 sm:px-7 lg:px-9 py-8 sm:py-10 space-y-8 sm:space-y-10">
+          <div className="w-full max-w-[1600px] mx-auto px-5 sm:px-7 lg:px-9 py-6 sm:py-8 space-y-8 sm:space-y-9">
 
             {/* ── Stats Row ───────────────────────────── */}
             <section>
@@ -40,17 +40,17 @@ export default function DashboardPage() {
             </section>
 
             {/* ── Main 2-Column Grid ───────────────────── */}
-            <section className="grid grid-cols-1 xl:grid-cols-12 gap-6 lg:gap-8 items-start">
+            <section className="grid grid-cols-1 xl:grid-cols-12 gap-7 lg:gap-9 items-start">
 
               {/* Left Column — 8/12 */}
-              <div className="xl:col-span-8 space-y-7 lg:space-y-8 min-w-0">
+              <div className="xl:col-span-8 space-y-7 lg:space-y-9 min-w-0">
                 <AIBriefing />
                 <ActivityChart />
                 <PullRequestList />
               </div>
 
               {/* Right Column — 4/12 */}
-              <div className="xl:col-span-4 space-y-7 lg:space-y-8 min-w-0">
+              <div className="xl:col-span-4 space-y-7 lg:space-y-9 min-w-0">
                 <QuickActions />
                 <CIStatusPanel />
               </div>
