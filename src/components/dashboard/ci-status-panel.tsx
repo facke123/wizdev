@@ -10,7 +10,6 @@ const mockWorkflows = [
     branch: "main",
     status: "success" as const,
     duration: "2m 34s",
-    updatedAt: "12min ago",
   },
   {
     id: 2,
@@ -19,7 +18,6 @@ const mockWorkflows = [
     branch: "main",
     status: "failure" as const,
     duration: "1m 12s",
-    updatedAt: "45min ago",
   },
   {
     id: 3,
@@ -28,7 +26,6 @@ const mockWorkflows = [
     branch: "feat/analytics",
     status: "running" as const,
     duration: "0m 48s",
-    updatedAt: "running now",
   },
   {
     id: 4,
@@ -37,7 +34,6 @@ const mockWorkflows = [
     branch: "main",
     status: "success" as const,
     duration: "1m 05s",
-    updatedAt: "2h ago",
   },
   {
     id: 5,
@@ -46,7 +42,6 @@ const mockWorkflows = [
     branch: "main",
     status: "success" as const,
     duration: "3m 21s",
-    updatedAt: "3h ago",
   },
 ];
 
@@ -55,28 +50,19 @@ const statusStyles = {
     Icon: CheckCircle2,
     iconColor: "#10d98e",
     label: "Passed",
-    labelBg: "rgba(16,217,142,0.10)",
-    labelColor: "#6ee7b7",
-    labelBorder: "rgba(16,217,142,0.22)",
-    dot: "#10d98e",
+    color: "#10d98e",
   },
   failure: {
     Icon: XCircle,
     iconColor: "#fb7185",
     label: "Failed",
-    labelBg: "rgba(251,113,133,0.10)",
-    labelColor: "#fca5a5",
-    labelBorder: "rgba(251,113,133,0.22)",
-    dot: "#fb7185",
+    color: "#fb7185",
   },
   running: {
     Icon: Loader2,
     iconColor: "#fbbf24",
     label: "Building",
-    labelBg: "rgba(251,191,36,0.10)",
-    labelColor: "#fcd34d",
-    labelBorder: "rgba(251,191,36,0.22)",
-    dot: "#fbbf24",
+    color: "#fbbf24",
     spin: true,
   },
 };
@@ -86,9 +72,15 @@ export function CIStatusPanel() {
   const healthPercent = Math.round((passingCount / mockWorkflows.length) * 100);
 
   return (
-    <div className="card p-5 lg:p-6">
+    <div
+      className="card p-5"
+      style={{
+        background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(15,23,42,0.95) 100%)",
+        border: "1px solid rgba(255,255,255,0.08)",
+      }}
+    >
       {/* ── Header ─────────────────────────────────── */}
-      <div className="flex items-center justify-between gap-3 mb-5">
+      <div className="flex items-center justify-between gap-3 mb-4">
         <div className="flex items-center gap-3 min-w-0">
           <div
             className="p-2 rounded-xl"
@@ -104,7 +96,7 @@ export function CIStatusPanel() {
             />
           </div>
           <div className="min-w-0">
-            <h2 className="text-[14px] font-semibold text-[var(--text-primary)] tracking-tight">
+            <h2 className="text-[14px] font-bold text-white tracking-tight">
               CI/CD Pipelines
             </h2>
             <p className="text-[11px] text-[var(--text-tertiary)]">
@@ -115,10 +107,10 @@ export function CIStatusPanel() {
 
         {/* Health badge */}
         <div
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-bold shrink-0"
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold shrink-0"
           style={{
-            background: "rgba(16,217,142,0.10)",
-            border: "1px solid rgba(16,217,142,0.22)",
+            background: "rgba(16,217,142,0.12)",
+            border: "1px solid rgba(16,217,142,0.25)",
             color: "#6ee7b7",
           }}
         >
@@ -132,8 +124,8 @@ export function CIStatusPanel() {
 
       {/* Health progress bar */}
       <div
-        className="w-full h-1 rounded-full mb-5 overflow-hidden"
-        style={{ background: "rgba(255,255,255,0.05)" }}
+        className="w-full h-1 rounded-full mb-4 overflow-hidden"
+        style={{ background: "rgba(255,255,255,0.06)" }}
       >
         <div
           className="h-full rounded-full transition-all duration-1000"
@@ -154,7 +146,7 @@ export function CIStatusPanel() {
           return (
             <div
               key={workflow.id}
-              className="p-3 rounded-xl transition-all duration-150 flex items-center justify-between gap-3 group cursor-pointer"
+              className="p-2.5 rounded-xl transition-all duration-150 flex items-center justify-between gap-3 group cursor-pointer"
               style={{
                 background: "rgba(255,255,255,0.02)",
                 border: "1px solid rgba(255,255,255,0.05)",
@@ -184,52 +176,31 @@ export function CIStatusPanel() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 flex-shrink-0">
-                <div className="text-right hidden sm:block">
-                  <span
-                    className="block text-[10px] font-bold px-2 py-0.5 rounded-full border"
-                    style={{
-                      background: style.labelBg,
-                      color: style.labelColor,
-                      borderColor: style.labelBorder,
-                    }}
-                  >
-                    {style.label}
-                  </span>
-                  <p className="text-[10px] font-mono text-[var(--text-disabled)] mt-0.5 text-right">
-                    {workflow.duration}
-                  </p>
-                </div>
-                <ExternalLink
-                  className="w-3 h-3 text-[var(--text-disabled)] opacity-0 group-hover:opacity-100 transition-opacity"
-                  strokeWidth={1.5}
-                />
+              <div className="text-right shrink-0">
+                <span className="text-[11px] font-bold block leading-none" style={{ color: style.color }}>
+                  {style.label}
+                </span>
+                <span className="text-[9px] font-mono text-[var(--text-disabled)] mt-0.5 block">
+                  {workflow.duration}
+                </span>
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* ── Footer CTA ──────────────────────────────── */}
-      <button
-        className="mt-4 w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[12px] font-semibold transition-all"
+      {/* ── Footer Link ────────────────────────────── */}
+      <a
+        href="/ci"
+        className="mt-3.5 w-full flex items-center justify-center gap-1.5 py-1.5 rounded-xl text-[12px] font-semibold transition-all text-[var(--text-secondary)] hover:text-white"
         style={{
-          background: "rgba(255,255,255,0.03)",
-          border: "1px solid rgba(255,255,255,0.07)",
-          color: "var(--text-secondary)",
-        }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
-          (e.currentTarget as HTMLElement).style.color = "var(--text-primary)";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.03)";
-          (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)";
+          background: "rgba(255,255,255,0.02)",
+          border: "1px solid rgba(255,255,255,0.06)",
         }}
       >
         View all pipelines
         <ExternalLink className="w-3 h-3" strokeWidth={1.75} />
-      </button>
+      </a>
     </div>
   );
 }

@@ -5,48 +5,48 @@ import { motion } from "framer-motion";
 
 const stats = [
   {
-    label: "Open Pull Requests",
+    label: "OPEN PULL REQUESTS",
     value: "12",
     change: "+3",
-    changeLabel: "this week",
     changeType: "neutral" as const,
     icon: GitPullRequest,
     accent: "#7c6dfa",
-    subtext: "4 awaiting your review",
+    subtext: "4 awaiting review",
     progress: 40,
+    sparkline: "M0 15 Q 15 12, 30 18 T 60 8 T 90 12 T 120 5",
   },
   {
-    label: "Active Issues",
+    label: "ACTIVE ISSUES",
     value: "28",
     change: "-5",
-    changeLabel: "resolved",
     changeType: "positive" as const,
     icon: Bug,
     accent: "#10d98e",
     subtext: "8 critical priority",
     progress: 70,
+    sparkline: "M0 18 Q 20 8, 40 14 T 80 6 T 120 10",
   },
   {
-    label: "CI Pass Rate",
+    label: "CI PASS RATE",
     value: "94.2%",
-    change: "+2.1%",
-    changeLabel: "vs last week",
+    change: "+9.3%",
     changeType: "positive" as const,
     icon: Zap,
     accent: "#22d3ee",
-    subtext: "Across 5 repositories",
+    subtext: "Across 3 repositories",
     progress: 94,
+    sparkline: "M0 16 Q 25 18, 50 10 T 90 12 T 120 4",
   },
   {
-    label: "Avg Review Time",
+    label: "AVG REVIEW VELO",
     value: "4.2h",
     change: "-1.3h",
-    changeLabel: "faster",
     changeType: "positive" as const,
     icon: Clock,
     accent: "#fbbf24",
     subtext: "Top 10% team velocity",
     progress: 80,
+    sparkline: "M0 10 Q 30 15, 60 8 T 100 14 T 120 6",
   },
 ];
 
@@ -59,8 +59,8 @@ const container = {
 };
 
 const item = {
-  hidden: { opacity: 0, y: 16, scale: 0.97 },
-  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } },
+  hidden: { opacity: 0, y: 12, scale: 0.98 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } },
 };
 
 export function StatsOverview() {
@@ -69,103 +69,83 @@ export function StatsOverview() {
       variants={container}
       initial="hidden"
       animate="show"
-      className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 lg:gap-6"
+      className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5"
     >
       {stats.map((stat) => {
         const Icon = stat.icon;
-        const TrendIcon =
-          stat.changeType === "positive"
-            ? TrendingUp
-            : stat.changeType === "negative"
-              ? TrendingDown
-              : Minus;
 
         return (
-          <motion.div key={stat.label} variants={item} className="stat-card group">
-            {/* Glow accent top-right */}
-            <div
-              className="absolute -top-6 -right-6 w-20 h-20 rounded-full opacity-[0.07] blur-2xl pointer-events-none transition-opacity duration-300 group-hover:opacity-[0.14]"
-              style={{ background: stat.accent }}
-            />
-
-            {/* Header Row */}
-            <div className="flex items-center justify-between gap-2 mb-4">
+          <motion.div
+            key={stat.label}
+            variants={item}
+            className="stat-card group relative p-4 sm:p-5 rounded-2xl overflow-hidden"
+            style={{
+              background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(15,23,42,0.85) 100%)",
+              border: "1px solid rgba(255,255,255,0.07)",
+            }}
+          >
+            {/* Top row: Icon on left, sparkline + badge on right */}
+            <div className="flex items-start justify-between gap-2 mb-3">
               <div
-                className="p-2 rounded-xl transition-all duration-300 group-hover:scale-105"
+                className="p-2 rounded-xl"
                 style={{
-                  backgroundColor: `${stat.accent}18`,
-                  border: `1px solid ${stat.accent}2a`,
+                  background: `${stat.accent}15`,
+                  border: `1px solid ${stat.accent}25`,
                 }}
               >
-                <Icon
-                  className="w-[17px] h-[17px]"
-                  style={{ color: stat.accent }}
-                  strokeWidth={1.75}
-                />
+                <Icon className="w-4 h-4" style={{ color: stat.accent }} strokeWidth={1.75} />
               </div>
 
-              {/* Change badge */}
-              <div
-                className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold"
-                style={{
-                  background:
-                    stat.changeType === "positive"
-                      ? "rgba(16,217,142,0.10)"
-                      : "rgba(255,255,255,0.06)",
-                  color:
-                    stat.changeType === "positive"
-                      ? "#10d98e"
-                      : "var(--text-tertiary)",
-                  border:
-                    stat.changeType === "positive"
-                      ? "1px solid rgba(16,217,142,0.22)"
-                      : "1px solid rgba(255,255,255,0.08)",
-                }}
-              >
-                <TrendIcon className="w-3 h-3" strokeWidth={2} />
-                <span>{stat.change}</span>
+              <div className="flex items-center gap-2">
+                {/* Sparkline mini graph */}
+                <svg width="60" height="20" className="overflow-visible opacity-75">
+                  <path
+                    d={stat.sparkline}
+                    fill="none"
+                    stroke={stat.accent}
+                    strokeWidth="1.75"
+                    strokeLinecap="round"
+                  />
+                </svg>
+
+                {/* Change badge */}
+                <span
+                  className="px-2 py-0.5 rounded-full text-[10px] font-bold font-mono"
+                  style={{
+                    background: `${stat.accent}15`,
+                    color: stat.accent,
+                    border: `1px solid ${stat.accent}30`,
+                  }}
+                >
+                  {stat.change}
+                </span>
               </div>
             </div>
 
-            {/* Value */}
-            <div className="space-y-0.5 mb-4">
-              <p className="text-[28px] font-extrabold text-[var(--text-primary)] tracking-tight font-mono leading-none">
+            {/* Main Value */}
+            <div className="mb-3">
+              <p className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-mono leading-none mb-1">
                 {stat.value}
               </p>
-              <p className="text-[11px] font-semibold text-[var(--text-tertiary)] uppercase tracking-wider truncate">
+              <p className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-wider">
                 {stat.label}
               </p>
             </div>
 
-            {/* Progress Bar */}
-            <div className="mb-4">
-              <div
-                className="w-full h-1 rounded-full overflow-hidden"
-                style={{ background: "rgba(255,255,255,0.06)" }}
-              >
-                <motion.div
+            {/* Bottom Colored Bar & Subtext */}
+            <div className="space-y-2 pt-2 border-t border-white/[0.05]">
+              <div className="w-full h-1 rounded-full overflow-hidden bg-white/[0.06]">
+                <div
                   className="h-full rounded-full"
                   style={{
-                    background: `linear-gradient(90deg, ${stat.accent}cc, ${stat.accent})`,
-                    boxShadow: `0 0 8px ${stat.accent}60`,
+                    width: `${stat.progress}%`,
+                    background: stat.accent,
+                    boxShadow: `0 0 8px ${stat.accent}80`,
                   }}
-                  initial={{ width: 0 }}
-                  animate={{ width: `${stat.progress}%` }}
-                  transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
                 />
               </div>
-            </div>
-
-            {/* Subtext */}
-            <div
-              className="pt-3 border-t"
-              style={{ borderColor: "rgba(255,255,255,0.05)" }}
-            >
-              <p className="text-[11px] text-[var(--text-tertiary)] truncate flex items-center gap-1.5">
-                <span
-                  className="w-1 h-1 rounded-full shrink-0"
-                  style={{ background: stat.accent }}
-                />
+              <p className="text-[11px] text-[var(--text-tertiary)] flex items-center gap-1.5">
+                <span className="w-1 h-1 rounded-full shrink-0" style={{ background: stat.accent }} />
                 {stat.subtext}
               </p>
             </div>

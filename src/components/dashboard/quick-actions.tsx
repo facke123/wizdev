@@ -8,36 +8,52 @@ const actions = [
     label: "Generate Standup Report",
     description: "AI compiles your daily standup notes",
     color: "#7c6dfa",
-    shortcut: "⌘1",
   },
   {
     icon: BarChart3,
     label: "Weekly Velocity Summary",
     description: "Executive summary of team progress",
     color: "#22d3ee",
-    shortcut: "⌘2",
   },
   {
     icon: ShieldAlert,
     label: "PR Risk Assessment",
     description: "AI analyzes high-risk code changes",
     color: "#fbbf24",
-    shortcut: "⌘3",
   },
   {
     icon: GitBranch,
     label: "Stale Branch Cleanup",
     description: "Identify inactive branches & issues",
     color: "#10d98e",
-    shortcut: "⌘4",
   },
 ];
 
 export function QuickActions() {
   return (
-    <div className="card p-5 lg:p-6">
+    <div
+      className="card p-5 relative overflow-visible"
+      style={{
+        background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(15,23,42,0.95) 100%)",
+        border: "1px solid rgba(255,255,255,0.08)",
+      }}
+    >
+      {/* Top right floating bot badge with notification '1' */}
+      <div
+        className="absolute -top-3 -right-3 w-9 h-9 rounded-full flex items-center justify-center text-sm shadow-lg border border-white/20 z-10 cursor-pointer hover:scale-110 transition-transform"
+        style={{
+          background: "linear-gradient(135deg, rgba(124,109,250,0.8), rgba(34,211,238,0.7))",
+          boxShadow: "0 4px 14px rgba(124,109,250,0.4)",
+        }}
+      >
+        🤖
+        <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-[9px] font-bold flex items-center justify-center border border-[#070b14]">
+          1
+        </span>
+      </div>
+
       {/* ── Header ─────────────────────────────────── */}
-      <div className="flex items-center gap-3 mb-5">
+      <div className="flex items-center gap-3 mb-4">
         <div
           className="p-2 rounded-xl"
           style={{
@@ -52,7 +68,7 @@ export function QuickActions() {
           />
         </div>
         <div className="min-w-0">
-          <h2 className="text-[14px] font-semibold text-[var(--text-primary)] tracking-tight">
+          <h2 className="text-[14px] font-bold text-white tracking-tight">
             AI Copilot
           </h2>
           <p className="text-[11px] text-[var(--text-tertiary)]">
@@ -68,7 +84,7 @@ export function QuickActions() {
           return (
             <button
               key={action.label}
-              className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-150 text-left group"
+              className="w-full flex items-center gap-3 p-2.5 rounded-xl transition-all duration-150 text-left group"
               style={{
                 background: "rgba(255,255,255,0.02)",
                 border: "1px solid rgba(255,255,255,0.05)",
@@ -104,9 +120,9 @@ export function QuickActions() {
                   {action.description}
                 </p>
               </div>
-              <div className="flex items-center gap-2 shrink-0">
+              <div className="flex items-center gap-1 shrink-0">
                 <ArrowRight
-                  className="w-4 h-4 text-[var(--text-tertiary)] group-hover:text-white transition-all group-hover:translate-x-1"
+                  className="w-3.5 h-3.5 text-[var(--text-tertiary)] group-hover:text-white transition-all group-hover:translate-x-0.5"
                   strokeWidth={2}
                 />
               </div>
@@ -117,7 +133,7 @@ export function QuickActions() {
 
       {/* ── Bottom Hint ─────────────────────────────── */}
       <div
-        className="mt-4 pt-4 text-center"
+        className="mt-3.5 pt-3 text-center"
         style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
       >
         <p className="text-[10px] text-[var(--text-disabled)]">
