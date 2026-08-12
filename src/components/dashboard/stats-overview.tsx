@@ -2,8 +2,20 @@
 
 import { GitPullRequest, Bug, Zap, Clock, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { motion } from "framer-motion";
-
 import { useLanguage } from "@/lib/i18n/context";
+
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 12, scale: 0.98 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } },
+};
 
 export function StatsOverview() {
   const { t } = useLanguage();
@@ -55,75 +67,74 @@ export function StatsOverview() {
     },
   ];
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
-  },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 12, scale: 0.98 },
-  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } },
-};
-
-export function StatsOverview() {
   return (
     <motion.div
       variants={container}
       initial="hidden"
       animate="show"
-      className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5"
+      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5"
     >
       {stats.map((stat) => {
         const Icon = stat.icon;
 
         return (
           <motion.div
-            key={stat.label}
-            variants={item}
-            className="stat-card group relative p-4 sm:p-5 rounded-2xl overflow-hidden"
+            key={stat.labelKey}
+            variants={itemVariants}
+            className="stat-card group"
             style={{
-              background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(15,23,42,0.85) 100%)",
-              border: "1px solid rgba(255,255,255,0.07)",
+              background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(15,23,42,0.95) 100%)",
+              border: "1px solid rgba(255,255,255,0.08)",
             }}
           >
-            {/* Top row: Icon on left, sparkline + badge on right */}
-            <div className="flex items-start justify-between gap-2 mb-3">
+            {/* Top Bar */}
+            <div className="flex items-center justify-between gap-2 mb-3">
               <div
-                className="p-2 rounded-xl"
+                className="w-9 h-9 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110 shrink-0"
                 style={{
                   background: `${stat.accent}15`,
-                  border: `1px solid ${stat.accent}25`,
+                  border: `1px solid ${stat.accent}30`,
                 }}
               >
-                <Icon className="w-4 h-4" style={{ color: stat.accent }} strokeWidth={1.75} />
+                <Icon className="w-4 h-4" style={{ color: stat.accent }} strokeWidth={2} />
               </div>
 
-              <div className="flex items-center gap-2">
-                {/* Sparkline mini graph */}
-                <svg width="60" height="20" className="overflow-visible opacity-75">
+              {/* Sparkline SVG */}
+              <div className="flex-1 h-7 max-w-[80px] px-1 opacity-70 group-hover:opacity-100 transition-opacity">
+                <svg viewBox="0 0 120 24" className="w-full h-full overflow-visible">
                   <path
                     d={stat.sparkline}
                     fill="none"
                     stroke={stat.accent}
-                    strokeWidth="1.75"
+                    strokeWidth="2"
                     strokeLinecap="round"
                   />
                 </svg>
+              </div>
 
-                {/* Change badge */}
-                <span
-                  className="px-2 py-0.5 rounded-full text-[10px] font-bold font-mono"
-                  style={{
-                    background: `${stat.accent}15`,
-                    color: stat.accent,
-                    border: `1px solid ${stat.accent}30`,
-                  }}
-                >
-                  {stat.change}
-                </span>
+              <div
+                className="flex items-center gap-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold font-mono shrink-0"
+                style={{
+                  background:
+                    stat.changeType === "positive"
+                      ? "rgba(16,217,142,0.12)"
+                      : "rgba(255,255,255,0.05)",
+                  color:
+                    stat.changeType === "positive"
+                      ? "#10d98e"
+                      : "var(--text-secondary)",
+                  border:
+                    stat.changeType === "positive"
+                      ? "1px solid rgba(16,217,142,0.25)"
+                      : "1px solid rgba(255,255,255,0.08)",
+                }}
+              >
+                {stat.changeType === "positive" ? (
+                  <TrendingUp className="w-2.5 h-2.5" />
+                ) : (
+                  <Minus className="w-2.5 h-2.5" />
+                )}
+                <span>{stat.change}</span>
               </div>
             </div>
 
@@ -137,7 +148,7 @@ export function StatsOverview() {
               </p>
             </div>
 
-            {/* Bottom Colored Bar & Subtext */}
+            {/* Bottom Progress Bar */}
             <div className="space-y-2 pt-2 border-t border-white/[0.05]">
               <div className="w-full h-1 rounded-full overflow-hidden bg-white/[0.06]">
                 <div
