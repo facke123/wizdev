@@ -3,18 +3,18 @@
 import { useState } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import {
-  User, Bot, Github, Bell, Palette,
+  User, Bot, Github, Bell, Sliders,
   Key, Eye, EyeOff, Check, ChevronRight, Sun, Monitor,
-  Zap, Globe, Shield
+  Zap, Laptop
 } from "lucide-react";
 import { getAllProviders, type AIProvider } from "@/lib/ai-providers";
 
 const NAV_ITEMS = [
-  { key: "general",     label: "General",       icon: User,    desc: "Profile & preferences" },
-  { key: "ai",          label: "AI Providers",  icon: Bot,     desc: "API keys & models" },
-  { key: "github",      label: "GitHub",        icon: Github,  desc: "Repository connections" },
-  { key: "notifications", label: "Notifications", icon: Bell,  desc: "Alerts & digests" },
-  { key: "appearance",  label: "Appearance",    icon: Palette, desc: "Theme & display" },
+  { key: "general",       label: "General",        icon: User,     desc: "Profile & preferences" },
+  { key: "ai",            label: "AI Providers",   icon: Bot,      desc: "API keys & models" },
+  { key: "github",        label: "GitHub",         icon: Github,   desc: "Repository connections" },
+  { key: "notifications", label: "Notifications",  icon: Bell,     desc: "Alerts & digests" },
+  { key: "appearance",    label: "Appearance",     icon: Sliders,  desc: "Theme & display" },
 ];
 
 const PROVIDERS = getAllProviders();
@@ -306,7 +306,7 @@ export default function SettingsPage() {
                   {[
                     { value: "dark",   label: "Dark",   icon: Monitor },
                     { value: "light",  label: "Light",  icon: Sun },
-                    { value: "system", label: "System", icon: Globe },
+                    { value: "system", label: "System", icon: Laptop },
                   ].map(t => {
                     const Icon = t.icon;
                     return (
