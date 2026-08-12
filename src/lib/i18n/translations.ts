@@ -1,0 +1,370 @@
+export type Language = "en" | "zh-CN" | "zh-TW" | "ja";
+
+export const LANGUAGE_OPTIONS: { code: Language; label: string; flag: string }[] = [
+  { code: "en", label: "English", flag: "🇺🇸" },
+  { code: "zh-CN", label: "简体中文", flag: "🇨🇳" },
+  { code: "zh-TW", label: "繁體中文", flag: "🇭🇰" },
+  { code: "ja", label: "日本語", flag: "🇯🇵" },
+];
+
+export const translations: Record<Language, Record<string, string>> = {
+  en: {
+    // Nav & Header
+    "nav.dashboard": "Dashboard",
+    "nav.prs": "Pull Requests",
+    "nav.issues": "Issues",
+    "nav.ci": "CI / CD",
+    "nav.analytics": "Analytics",
+    "nav.copilot": "AI Copilot",
+    "nav.settings": "Settings",
+    "header.workspace": "Workspace",
+    "header.overview": "Overview",
+    "header.greeting.morning": "Good morning",
+    "header.greeting.afternoon": "Good afternoon",
+    "header.greeting.evening": "Good evening",
+    "header.subtitle": "Here's your daily overview",
+    "header.search": "Search...",
+    "header.collapse": "Collapse",
+
+    // Dashboard Stats
+    "stats.openPRs": "OPEN PULL REQUESTS",
+    "stats.openPRs.sub": "4 awaiting review",
+    "stats.activeIssues": "ACTIVE ISSUES",
+    "stats.activeIssues.sub": "8 critical priority",
+    "stats.ciPassRate": "CI PASS RATE",
+    "stats.ciPassRate.sub": "Across 3 repositories",
+    "stats.avgReviewTime": "AVG REVIEW VELO",
+    "stats.avgReviewTime.sub": "Top 10% team velocity",
+
+    // AI Briefing
+    "briefing.title": "AI Executive Daily Briefing",
+    "briefing.auto": "Auto Synthesized",
+    "briefing.generatedAt": "Generated at",
+    "briefing.model": "Model",
+    "briefing.refresh": "Refresh",
+    "briefing.generating": "Generating...",
+    "briefing.expand": "Expand",
+    "briefing.collapse": "Collapse",
+    "briefing.criticalFocus": "Critical Focus Areas",
+    "briefing.overnightSummary": "Overnight Activity Summary",
+    "briefing.commitsPushed": "Commits Pushed",
+    "briefing.prsMerged": "PRs Merged",
+    "briefing.newIssues": "New Issues",
+    "briefing.askPlaceholder": "Ask AI Copilot...",
+    "briefing.askBtn": "Ask AI",
+
+    // Engineering Velocity Chart
+    "chart.title": "Engineering Velocity",
+    "chart.sub": "Weekly commits, PRs & code reviews",
+    "chart.commits": "Commits",
+    "chart.prs": "PRs",
+    "chart.reviews": "Reviews",
+    "chart.velocity": "Velocity",
+
+    // Pull Requests
+    "prs.title": "Active Pull Requests",
+    "prs.sub": "4 open PRs across active repositories",
+    "prs.viewAll": "View All",
+    "prs.status.review": "Review Required",
+    "prs.status.approved": "Approved",
+    "prs.status.changes": "Changes Needed",
+    "prs.status.draft": "Draft",
+
+    // AI Copilot Quick Actions
+    "copilot.title": "AI Copilot",
+    "copilot.sub": "One-click automation",
+    "copilot.action1.title": "Generate Standup Report",
+    "copilot.action1.desc": "AI compiles your daily standup notes",
+    "copilot.action2.title": "Weekly Velocity Summary",
+    "copilot.action2.desc": "Executive summary of team progress",
+    "copilot.action3.title": "PR Risk Assessment",
+    "copilot.action3.desc": "AI analyzes high-risk code changes",
+    "copilot.action4.title": "Stale Branch Cleanup",
+    "copilot.action4.desc": "Identify inactive branches & issues",
+    "copilot.cmdPalette": "Press ⌘J to open command palette",
+
+    // CI/CD Panel
+    "ci.title": "CI/CD Pipelines",
+    "ci.sub": "3/5 passing",
+    "ci.healthy": "Healthy",
+    "ci.viewAll": "View all pipelines",
+    "ci.passed": "Passed",
+    "ci.failed": "Failed",
+    "ci.building": "Building",
+
+    // Common Buttons
+    "common.save": "Save Changes",
+    "common.saved": "Saved!",
+    "common.language": "Language",
+  },
+
+  "zh-CN": {
+    // Nav & Header
+    "nav.dashboard": "控制台",
+    "nav.prs": "合并请求 (PR)",
+    "nav.issues": "问题跟踪 (Issues)",
+    "nav.ci": "持续集成 (CI / CD)",
+    "nav.analytics": "效能分析",
+    "nav.copilot": "AI 助手 (Copilot)",
+    "nav.settings": "系统设置",
+    "header.workspace": "工作区",
+    "header.overview": "概览",
+    "header.greeting.morning": "早上好",
+    "header.greeting.afternoon": "下午好",
+    "header.greeting.evening": "晚上好",
+    "header.subtitle": "这是您的每日研发概览",
+    "header.search": "搜索...",
+    "header.collapse": "收起",
+
+    // Dashboard Stats
+    "stats.openPRs": "待处理合并请求",
+    "stats.openPRs.sub": "4 个等待您的审核",
+    "stats.activeIssues": "活跃问题数",
+    "stats.activeIssues.sub": "8 个紧急高优问题",
+    "stats.ciPassRate": "CI 编译通过率",
+    "stats.ciPassRate.sub": "涵盖 3 个核心代码库",
+    "stats.avgReviewTime": "平均评审响应时间",
+    "stats.avgReviewTime.sub": "团队效能排名前 10%",
+
+    // AI Briefing
+    "briefing.title": "AI 高管每日研发简报",
+    "briefing.auto": "自动智能合成",
+    "briefing.generatedAt": "生成时间",
+    "briefing.model": "模型",
+    "briefing.refresh": "刷新",
+    "briefing.generating": "生成中...",
+    "briefing.expand": "展开",
+    "briefing.collapse": "折叠",
+    "briefing.criticalFocus": "核心关注事项",
+    "briefing.overnightSummary": "夜间研发活动汇总",
+    "briefing.commitsPushed": "提交数量 (Commits)",
+    "briefing.prsMerged": "已合并 PR",
+    "briefing.newIssues": "新增 Issue",
+    "briefing.askPlaceholder": "向 AI 助手提问...",
+    "briefing.askBtn": "提问 AI",
+
+    // Engineering Velocity Chart
+    "chart.title": "工程研发速率",
+    "chart.sub": "每周 Commit、PR 与代码评审统计",
+    "chart.commits": "提交 (Commits)",
+    "chart.prs": "合并请求 (PRs)",
+    "chart.reviews": "评审 (Reviews)",
+    "chart.velocity": "效能评级",
+
+    // Pull Requests
+    "prs.title": "活跃合并请求",
+    "prs.sub": "跨代码库共 4 个开放状态的 PR",
+    "prs.viewAll": "查看全部",
+    "prs.status.review": "等待审核",
+    "prs.status.approved": "审核通过",
+    "prs.status.changes": "需要修改",
+    "prs.status.draft": "草稿",
+
+    // AI Copilot Quick Actions
+    "copilot.title": "AI 智能助手",
+    "copilot.sub": "一键自动化研发工具",
+    "copilot.action1.title": "生成站会日报",
+    "copilot.action1.desc": "AI 自动汇总您的每日工作进展",
+    "copilot.action2.title": "周度效能总结",
+    "copilot.action2.desc": "团队研发进展的高管层摘要",
+    "copilot.action3.title": "PR 风险评估",
+    "copilot.action3.desc": "AI 深度分析高风险代码变更",
+    "copilot.action4.title": "陈旧分支清理",
+    "copilot.action4.desc": "识别不活跃分支与废弃问题",
+    "copilot.cmdPalette": "按 ⌘J 打开快捷指令面板",
+
+    // CI/CD Panel
+    "ci.title": "CI/CD 构建流水线",
+    "ci.sub": "3/5 成功通过",
+    "ci.healthy": "健康",
+    "ci.viewAll": "查看所有流水线",
+    "ci.passed": "编译通过",
+    "ci.failed": "构建失败",
+    "ci.building": "正在构建",
+
+    // Common Buttons
+    "common.save": "保存设置",
+    "common.saved": "已保存！",
+    "common.language": "语言",
+  },
+
+  "zh-TW": {
+    // Nav & Header
+    "nav.dashboard": "控制台",
+    "nav.prs": "合併請求 (PR)",
+    "nav.issues": "問題追蹤 (Issues)",
+    "nav.ci": "持續整合 (CI / CD)",
+    "nav.analytics": "效能分析",
+    "nav.copilot": "AI 助手 (Copilot)",
+    "nav.settings": "系統設定",
+    "header.workspace": "工作區",
+    "header.overview": "概覽",
+    "header.greeting.morning": "早安",
+    "header.greeting.afternoon": "午安",
+    "header.greeting.evening": "晚安",
+    "header.subtitle": "這是您的每日研發概覽",
+    "header.search": "搜尋...",
+    "header.collapse": "收起",
+
+    // Dashboard Stats
+    "stats.openPRs": "待處理合併請求",
+    "stats.openPRs.sub": "4 個等待您的審核",
+    "stats.activeIssues": "活躍問題數",
+    "stats.activeIssues.sub": "8 個緊急高優問題",
+    "stats.ciPassRate": "CI 建置通過率",
+    "stats.ciPassRate.sub": "涵蓋 3 個核心程式碼庫",
+    "stats.avgReviewTime": "平均審查回應時間",
+    "stats.avgReviewTime.sub": "團隊效能排名前 10%",
+
+    // AI Briefing
+    "briefing.title": "AI 高管每日研發簡報",
+    "briefing.auto": "自動智慧合成",
+    "briefing.generatedAt": "產生時間",
+    "briefing.model": "模型",
+    "briefing.refresh": "重新整理",
+    "briefing.generating": "產生中...",
+    "briefing.expand": "展開",
+    "briefing.collapse": "折疊",
+    "briefing.criticalFocus": "核心關注事項",
+    "briefing.overnightSummary": "夜間研發活動彙整",
+    "briefing.commitsPushed": "提交數量 (Commits)",
+    "briefing.prsMerged": "已合併 PR",
+    "briefing.newIssues": "新增 Issue",
+    "briefing.askPlaceholder": "向 AI 助手提問...",
+    "briefing.askBtn": "提問 AI",
+
+    // Engineering Velocity Chart
+    "chart.title": "工程研發速率",
+    "chart.sub": "每週 Commit、PR 與程式碼審查統計",
+    "chart.commits": "提交 (Commits)",
+    "chart.prs": "合併請求 (PRs)",
+    "chart.reviews": "審查 (Reviews)",
+    "chart.velocity": "效能評級",
+
+    // Pull Requests
+    "prs.title": "活躍合併請求",
+    "prs.sub": "跨程式碼庫共 4 個開放狀態的 PR",
+    "prs.viewAll": "檢視全部",
+    "prs.status.review": "等待審核",
+    "prs.status.approved": "審核通過",
+    "prs.status.changes": "需要修改",
+    "prs.status.draft": "草稿",
+
+    // AI Copilot Quick Actions
+    "copilot.title": "AI 智慧助手",
+    "copilot.sub": "一鍵自動化研發工具",
+    "copilot.action1.title": "產生站會日報",
+    "copilot.action1.desc": "AI 自動彙整您的每日工作進展",
+    "copilot.action2.title": "週度效能總結",
+    "copilot.action2.desc": "團隊研發進展的高管層摘要",
+    "copilot.action3.title": "PR 風險評估",
+    "copilot.action3.desc": "AI 深度分析高風險程式碼變更",
+    "copilot.action4.title": "陳舊分支清理",
+    "copilot.action4.desc": "識別不活躍分支與廢棄問題",
+    "copilot.cmdPalette": "按 ⌘J 打開快捷指令面板",
+
+    // CI/CD Panel
+    "ci.title": "CI/CD 建置流水線",
+    "ci.sub": "3/5 成功通過",
+    "ci.healthy": "健康",
+    "ci.viewAll": "檢視所有流水線",
+    "ci.passed": "建置通過",
+    "ci.failed": "建置失敗",
+    "ci.building": "正在建置",
+
+    // Common Buttons
+    "common.save": "儲存設定",
+    "common.saved": "已儲存！",
+    "common.language": "語言",
+  },
+
+  ja: {
+    // Nav & Header
+    "nav.dashboard": "ダッシュボード",
+    "nav.prs": "プルリクエスト",
+    "nav.issues": "課題トラック (Issues)",
+    "nav.ci": "CI / CD パイプライン",
+    "nav.analytics": "ベロシティ分析",
+    "nav.copilot": "AI コパイロット",
+    "nav.settings": "設定",
+    "header.workspace": "ワークスペース",
+    "header.overview": "概要",
+    "header.greeting.morning": "おはようございます",
+    "header.greeting.afternoon": "こんにちは",
+    "header.greeting.evening": "こんばんは",
+    "header.subtitle": "本日の開発アクティビティ概要",
+    "header.search": "検索...",
+    "header.collapse": "折りたたむ",
+
+    // Dashboard Stats
+    "stats.openPRs": "オープンな PR",
+    "stats.openPRs.sub": "4 件のレビュー待ち",
+    "stats.activeIssues": "アクティブな課題",
+    "stats.activeIssues.sub": "8 件の緊急課題",
+    "stats.ciPassRate": "CI 合格率",
+    "stats.ciPassRate.sub": "3 つのリポジトリで計測",
+    "stats.avgReviewTime": "平均レビュー時間",
+    "stats.avgReviewTime.sub": "チームの上位 10% の速度",
+
+    // AI Briefing
+    "briefing.title": "AI エグゼクティブ日次要約",
+    "briefing.auto": "自動要約済み",
+    "briefing.generatedAt": "生成時刻",
+    "briefing.model": "モデル",
+    "briefing.refresh": "更新",
+    "briefing.generating": "生成中...",
+    "briefing.expand": "展開",
+    "briefing.collapse": "折りたたむ",
+    "briefing.criticalFocus": "重要な注力領域",
+    "briefing.overnightSummary": "夜間アクティビティ要約",
+    "briefing.commitsPushed": "コミット数",
+    "briefing.prsMerged": "マージされた PR",
+    "briefing.newIssues": "新規課題",
+    "briefing.askPlaceholder": "AI コパイロットに質問...",
+    "briefing.askBtn": "AI に質問",
+
+    // Engineering Velocity Chart
+    "chart.title": "エンジニアリング速度",
+    "chart.sub": "週間コミット・PR・レビュー統計",
+    "chart.commits": "コミット",
+    "chart.prs": "PR",
+    "chart.reviews": "レビュー",
+    "chart.velocity": "速度ランク",
+
+    // Pull Requests
+    "prs.title": "アクティブなプルリクエスト",
+    "prs.sub": "全リポジトリで 4 件のオープン PR",
+    "prs.viewAll": "すべて表示",
+    "prs.status.review": "レビューが必要",
+    "prs.status.approved": "承認済み",
+    "prs.status.changes": "変更が必要",
+    "prs.status.draft": "下書き",
+
+    // AI Copilot Quick Actions
+    "copilot.title": "AI コパイロット",
+    "copilot.sub": "ワンクリック自動化",
+    "copilot.action1.title": "スタンドアップレポート作成",
+    "copilot.action1.desc": "日次進捗ノートを AI が自動集計",
+    "copilot.action2.title": "週次ベロシティ要約",
+    "copilot.action2.desc": "チーム進捗のエグゼクティブ要約",
+    "copilot.action3.title": "PR リスク評価",
+    "copilot.action3.desc": "高リスクなコード変更を AI 解析",
+    "copilot.action4.title": "非アクティブブランチクリーンアップ",
+    "copilot.action4.desc": "停滞中のブランチや課題を検出",
+    "copilot.cmdPalette": "⌘J キーでコマンドパレットを開く",
+
+    // CI/CD Panel
+    "ci.title": "CI/CD パイプライン",
+    "ci.sub": "3/5 成功",
+    "ci.healthy": "正常",
+    "ci.viewAll": "すべてのパイプラインを表示",
+    "ci.passed": "成功",
+    "ci.failed": "失敗",
+    "ci.building": "ビルド中",
+
+    // Common Buttons
+    "common.save": "設定を保存",
+    "common.saved": "保存しました！",
+    "common.language": "言語",
+  },
+};

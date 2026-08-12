@@ -3,52 +3,57 @@
 import { GitPullRequest, Bug, Zap, Clock, TrendingUp, TrendingDown, Minus } from "lucide-react";
 import { motion } from "framer-motion";
 
-const stats = [
-  {
-    label: "OPEN PULL REQUESTS",
-    value: "12",
-    change: "+3",
-    changeType: "neutral" as const,
-    icon: GitPullRequest,
-    accent: "#7c6dfa",
-    subtext: "4 awaiting review",
-    progress: 40,
-    sparkline: "M0 15 Q 15 12, 30 18 T 60 8 T 90 12 T 120 5",
-  },
-  {
-    label: "ACTIVE ISSUES",
-    value: "28",
-    change: "-5",
-    changeType: "positive" as const,
-    icon: Bug,
-    accent: "#10d98e",
-    subtext: "8 critical priority",
-    progress: 70,
-    sparkline: "M0 18 Q 20 8, 40 14 T 80 6 T 120 10",
-  },
-  {
-    label: "CI PASS RATE",
-    value: "94.2%",
-    change: "+9.3%",
-    changeType: "positive" as const,
-    icon: Zap,
-    accent: "#22d3ee",
-    subtext: "Across 3 repositories",
-    progress: 94,
-    sparkline: "M0 16 Q 25 18, 50 10 T 90 12 T 120 4",
-  },
-  {
-    label: "AVG REVIEW VELO",
-    value: "4.2h",
-    change: "-1.3h",
-    changeType: "positive" as const,
-    icon: Clock,
-    accent: "#fbbf24",
-    subtext: "Top 10% team velocity",
-    progress: 80,
-    sparkline: "M0 10 Q 30 15, 60 8 T 100 14 T 120 6",
-  },
-];
+import { useLanguage } from "@/lib/i18n/context";
+
+export function StatsOverview() {
+  const { t } = useLanguage();
+
+  const stats = [
+    {
+      labelKey: "stats.openPRs",
+      subKey: "stats.openPRs.sub",
+      value: "12",
+      change: "+3",
+      changeType: "neutral" as const,
+      icon: GitPullRequest,
+      accent: "#7c6dfa",
+      progress: 40,
+      sparkline: "M0 15 Q 15 12, 30 18 T 60 8 T 90 12 T 120 5",
+    },
+    {
+      labelKey: "stats.activeIssues",
+      subKey: "stats.activeIssues.sub",
+      value: "28",
+      change: "-5",
+      changeType: "positive" as const,
+      icon: Bug,
+      accent: "#10d98e",
+      progress: 70,
+      sparkline: "M0 18 Q 20 8, 40 14 T 80 6 T 120 10",
+    },
+    {
+      labelKey: "stats.ciPassRate",
+      subKey: "stats.ciPassRate.sub",
+      value: "94.2%",
+      change: "+9.3%",
+      changeType: "positive" as const,
+      icon: Zap,
+      accent: "#22d3ee",
+      progress: 94,
+      sparkline: "M0 16 Q 25 18, 50 10 T 90 12 T 120 4",
+    },
+    {
+      labelKey: "stats.avgReviewTime",
+      subKey: "stats.avgReviewTime.sub",
+      value: "4.2h",
+      change: "-1.3h",
+      changeType: "positive" as const,
+      icon: Clock,
+      accent: "#fbbf24",
+      progress: 80,
+      sparkline: "M0 10 Q 30 15, 60 8 T 100 14 T 120 6",
+    },
+  ];
 
 const container = {
   hidden: { opacity: 0 },
@@ -127,8 +132,8 @@ export function StatsOverview() {
               <p className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight font-mono leading-none mb-1">
                 {stat.value}
               </p>
-              <p className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-wider">
-                {stat.label}
+              <p className="text-[10px] font-bold text-[var(--text-tertiary)] uppercase tracking-wider truncate">
+                {t(stat.labelKey)}
               </p>
             </div>
 
@@ -144,9 +149,9 @@ export function StatsOverview() {
                   }}
                 />
               </div>
-              <p className="text-[11px] text-[var(--text-tertiary)] flex items-center gap-1.5">
+              <p className="text-[11px] text-[var(--text-tertiary)] flex items-center gap-1.5 truncate">
                 <span className="w-1 h-1 rounded-full shrink-0" style={{ background: stat.accent }} />
-                {stat.subtext}
+                <span>{t(stat.subKey)}</span>
               </p>
             </div>
           </motion.div>

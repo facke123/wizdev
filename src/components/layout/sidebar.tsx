@@ -12,71 +12,74 @@ import {
   ChevronRight,
   Sparkles,
 } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/context";
 
 interface SidebarProps {
   collapsed: boolean;
   onToggle: () => void;
 }
 
-const navItems = [
-  {
-    icon: LayoutDashboard,
-    label: "Dashboard",
-    href: "/",
-    active: true,
-    group: "main",
-  },
-  {
-    icon: GitPullRequest,
-    label: "Pull Requests",
-    href: "/prs",
-    active: false,
-    badge: "12",
-    group: "main",
-  },
-  {
-    icon: Bug,
-    label: "Issues",
-    href: "/issues",
-    active: false,
-    badge: "28",
-    group: "main",
-  },
-  {
-    icon: Zap,
-    label: "CI / CD",
-    href: "/ci",
-    active: false,
-    group: "main",
-  },
-  {
-    icon: BarChart3,
-    label: "Analytics",
-    href: "/analytics",
-    active: false,
-    group: "tools",
-  },
-  {
-    icon: Bot,
-    label: "AI Copilot",
-    href: "/chat",
-    active: false,
-    group: "tools",
-    highlight: true,
-  },
-  {
-    icon: Settings,
-    label: "Settings",
-    href: "/settings",
-    active: false,
-    group: "tools",
-  },
-];
-
-const mainItems = navItems.filter((i) => i.group === "main");
-const toolItems = navItems.filter((i) => i.group === "tools");
-
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
+  const { t } = useLanguage();
+
+  const navItems = [
+    {
+      icon: LayoutDashboard,
+      labelKey: "nav.dashboard",
+      href: "/",
+      active: true,
+      group: "main",
+    },
+    {
+      icon: GitPullRequest,
+      labelKey: "nav.prs",
+      href: "/prs",
+      active: false,
+      badge: "12",
+      group: "main",
+    },
+    {
+      icon: Bug,
+      labelKey: "nav.issues",
+      href: "/issues",
+      active: false,
+      badge: "28",
+      group: "main",
+    },
+    {
+      icon: Zap,
+      labelKey: "nav.ci",
+      href: "/ci",
+      active: false,
+      group: "main",
+    },
+    {
+      icon: BarChart3,
+      labelKey: "nav.analytics",
+      href: "/analytics",
+      active: false,
+      group: "tools",
+    },
+    {
+      icon: Bot,
+      labelKey: "nav.copilot",
+      href: "/chat",
+      active: false,
+      group: "tools",
+      highlight: true,
+    },
+    {
+      icon: Settings,
+      labelKey: "nav.settings",
+      href: "/settings",
+      active: false,
+      group: "tools",
+    },
+  ];
+
+  const mainItems = navItems.filter((i) => i.group === "main");
+  const toolItems = navItems.filter((i) => i.group === "tools");
+
   return (
     <aside
       className={`
@@ -96,15 +99,12 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           collapsed ? "justify-center px-0" : "px-4 gap-3"
         }`}
       >
-        {/* Logo icon with animated gradient */}
         <div className="relative shrink-0">
           <div
             className="w-8 h-8 rounded-[10px] flex items-center justify-center text-white font-black text-sm"
             style={{
-              background:
-                "linear-gradient(135deg, #7c6dfa 0%, #5b4fdf 50%, #22d3ee 100%)",
-              boxShadow:
-                "0 4px 12px rgba(124, 109, 250, 0.45), 0 0 0 1px rgba(255,255,255,0.10) inset",
+              background: "linear-gradient(135deg, #7c6dfa 0%, #5b4fdf 50%, #22d3ee 100%)",
+              boxShadow: "0 4px 12px rgba(124, 109, 250, 0.45), 0 0 0 1px rgba(255,255,255,0.10) inset",
             }}
           >
             W
@@ -140,7 +140,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             </p>
           )}
           {mainItems.map((item) => (
-            <NavItem key={item.label} item={item} collapsed={collapsed} />
+            <NavItem key={item.labelKey} item={item} collapsed={collapsed} t={t} />
           ))}
         </div>
 
@@ -152,7 +152,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             </p>
           )}
           {toolItems.map((item) => (
-            <NavItem key={item.label} item={item} collapsed={collapsed} />
+            <NavItem key={item.labelKey} item={item} collapsed={collapsed} t={t} />
           ))}
         </div>
       </nav>
@@ -163,8 +163,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           <div
             className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
             style={{
-              background:
-                "linear-gradient(135deg, var(--brand-violet), var(--brand-indigo))",
+              background: "linear-gradient(135deg, var(--brand-violet), var(--brand-indigo))",
             }}
           >
             JD
@@ -191,7 +190,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           ) : (
             <>
               <ChevronLeft className="w-4 h-4" />
-              <span>Collapse</span>
+              <span>{t("header.collapse")}</span>
             </>
           )}
         </button>
@@ -203,15 +202,26 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
 function NavItem({
   item,
   collapsed,
+  t,
 }: {
-  item: (typeof navItems)[0];
+  item: {
+    icon: any;
+    labelKey: string;
+    href: string;
+    active: boolean;
+    badge?: string;
+    highlight?: boolean;
+  };
   collapsed: boolean;
+  t: (key: string) => string;
 }) {
   const Icon = item.icon;
+  const label = t(item.labelKey);
+
   return (
     <a
       href={item.href}
-      title={collapsed ? item.label : undefined}
+      title={collapsed ? label : undefined}
       className={`
         relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium
         transition-all duration-150 group
@@ -225,15 +235,13 @@ function NavItem({
       style={
         item.active
           ? {
-              background:
-                "linear-gradient(135deg, rgba(124,109,250,0.18) 0%, rgba(124,109,250,0.08) 100%)",
+              background: "linear-gradient(135deg, rgba(124,109,250,0.18) 0%, rgba(124,109,250,0.08) 100%)",
               border: "1px solid rgba(124,109,250,0.25)",
               boxShadow: "0 2px 8px rgba(124,109,250,0.12)",
             }
           : { border: "1px solid transparent" }
       }
     >
-      {/* Active left bar */}
       {item.active && !collapsed && (
         <div
           className="absolute left-0 top-2 bottom-2 w-0.5 rounded-r-full"
@@ -253,7 +261,7 @@ function NavItem({
 
       {!collapsed && (
         <>
-          <span className="truncate flex-1">{item.label}</span>
+          <span className="truncate flex-1">{label}</span>
 
           {item.highlight && (
             <Sparkles

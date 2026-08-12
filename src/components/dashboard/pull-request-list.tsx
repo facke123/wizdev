@@ -82,30 +82,28 @@ const avatarGradients = [
 ];
 
 export function PullRequestList() {
+  const { t } = useLanguage();
+
   return (
-    <div className="card p-5 sm:p-6">
-      {/* ── Header ─────────────────────────────────── */}
-      <div className="flex items-center justify-between gap-4 mb-5">
+    <div className="card p-5 sm:p-6 space-y-4">
+      {/* ── Header ──────────────────────────────────────── */}
+      <div className="flex items-center justify-between gap-4 pb-3 border-b border-white/[0.06]">
         <div className="flex items-center gap-3 min-w-0">
           <div
-            className="p-2 rounded-xl"
+            className="w-9 h-9 rounded-xl flex items-center justify-center text-sm shrink-0"
             style={{
               background: "rgba(124,109,250,0.12)",
               border: "1px solid rgba(124,109,250,0.22)",
             }}
           >
-            <GitPullRequest
-              className="w-[17px] h-[17px]"
-              style={{ color: "#9d91fc" }}
-              strokeWidth={1.75}
-            />
+            <GitPullRequest className="w-4 h-4 text-[var(--brand-violet)]" />
           </div>
           <div className="min-w-0">
-            <h2 className="text-[14px] font-bold text-[var(--text-primary)] tracking-tight">
-              Active Pull Requests
+            <h2 className="text-[15px] font-bold text-white tracking-tight truncate">
+              {t("prs.title")}
             </h2>
-            <p className="text-[11px] text-[var(--text-tertiary)]">
-              4 open PRs across active repositories
+            <p className="text-xs text-[var(--text-tertiary)] mt-0.5 truncate">
+              {t("prs.sub")}
             </p>
           </div>
         </div>
@@ -118,7 +116,7 @@ export function PullRequestList() {
             border: "1px solid rgba(255,255,255,0.07)",
           }}
         >
-          <span className="whitespace-nowrap">View All</span>
+          <span className="whitespace-nowrap">{t("prs.viewAll")}</span>
           <ArrowRight className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
         </a>
       </div>

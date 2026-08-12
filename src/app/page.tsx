@@ -10,14 +10,17 @@ import { CIStatusPanel } from "@/components/dashboard/ci-status-panel";
 import { ActivityChart } from "@/components/dashboard/activity-chart";
 import { QuickActions } from "@/components/dashboard/quick-actions";
 
+import { I18nProvider } from "@/lib/i18n/context";
+
 export default function DashboardPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div
-      className="flex min-h-[100dvh] w-full overflow-x-hidden"
-      style={{ background: "var(--surface-root)" }}
-    >
+    <I18nProvider>
+      <div
+        className="flex min-h-[100dvh] w-full overflow-x-hidden"
+        style={{ background: "var(--surface-root)" }}
+      >
       {/* Ambient background mesh */}
       <div className="bg-mesh" />
 
@@ -60,5 +63,6 @@ export default function DashboardPage() {
         </main>
       </div>
     </div>
+    </I18nProvider>
   );
 }

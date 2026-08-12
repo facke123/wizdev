@@ -73,52 +73,47 @@ export function CIStatusPanel() {
 
   return (
     <div
-      className="card p-5"
+      className="card p-5 space-y-4"
       style={{
         background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(15,23,42,0.95) 100%)",
         border: "1px solid rgba(255,255,255,0.08)",
       }}
     >
       {/* ── Header ─────────────────────────────────── */}
-      <div className="flex items-center justify-between gap-3 mb-4">
+      <div className="flex items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
         <div className="flex items-center gap-3 min-w-0">
           <div
-            className="p-2 rounded-xl"
+            className="w-9 h-9 rounded-xl flex items-center justify-center text-sm shrink-0"
             style={{
               background: "rgba(34,211,238,0.10)",
-              border: "1px solid rgba(34,211,238,0.20)",
+              border: "1px solid rgba(34,211,238,0.22)",
             }}
           >
-            <CheckCircle2
-              className="w-[17px] h-[17px]"
-              style={{ color: "#22d3ee" }}
-              strokeWidth={1.75}
-            />
+            <Zap className="w-4 h-4 text-[var(--brand-cyan)]" />
           </div>
           <div className="min-w-0">
-            <h2 className="text-[14px] font-bold text-white tracking-tight">
-              CI/CD Pipelines
+            <h2 className="text-[15px] font-bold text-white tracking-tight truncate">
+              {t("ci.title")}
             </h2>
-            <p className="text-[11px] text-[var(--text-tertiary)]">
-              {passingCount}/{mockWorkflows.length} passing
+            <p className="text-xs text-[var(--text-tertiary)] mt-0.5 truncate">
+              {t("ci.sub")}
             </p>
           </div>
         </div>
 
         {/* Health badge */}
         <div
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold shrink-0"
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold shrink-0 whitespace-nowrap"
           style={{
             background: "rgba(16,217,142,0.12)",
             border: "1px solid rgba(16,217,142,0.25)",
-            color: "#6ee7b7",
+            color: "#10d98e",
           }}
         >
           <span
-            className="w-1.5 h-1.5 rounded-full"
-            style={{ background: "#10d98e", boxShadow: "0 0 6px #10d98e" }}
+            className="w-1.5 h-1.5 rounded-full bg-[#10d98e] animate-pulse"
           />
-          {healthPercent}% Healthy
+          {t("ci.healthy")}
         </div>
       </div>
 
@@ -198,7 +193,7 @@ export function CIStatusPanel() {
           border: "1px solid rgba(255,255,255,0.06)",
         }}
       >
-        <span className="whitespace-nowrap">View all pipelines</span>
+        <span className="whitespace-nowrap">{t("ci.viewAll")}</span>
         <ExternalLink className="w-3 h-3 shrink-0" strokeWidth={1.75} />
       </a>
     </div>

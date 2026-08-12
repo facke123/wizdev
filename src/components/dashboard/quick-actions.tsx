@@ -1,35 +1,51 @@
 "use client";
 
-import { FileText, BarChart3, ShieldAlert, GitBranch, ArrowRight, Sparkles } from "lucide-react";
-
-const actions = [
-  {
-    icon: FileText,
-    label: "Generate Standup Report",
-    description: "AI compiles your daily standup notes",
-    color: "#7c6dfa",
-  },
-  {
-    icon: BarChart3,
-    label: "Weekly Velocity Summary",
-    description: "Executive summary of team progress",
-    color: "#22d3ee",
-  },
-  {
-    icon: ShieldAlert,
-    label: "PR Risk Assessment",
-    description: "AI analyzes high-risk code changes",
-    color: "#fbbf24",
-  },
-  {
-    icon: GitBranch,
-    label: "Stale Branch Cleanup",
-    description: "Identify inactive branches & issues",
-    color: "#10d98e",
-  },
-];
+import { FileText, TrendingUp, ShieldAlert, GitBranch, ArrowRight, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
+import { useLanguage } from "@/lib/i18n/context";
 
 export function QuickActions() {
+  const { t } = useLanguage();
+
+  const actions = [
+    {
+      icon: FileText,
+      titleKey: "copilot.action1.title",
+      descKey: "copilot.action1.desc",
+      color: "#7c6dfa",
+      bg: "rgba(124,109,250,0.10)",
+      border: "rgba(124,109,250,0.22)",
+      tag: "1-Click",
+    },
+    {
+      icon: TrendingUp,
+      titleKey: "copilot.action2.title",
+      descKey: "copilot.action2.desc",
+      color: "#22d3ee",
+      bg: "rgba(34,211,238,0.10)",
+      border: "rgba(34,211,238,0.22)",
+      tag: "Weekly",
+    },
+    {
+      icon: ShieldAlert,
+      titleKey: "copilot.action3.title",
+      descKey: "copilot.action3.desc",
+      color: "#fb7185",
+      bg: "rgba(251,113,133,0.10)",
+      border: "rgba(251,113,133,0.22)",
+      tag: "Security",
+    },
+    {
+      icon: GitBranch,
+      titleKey: "copilot.action4.title",
+      descKey: "copilot.action4.desc",
+      color: "#10d98e",
+      bg: "rgba(16,217,142,0.10)",
+      border: "rgba(16,217,142,0.22)",
+      tag: "Cleanup",
+    },
+  ];
+
   return (
     <div
       className="card p-5 relative overflow-visible"
@@ -55,64 +71,38 @@ export function QuickActions() {
       {/* ── Header ─────────────────────────────────── */}
       <div className="flex items-center gap-3 mb-4">
         <div
-          className="p-2 rounded-xl"
+          className="p-2 rounded-xl flex items-center justify-center"
           style={{
             background: "rgba(124,109,250,0.12)",
             border: "1px solid rgba(124,109,250,0.22)",
           }}
         >
-          <Sparkles
-            className="w-[17px] h-[17px]"
-            style={{ color: "#9d91fc" }}
-            strokeWidth={1.75}
-          />
+          <Sparkles className="w-4 h-4 text-[var(--brand-violet)]" />
         </div>
-        <div className="min-w-0">
-          <h2 className="text-[14px] font-bold text-white tracking-tight">
-            AI Copilot
+        <div>
+          <h2 className="text-[15px] font-bold text-white tracking-tight leading-none">
+            {t("copilot.title")}
           </h2>
-          <p className="text-[11px] text-[var(--text-tertiary)]">
-            One-click automation
+          <p className="text-xs text-[var(--text-tertiary)] mt-1 leading-none">
+            {t("copilot.sub")}
           </p>
         </div>
       </div>
 
       {/* ── Action Buttons ──────────────────────────── */}
       <div className="space-y-2">
-        {actions.map((action) => {
+        {actions.map((action, i) => {
           const Icon = action.icon;
           return (
             <button
-              key={action.label}
-              className="w-full flex items-center gap-3 p-2.5 rounded-xl transition-all duration-150 text-left group"
-              style={{
-                background: "rgba(255,255,255,0.02)",
-                border: "1px solid rgba(255,255,255,0.05)",
-              }}
-              onMouseEnter={(e) => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.background = `${action.color}0a`;
-                el.style.borderColor = `${action.color}28`;
-                el.style.transform = "translateX(2px)";
-              }}
-              onMouseLeave={(e) => {
-                const el = e.currentTarget as HTMLElement;
-                el.style.background = "rgba(255,255,255,0.02)";
-                el.style.borderColor = "rgba(255,255,255,0.05)";
-                el.style.transform = "translateX(0)";
-              }}
+              key={i}
+              className="w-full p-3 rounded-xl flex items-center gap-3 text-left transition-all duration-150 group border border-white/[0.05] hover:border-white/[0.12]"
+              style={{ background: "rgba(255,255,255,0.02)" }}
             >
               <div
-                className="p-1.5 rounded-lg flex-shrink-0 transition-transform duration-150 group-hover:scale-110"
-                style={{ background: `${action.color}18` }}
+                className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+                style={{ background: action.bg, border: `1px solid ${action.border}` }}
               >
-                <Icon
-                  className="w-3.5 h-3.5"
-                  style={{ color: action.color }}
-                  strokeWidth={1.75}
-                />
-              </div>
-              <div className="min-w-0 flex-1">
                 <p className="text-[12px] font-semibold text-[var(--text-primary)] group-hover:text-white transition-colors truncate">
                   {action.label}
                 </p>

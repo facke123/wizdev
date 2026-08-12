@@ -2,22 +2,25 @@
 
 import { useEffect, useState } from "react";
 import { Search, Bell, ChevronDown, Command } from "lucide-react";
+import { LanguageSelector } from "./language-selector";
+import { useLanguage } from "@/lib/i18n/context";
 
 export function Header() {
+  const { t } = useLanguage();
   const [mounted, setMounted] = useState(false);
-  const [greeting, setGreeting] = useState("Good morning");
+  const [greetingKey, setGreetingKey] = useState("header.greeting.morning");
   const [formattedDate, setFormattedDate] = useState("");
 
   useEffect(() => {
     setMounted(true);
     const hour = new Date().getHours();
-    const g =
+    const gk =
       hour < 12
-        ? "Good morning"
+        ? "header.greeting.morning"
         : hour < 18
-          ? "Good afternoon"
-          : "Good evening";
-    setGreeting(g);
+          ? "header.greeting.afternoon"
+          : "header.greeting.evening";
+    setGreetingKey(gk);
     setFormattedDate(
       new Date().toLocaleDateString("en-US", {
         weekday: "short",
@@ -42,9 +45,9 @@ export function Header() {
         <div className="flex items-center gap-3 min-w-0 flex-1">
           <div className="min-w-0">
             <div className="flex items-center gap-2 text-[11px] text-[var(--text-tertiary)] leading-none mb-1">
-              <span className="font-medium text-[var(--text-secondary)]">Workspace</span>
+              <span className="font-medium text-[var(--text-secondary)]">{t("header.workspace")}</span>
               <span className="text-[var(--text-disabled)]">/</span>
-              <span className="font-semibold text-[var(--brand-violet)]">Overview</span>
+              <span className="font-semibold text-[var(--brand-violet)]">{t("header.overview")}</span>
               {mounted && formattedDate && (
                 <>
                   <span className="text-[var(--text-disabled)]">·</span>
@@ -53,29 +56,32 @@ export function Header() {
               )}
             </div>
             <h1 className="text-[15px] font-bold text-white tracking-tight leading-none truncate">
-              {mounted ? greeting : "Good morning"}
+              {mounted ? t(greetingKey) : t("header.greeting.morning")}
               <span className="hidden sm:inline font-normal text-[var(--text-tertiary)] ml-2 text-[13px]">
-                — Here&apos;s your daily overview
+                — {t("header.subtitle")}
               </span>
             </h1>
           </div>
         </div>
 
         {/* ── Right: Controls ──────────────────────────── */}
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2.5 shrink-0">
+          {/* Language Selector */}
+          <LanguageSelector />
+
           {/* Search Box */}
           <div
             className="hidden md:flex items-center gap-2 px-3 h-9 rounded-xl transition-all duration-150 group"
             style={{
               background: "rgba(255,255,255,0.03)",
               border: "1px solid rgba(255,255,255,0.07)",
-              width: "200px",
+              width: "180px",
             }}
           >
             <Search className="w-3.5 h-3.5 text-[var(--text-tertiary)] group-hover:text-[var(--brand-violet)] transition-colors shrink-0" />
             <input
               type="text"
-              placeholder="Search..."
+              placeholder={t("header.search")}
               className="w-full bg-transparent text-xs text-[var(--text-primary)] placeholder:text-[var(--text-disabled)] focus:outline-none"
             />
             <kbd

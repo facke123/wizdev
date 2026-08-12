@@ -1,6 +1,5 @@
-"use client";
-
 import { motion } from "framer-motion";
+import { useLanguage } from "@/lib/i18n/context";
 
 const mockData = [
   { day: "Mon", commits: 12, prs: 3, reviews: 5 },
@@ -18,13 +17,15 @@ function getBarHeight(value: number): string {
   return `${Math.max((value / maxCommits) * 100, 4)}%`;
 }
 
-const series = [
-  { key: "commits" as const,  label: "Commits",  color: "#7c6dfa", glow: "rgba(124,109,250,0.4)" },
-  { key: "prs" as const,      label: "PRs",       color: "#22d3ee", glow: "rgba(34,211,238,0.4)"  },
-  { key: "reviews" as const,  label: "Reviews",   color: "#10d98e", glow: "rgba(16,217,142,0.4)"  },
-];
-
 export function ActivityChart() {
+  const { t } = useLanguage();
+
+  const series = [
+    { key: "commits" as const,  labelKey: "chart.commits",  color: "#7c6dfa", glow: "rgba(124,109,250,0.4)" },
+    { key: "prs" as const,      labelKey: "chart.prs",      color: "#22d3ee", glow: "rgba(34,211,238,0.4)"  },
+    { key: "reviews" as const,  labelKey: "chart.reviews",  color: "#10d98e", glow: "rgba(16,217,142,0.4)"  },
+  ];
+
   const totalCommits = mockData.reduce((s, d) => s + d.commits, 0);
   const totalPRs = mockData.reduce((s, d) => s + d.prs, 0);
   const totalReviews = mockData.reduce((s, d) => s + d.reviews, 0);
@@ -48,28 +49,32 @@ export function ActivityChart() {
               <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
             </svg>
           </div>
-          <div className="min-w-0">
-            <h2 className="text-[14px] font-bold text-[var(--text-primary)] tracking-tight">
-              Engineering Velocity
-            </h2>
-            <p className="text-[11px] text-[var(--text-tertiary)]">
-              Weekly commits, PRs &amp; code reviews
-            </p>
-          </div>
+        {/* ── Header ──────────────────────────────────────── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
+        <div>
+          <h2 className="text-[15px] font-bold text-white tracking-tight">
+            {t("chart.title")}
+          </h2>
+          <p className="text-xs text-[var(--text-tertiary)] mt-0.5">
+            {t("chart.sub")}
+          </p>
         </div>
 
         {/* Legend */}
-        <div className="flex items-center gap-4 text-[11px] font-semibold shrink-0">
+        <div className="flex items-center gap-4 flex-wrap">
           {series.map((s) => (
             <div key={s.key} className="flex items-center gap-1.5">
-              <div
-                className="w-2.5 h-2.5 rounded-full"
-                style={{ background: s.color, boxShadow: `0 0 6px ${s.color}` }}
+              <span
+                className="w-2.5 h-2.5 rounded-sm shrink-0"
+                style={{ background: s.color, boxShadow: `0 0 6px ${s.glow}` }}
               />
-              <span className="text-[var(--text-secondary)]">{s.label}</span>
+              <span className="text-[11px] font-medium text-[var(--text-secondary)]">
+                {t(s.labelKey)}
+              </span>
             </div>
           ))}
         </div>
+      </div>
       </div>
 
       {/* ── Bar Chart ──────────────────────────────── */}

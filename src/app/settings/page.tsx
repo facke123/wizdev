@@ -8,6 +8,7 @@ import {
   Zap, Laptop
 } from "lucide-react";
 import { getAllProviders, type AIProvider } from "@/lib/ai-providers";
+import { LanguageSelector } from "@/components/layout/language-selector";
 
 function GithubIcon({ className = "w-4 h-4", style }: { className?: string; style?: React.CSSProperties }) {
   return (
@@ -160,6 +161,11 @@ export default function SettingsPage() {
                 </SettingRow>
                 <SettingRow label="Email">
                   <div className="w-64"><TextInput placeholder="email@example.com" type="email" value={email} onChange={setEmail} /></div>
+                </SettingRow>
+                <SettingRow label="Language" description="Interface display language / 多语言设置">
+                  <div className="w-64">
+                    <LanguageSelector />
+                  </div>
                 </SettingRow>
                 <SettingRow label="Timezone">
                   <select value={timezone} onChange={e => setTimezone(e.target.value)}

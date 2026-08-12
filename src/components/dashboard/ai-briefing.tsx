@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { RefreshCw, ChevronUp, ChevronDown, Sparkles, Send } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/context";
 
 const mockBriefing = {
   defaultGeneratedAt: "09:00 AM",
@@ -9,6 +10,7 @@ const mockBriefing = {
 };
 
 export function AIBriefing() {
+  const { t } = useLanguage();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isExpanded, setIsExpanded] = useState(true);
   const [generatedAt, setGeneratedAt] = useState(mockBriefing.defaultGeneratedAt);
@@ -50,10 +52,10 @@ export function AIBriefing() {
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap min-w-0">
               <h2 className="text-[14px] font-bold text-white tracking-tight truncate">
-                AI Executive Daily Briefing
+                {t("briefing.title")}
               </h2>
               <span
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold shrink-0"
+                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-semibold shrink-0"
                 style={{
                   background: "rgba(124,109,250,0.14)",
                   border: "1px solid rgba(124,109,250,0.28)",
@@ -61,15 +63,15 @@ export function AIBriefing() {
                 }}
               >
                 <Sparkles className="w-2.5 h-2.5 shrink-0" />
-                <span className="whitespace-nowrap">Auto Synthesized</span>
+                <span className="whitespace-nowrap">{t("briefing.auto")}</span>
               </span>
             </div>
             <p className="text-[11px] text-[var(--text-tertiary)] mt-0.5 truncate">
-              Generated at{" "}
+              {t("briefing.generatedAt")}{" "}
               <span className="font-mono text-[var(--text-secondary)]">
                 {generatedAt}
               </span>{" "}
-              · Model:{" "}
+              · {t("briefing.model")}:{" "}
               <span style={{ color: "var(--brand-violet)" }} className="font-semibold">
                 {mockBriefing.model}
               </span>
@@ -89,7 +91,7 @@ export function AIBriefing() {
             }}
           >
             <RefreshCw className={`w-3.5 h-3.5 shrink-0 ${isRefreshing ? "animate-spin" : ""}`} />
-            <span className="whitespace-nowrap">{isRefreshing ? "Generating..." : "Refresh"}</span>
+            <span className="whitespace-nowrap">{isRefreshing ? t("briefing.generating") : t("briefing.refresh")}</span>
           </button>
 
           <button
@@ -100,7 +102,7 @@ export function AIBriefing() {
               border: "1px solid rgba(255,255,255,0.08)",
             }}
           >
-            <span className="whitespace-nowrap">{isExpanded ? "Collapse" : "Expand"}</span>
+            <span className="whitespace-nowrap">{isExpanded ? t("briefing.collapse") : t("briefing.expand")}</span>
             {isExpanded ? <ChevronUp className="w-3.5 h-3.5 shrink-0" /> : <ChevronDown className="w-3.5 h-3.5 shrink-0" />}
           </button>
         </div>
@@ -169,25 +171,25 @@ export function AIBriefing() {
             <div className="flex items-center gap-2 mb-2.5">
               <span className="text-sm">📊</span>
               <h3 className="text-[11px] font-extrabold uppercase tracking-[0.12em]" style={{ color: "#22d3ee" }}>
-                Overnight Activity Summary
+                {t("briefing.overnightSummary")}
               </h3>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 min-w-0">
               {[
-                { label: "Commits Pushed", value: "7", sub: "Across 3 repos", color: "#7c6dfa" },
-                { label: "PRs Merged", value: "2", sub: "#142 Analytics, #156 Fix", color: "#10d98e" },
-                { label: "New Issues", value: "1", sub: "#203 Perf Regression", color: "#fbbf24" },
+                { labelKey: "briefing.commitsPushed", value: "7", sub: "Across 3 repos", color: "#7c6dfa" },
+                { labelKey: "briefing.prsMerged", value: "2", sub: "#142 Analytics, #156 Fix", color: "#10d98e" },
+                { labelKey: "briefing.newIssues", value: "1", sub: "#203 Perf Regression", color: "#fbbf24" },
               ].map((card) => (
                 <div
-                  key={card.label}
+                  key={card.labelKey}
                   className="p-3 rounded-xl transition-all duration-150 min-w-0"
                   style={{
                     background: "rgba(255,255,255,0.025)",
                     border: "1px solid rgba(255,255,255,0.06)",
                   }}
                 >
-                  <p className="text-[11px] text-[var(--text-tertiary)] font-medium mb-1 truncate">{card.label}</p>
+                  <p className="text-[11px] text-[var(--text-tertiary)] font-medium mb-1 truncate">{t(card.labelKey)}</p>
                   <p className="text-xl font-extrabold font-mono leading-none mb-1" style={{ color: card.color }}>
                     {card.value}
                   </p>
@@ -210,7 +212,7 @@ export function AIBriefing() {
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Ask AI Copilot..."
+                placeholder={t("briefing.askPlaceholder")}
                 className="flex-1 min-w-0 bg-transparent text-xs text-[var(--text-primary)] placeholder:text-[var(--text-disabled)] focus:outline-none"
               />
               <button
@@ -221,7 +223,7 @@ export function AIBriefing() {
                 }}
               >
                 <Send className="w-3.5 h-3.5 shrink-0" />
-                <span className="whitespace-nowrap font-bold">Ask AI</span>
+                <span className="whitespace-nowrap font-bold">{t("briefing.askBtn")}</span>
               </button>
             </div>
           </div>
