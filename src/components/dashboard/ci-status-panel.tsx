@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, XCircle, Loader2, ExternalLink } from "lucide-react";
+import { CheckCircle2, XCircle, Loader2, ExternalLink, Zap } from "lucide-react";
 
 const mockWorkflows = [
   {
