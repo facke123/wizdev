@@ -32,7 +32,7 @@ export default function DashboardPage() {
         <Header />
 
         <main className="flex-1 overflow-y-auto">
-          <div className="w-full max-w-[1600px] mx-auto px-5 sm:px-7 lg:px-9 py-6 sm:py-8 space-y-6 sm:space-y-8">
+          <div className="w-full max-w-[1600px] mx-auto space-y-6 sm:space-y-8" style={{ margin: "2px", padding: "2px" }}>
 
             {/* ── Stats Row ───────────────────────────── */}
             <section>

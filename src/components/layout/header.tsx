@@ -37,7 +37,7 @@ export function Header() {
         borderBottom: "1px solid rgba(255,255,255,0.06)",
       }}
     >
-      <div className="w-full max-w-[1600px] mx-auto px-5 sm:px-7 lg:px-9 h-full flex items-center justify-between gap-4">
+      <div className="w-full max-w-[1600px] mx-auto h-full flex items-center justify-between gap-4" style={{ margin: "2px", padding: "2px" }}>
         {/* ── Left: Greeting & Breadcrumb ─────────────── */}
         <div className="flex items-center gap-3 min-w-0 flex-1">
           <div className="min-w-0">
