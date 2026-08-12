@@ -11,6 +11,7 @@ export const translations: Record<Language, Record<string, string>> = {
   en: {
     // Nav & Header
     "nav.dashboard": "Dashboard",
+    "nav.planning": "Project Planning",
     "nav.prs": "Pull Requests",
     "nav.issues": "Issues",
     "nav.ci": "CI / CD",
@@ -83,6 +84,21 @@ export const translations: Record<Language, Record<string, string>> = {
     "copilot.action4.desc": "Identify inactive branches & issues",
     "copilot.cmdPalette": "Press ⌘J to open command palette",
 
+    // Planning Module
+    "planning.title": "Project Planning & Roadmap",
+    "planning.subtitle": "Manage sprints, epic roadmaps, AI task decomposition, and velocity burndown",
+    "planning.tabs.roadmap": "Roadmap & Timeline",
+    "planning.tabs.kanban": "Sprint Kanban Board",
+    "planning.tabs.aiPlanner": "AI Task Auto-Planner",
+    "planning.tabs.burndown": "Velocity & Burndown",
+    "planning.sprint": "Sprint 24 - Q1 Release",
+    "planning.metrics.progress": "Completed Progress",
+    "planning.metrics.storyPoints": "Total Story Points",
+    "planning.metrics.atRisk": "At-Risk Tasks",
+    "planning.metrics.teamCapacity": "Team Capacity",
+    "planning.newTask": "Add New Task",
+    "planning.aiBreakdownBtn": "AI Decompose Feature",
+
     // CI/CD Panel
     "ci.title": "CI/CD Pipelines",
     "ci.sub": "3/5 passing",
@@ -101,6 +117,7 @@ export const translations: Record<Language, Record<string, string>> = {
   "zh-CN": {
     // Nav & Header
     "nav.dashboard": "控制台",
+    "nav.planning": "项目规划",
     "nav.prs": "合并请求 (PR)",
     "nav.issues": "问题跟踪 (Issues)",
     "nav.ci": "持续集成 (CI / CD)",
@@ -191,12 +208,28 @@ export const translations: Record<Language, Record<string, string>> = {
   "zh-TW": {
     // Nav & Header
     "nav.dashboard": "控制台",
+    "nav.planning": "專案規劃",
     "nav.prs": "合併請求 (PR)",
     "nav.issues": "問題追蹤 (Issues)",
     "nav.ci": "持續整合 (CI / CD)",
     "nav.analytics": "效能分析",
     "nav.copilot": "AI 助手 (Copilot)",
     "nav.settings": "系統設定",
+
+    // Planning Module
+    "planning.title": "專案規劃與路線圖",
+    "planning.subtitle": "管理 Sprint 迭代、Epic 路線圖、AI 需求拆解與燃盡速率分析",
+    "planning.tabs.roadmap": "里程碑與路線圖",
+    "planning.tabs.kanban": "Sprint 迭代看板",
+    "planning.tabs.aiPlanner": "AI 智慧分解助手",
+    "planning.tabs.burndown": "燃盡速率圖表",
+    "planning.sprint": "Sprint 24 - Q1 核心發佈",
+    "planning.metrics.progress": "迭代完成進度",
+    "planning.metrics.storyPoints": "總故事點數",
+    "planning.metrics.atRisk": "存在風險任務",
+    "planning.metrics.teamCapacity": "團隊剩餘容量",
+    "planning.newTask": "新建規劃任務",
+    "planning.aiBreakdownBtn": "AI 拆解複雜需求",
     "header.workspace": "工作區",
     "header.overview": "概覽",
     "header.greeting.morning": "早安",
@@ -278,15 +311,31 @@ export const translations: Record<Language, Record<string, string>> = {
     "common.language": "語言",
   },
 
-  ja: {
+  "ja": {
     // Nav & Header
     "nav.dashboard": "ダッシュボード",
+    "nav.planning": "プロジェクト計画",
     "nav.prs": "プルリクエスト",
     "nav.issues": "課題トラック (Issues)",
     "nav.ci": "CI / CD パイプライン",
     "nav.analytics": "ベロシティ分析",
     "nav.copilot": "AI コパイロット",
     "nav.settings": "設定",
+
+    // Planning Module
+    "planning.title": "プロジェクト計画・ロードマップ",
+    "planning.subtitle": "スプリント、Epic ロードマップ、AI タスク分解、バーンダウン分析の管理",
+    "planning.tabs.roadmap": "ロードマップ・マイルストーン",
+    "planning.tabs.kanban": "スプリント看板ボード",
+    "planning.tabs.aiPlanner": "AI 自動計画・タスク分解",
+    "planning.tabs.burndown": "バーンダウン・ベロシティ",
+    "planning.sprint": "スプリント 24 - Q1 リリース",
+    "planning.metrics.progress": "スプリント達成度",
+    "planning.metrics.storyPoints": "合計ストーリーポイント",
+    "planning.metrics.atRisk": "リスクありタスク",
+    "planning.metrics.teamCapacity": "チーム残容量",
+    "planning.newTask": "新規タスク作成",
+    "planning.aiBreakdownBtn": "AI 要件自動分解",
     "header.workspace": "ワークスペース",
     "header.overview": "概要",
     "header.greeting.morning": "おはようございます",

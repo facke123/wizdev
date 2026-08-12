@@ -9,6 +9,7 @@ import { PullRequestList } from "@/components/dashboard/pull-request-list";
 import { CIStatusPanel } from "@/components/dashboard/ci-status-panel";
 import { ActivityChart } from "@/components/dashboard/activity-chart";
 import { QuickActions } from "@/components/dashboard/quick-actions";
+import { SprintWidget } from "@/components/dashboard/sprint-widget";
 
 import { I18nProvider } from "@/lib/i18n/context";
 
@@ -54,6 +55,7 @@ export default function DashboardPage() {
 
               {/* Right Column — 4/12 */}
               <div className="xl:col-span-4 space-y-6 lg:space-y-7 min-w-0">
+                <SprintWidget />
                 <QuickActions />
                 <CIStatusPanel />
               </div>

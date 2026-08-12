@@ -2,6 +2,7 @@
 
 import {
   LayoutDashboard,
+  CalendarDays,
   GitPullRequest,
   Bug,
   Zap,
@@ -13,6 +14,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
+import { usePathname } from "next/navigation";
 
 interface SidebarProps {
   collapsed: boolean;
@@ -21,20 +23,29 @@ interface SidebarProps {
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const { t } = useLanguage();
+  const pathname = usePathname();
 
   const navItems = [
     {
       icon: LayoutDashboard,
       labelKey: "nav.dashboard",
       href: "/",
-      active: true,
+      active: pathname === "/",
+      group: "main",
+    },
+    {
+      icon: CalendarDays,
+      labelKey: "nav.planning",
+      href: "/planning",
+      active: pathname === "/planning",
+      badge: "Sprint 24",
       group: "main",
     },
     {
       icon: GitPullRequest,
       labelKey: "nav.prs",
       href: "/prs",
-      active: false,
+      active: pathname === "/prs",
       badge: "12",
       group: "main",
     },
@@ -42,7 +53,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       icon: Bug,
       labelKey: "nav.issues",
       href: "/issues",
-      active: false,
+      active: pathname === "/issues",
       badge: "28",
       group: "main",
     },
@@ -50,21 +61,21 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       icon: Zap,
       labelKey: "nav.ci",
       href: "/ci",
-      active: false,
+      active: pathname === "/ci",
       group: "main",
     },
     {
       icon: BarChart3,
       labelKey: "nav.analytics",
       href: "/analytics",
-      active: false,
+      active: pathname === "/analytics",
       group: "tools",
     },
     {
       icon: Bot,
       labelKey: "nav.copilot",
       href: "/chat",
-      active: false,
+      active: pathname === "/chat",
       group: "tools",
       highlight: true,
     },
@@ -72,7 +83,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       icon: Settings,
       labelKey: "nav.settings",
       href: "/settings",
-      active: false,
+      active: pathname === "/settings",
       group: "tools",
     },
   ];
