@@ -112,14 +112,14 @@ export function PullRequestList() {
 
         <a
           href="/prs"
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[12px] font-semibold transition-all shrink-0 text-[var(--text-secondary)] hover:text-white"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[12px] font-semibold transition-all shrink-0 whitespace-nowrap text-[var(--text-secondary)] hover:text-white"
           style={{
             background: "rgba(255,255,255,0.03)",
             border: "1px solid rgba(255,255,255,0.07)",
           }}
         >
-          View All
-          <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
+          <span className="whitespace-nowrap">View All</span>
+          <ArrowRight className="w-3.5 h-3.5 shrink-0" strokeWidth={2} />
         </a>
       </div>
 

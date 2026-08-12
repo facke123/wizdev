@@ -192,14 +192,14 @@ export function CIStatusPanel() {
       {/* ── Footer Link ────────────────────────────── */}
       <a
         href="/ci"
-        className="mt-3.5 w-full flex items-center justify-center gap-1.5 py-1.5 rounded-xl text-[12px] font-semibold transition-all text-[var(--text-secondary)] hover:text-white"
+        className="mt-3.5 w-full flex items-center justify-center gap-1.5 py-1.5 rounded-xl text-[12px] font-semibold transition-all shrink-0 whitespace-nowrap text-[var(--text-secondary)] hover:text-white"
         style={{
           background: "rgba(255,255,255,0.02)",
           border: "1px solid rgba(255,255,255,0.06)",
         }}
       >
-        View all pipelines
-        <ExternalLink className="w-3 h-3" strokeWidth={1.75} />
+        <span className="whitespace-nowrap">View all pipelines</span>
+        <ExternalLink className="w-3 h-3 shrink-0" strokeWidth={1.75} />
       </a>
     </div>
   );
