@@ -1,10 +1,10 @@
 "use client";
 
 import { GitPullRequest, Bug, Zap, Clock, TrendingUp, TrendingDown, Minus } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 import { useLanguage } from "@/lib/i18n/context";
 
-const container = {
+const container: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -12,9 +12,9 @@ const container = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 12, scale: 0.98 },
-  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.35 } },
 };
 
 export function StatsOverview() {

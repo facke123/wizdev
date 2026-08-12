@@ -104,10 +104,10 @@ export function QuickActions() {
                 style={{ background: action.bg, border: `1px solid ${action.border}` }}
               >
                 <p className="text-[12px] font-semibold text-[var(--text-primary)] group-hover:text-white transition-colors truncate">
-                  {action.label}
+                  {t(action.titleKey)}
                 </p>
                 <p className="text-[10px] text-[var(--text-tertiary)] mt-0.5 truncate">
-                  {action.description}
+                  {t(action.descKey)}
                 </p>
               </div>
               <div className="flex items-center gap-1 shrink-0">
