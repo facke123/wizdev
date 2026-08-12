@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/i18n/context";
 
@@ -31,25 +33,14 @@ export function ActivityChart() {
   const totalReviews = mockData.reduce((s, d) => s + d.reviews, 0);
 
   return (
-    <div className="card p-5 sm:p-6">
-      {/* ── Header ─────────────────────────────────── */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
-        <div className="flex items-center gap-3 min-w-0">
-          <div
-            className="p-2 rounded-xl"
-            style={{
-              background: "rgba(124,109,250,0.12)",
-              border: "1px solid rgba(124,109,250,0.22)",
-            }}
-          >
-            <svg
-              width="17" height="17" viewBox="0 0 24 24" fill="none"
-              stroke="#9d91fc" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"
-            >
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-            </svg>
-          </div>
-        {/* ── Header ──────────────────────────────────────── */}
+    <div
+      className="card p-5 sm:p-6 space-y-4"
+      style={{
+        background: "linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(15,23,42,0.95) 100%)",
+        border: "1px solid rgba(255,255,255,0.08)",
+      }}
+    >
+      {/* ── Header ──────────────────────────────────────── */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
         <div>
           <h2 className="text-[15px] font-bold text-white tracking-tight">
@@ -75,61 +66,62 @@ export function ActivityChart() {
           ))}
         </div>
       </div>
-      </div>
 
       {/* ── Bar Chart ──────────────────────────────── */}
-      <div
-        className="rounded-xl px-4 pt-5 pb-3"
-        style={{
-          background: "rgba(7,11,20,0.5)",
-          border: "1px solid rgba(255,255,255,0.05)",
-        }}
-      >
-        <div className="flex items-end gap-2 sm:gap-4 h-48">
-          {mockData.map((day, dayIdx) => (
-            <div key={day.day} className="flex-1 flex flex-col items-center gap-2">
-              <div className="w-full flex items-end justify-center gap-1 h-40">
-                {series.map((s, si) => (
+      <div className="h-44 flex items-end justify-between gap-2 sm:gap-4 pt-6 pb-2 px-1 border-b border-white/[0.05]">
+        {mockData.map((item) => (
+          <div
+            key={item.day}
+            className="flex-1 flex flex-col items-center gap-2 h-full justify-end group"
+          >
+            {/* Bars container */}
+            <div className="w-full flex items-end justify-center gap-1 h-full max-w-[48px]">
+              {series.map((s) => {
+                const val = item[s.key];
+                const heightPct = getBarHeight(val);
+
+                return (
                   <motion.div
                     key={s.key}
-                    className="flex-1 rounded-t-sm origin-bottom cursor-pointer min-w-0"
+                    initial={{ height: 0 }}
+                    animate={{ height: heightPct }}
+                    transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex-1 rounded-t-sm relative group/bar"
                     style={{
-                      height: getBarHeight(day[s.key]),
-                      background: `linear-gradient(to top, ${s.color}b0, ${s.color})`,
-                      maxWidth: 22,
+                      background: s.color,
+                      boxShadow: `0 0 8px ${s.glow}`,
+                      minWidth: "4px",
                     }}
-                    initial={{ scaleY: 0 }}
-                    animate={{ scaleY: 1 }}
-                    transition={{
-                      duration: 0.5,
-                      delay: dayIdx * 0.04 + si * 0.03,
-                      ease: [0.16, 1, 0.3, 1],
-                    }}
-                    whileHover={{
-                      filter: "brightness(1.3)",
-                      boxShadow: `0 -4px 12px ${s.glow}`,
-                    }}
-                  />
-                ))}
-              </div>
-              <span className="text-[11px] font-mono font-semibold text-[var(--text-secondary)]">
-                {day.day}
-              </span>
+                  >
+                    {/* Tooltip on hover */}
+                    <div
+                      className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-1 rounded bg-[#0b0f1e] text-[10px] font-mono text-white font-bold opacity-0 group-hover/bar:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-20 shadow-lg border border-white/10"
+                    >
+                      {t(s.labelKey)}: {val}
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
-          ))}
-        </div>
+
+            {/* Day Label */}
+            <span className="text-[11px] font-bold text-[var(--text-secondary)] font-mono group-hover:text-white transition-colors">
+              {item.day}
+            </span>
+          </div>
+        ))}
       </div>
 
       {/* ── Summary Footer ─────────────────────────── */}
       <div className="grid grid-cols-4 gap-3 mt-4">
         {[
-          { label: "Commits", value: totalCommits, color: "#7c6dfa" },
-          { label: "PRs", value: totalPRs, color: "#22d3ee" },
-          { label: "Reviews", value: totalReviews, color: "#10d98e" },
-          { label: "Velocity", value: "A+", color: "#7c6dfa", isGrade: true },
+          { labelKey: "chart.commits", value: totalCommits, color: "#7c6dfa" },
+          { labelKey: "chart.prs", value: totalPRs, color: "#22d3ee" },
+          { labelKey: "chart.reviews", value: totalReviews, color: "#10d98e" },
+          { labelKey: "chart.velocity", value: "A+", color: "#7c6dfa", isGrade: true },
         ].map((item) => (
           <div
-            key={item.label}
+            key={item.labelKey}
             className="p-2.5 sm:p-3 rounded-xl text-center"
             style={{
               background: item.isGrade
@@ -147,7 +139,7 @@ export function ActivityChart() {
               {item.value}
             </p>
             <p className="text-[10px] text-[var(--text-tertiary)] font-semibold uppercase tracking-wider truncate">
-              {item.label}
+              {t(item.labelKey)}
             </p>
           </div>
         ))}
