@@ -16,8 +16,8 @@ const mockPRs = [
     comments: 5,
     createdAt: "2 hours ago",
     labels: [
-      { name: "feature", color: "#7c6dfa" },
-      { name: "frontend", color: "#22d3ee" },
+      { name: "feature", color: "#9d91fc" },
+      { name: "frontend", color: "#38bdf8" },
     ],
   },
   {
@@ -33,7 +33,7 @@ const mockPRs = [
     comments: 3,
     createdAt: "5 hours ago",
     labels: [
-      { name: "bug", color: "#fb7185" },
+      { name: "bug", color: "#f87171" },
       { name: "critical", color: "#fbbf24" },
     ],
   },
@@ -49,7 +49,7 @@ const mockPRs = [
     deletions: 312,
     comments: 12,
     createdAt: "1 day ago",
-    labels: [{ name: "refactor", color: "#a78bfa" }],
+    labels: [{ name: "refactor", color: "#c084fc" }],
   },
   {
     id: 4,
@@ -63,7 +63,7 @@ const mockPRs = [
     deletions: 0,
     comments: 0,
     createdAt: "3 hours ago",
-    labels: [{ name: "ai", color: "#10d98e" }],
+    labels: [{ name: "ai", color: "#34d399" }],
   },
 ];
 
@@ -83,7 +83,7 @@ const avatarGradients = [
 
 export function PullRequestList() {
   return (
-    <div className="card p-5 sm:p-6 lg:p-7">
+    <div className="card p-5 sm:p-6">
       {/* ── Header ─────────────────────────────────── */}
       <div className="flex items-center justify-between gap-4 mb-5">
         <div className="flex items-center gap-3 min-w-0">
@@ -101,7 +101,7 @@ export function PullRequestList() {
             />
           </div>
           <div className="min-w-0">
-            <h2 className="text-[14px] font-semibold text-[var(--text-primary)] tracking-tight">
+            <h2 className="text-[14px] font-bold text-[var(--text-primary)] tracking-tight">
               Active Pull Requests
             </h2>
             <p className="text-[11px] text-[var(--text-tertiary)]">
@@ -110,21 +110,21 @@ export function PullRequestList() {
           </div>
         </div>
 
-        <button
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[12px] font-semibold transition-all shrink-0"
+        <a
+          href="/prs"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[12px] font-semibold transition-all shrink-0 text-[var(--text-secondary)] hover:text-white"
           style={{
             background: "rgba(255,255,255,0.03)",
             border: "1px solid rgba(255,255,255,0.07)",
-            color: "var(--text-secondary)",
           }}
         >
           View All
           <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
-        </button>
+        </a>
       </div>
 
       {/* ── PR List ────────────────────────────────── */}
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         {mockPRs.map((pr, idx) => {
           const status = statusConfig[pr.status];
           return (
@@ -144,7 +144,7 @@ export function PullRequestList() {
                 (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.05)";
               }}
             >
-              <div className="flex flex-col lg:flex-row lg:items-center gap-3">
+              <div className="flex flex-col lg:flex-row lg:items-center gap-3 justify-between">
                 {/* Left: PR Info */}
                 <div className="flex items-start gap-3 flex-1 min-w-0">
                   {/* Avatar */}
@@ -157,10 +157,7 @@ export function PullRequestList() {
 
                   <div className="space-y-1.5 flex-1 min-w-0">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span
-                        className="font-mono text-[11px] font-bold shrink-0"
-                        style={{ color: "#9d91fc" }}
-                      >
+                      <span className="font-mono text-[12px] font-bold shrink-0 text-[#9d91fc]">
                         #{pr.number}
                       </span>
                       <h3 className="text-[13px] font-semibold text-[var(--text-primary)] group-hover:text-white transition-colors truncate">
@@ -170,9 +167,8 @@ export function PullRequestList() {
 
                     <div className="flex items-center gap-2 text-[11px] text-[var(--text-tertiary)] flex-wrap">
                       <span
-                        className="font-mono text-[11px] font-medium px-1.5 py-0.5 rounded border"
+                        className="font-mono text-[11px] font-medium px-1.5 py-0.5 rounded border text-[var(--text-secondary)]"
                         style={{
-                          color: "var(--text-secondary)",
                           background: "rgba(255,255,255,0.04)",
                           borderColor: "rgba(255,255,255,0.07)",
                         }}
@@ -180,12 +176,9 @@ export function PullRequestList() {
                         {pr.repo}
                       </span>
                       <span>
-                        by{" "}
-                        <strong className="text-[var(--text-secondary)] font-semibold">
-                          @{pr.author}
-                        </strong>
+                        by <strong className="text-[var(--text-secondary)] font-semibold">@{pr.author}</strong>
                       </span>
-                      <span>{pr.createdAt}</span>
+                      <span>· {pr.createdAt}</span>
                       {pr.comments > 0 && (
                         <span className="flex items-center gap-1">
                           <MessageSquare className="w-3 h-3" strokeWidth={1.5} />
@@ -197,17 +190,17 @@ export function PullRequestList() {
                 </div>
 
                 {/* Right: Labels + Diff + Status */}
-                <div className="flex items-center gap-2 flex-wrap lg:flex-nowrap shrink-0 pl-11 lg:pl-0">
-                  {/* Labels */}
-                  <div className="flex items-center gap-1 flex-wrap">
+                <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap shrink-0 pl-11 lg:pl-0">
+                  {/* Desaturated, clear readable Labels */}
+                  <div className="flex items-center gap-1.5 flex-wrap">
                     {pr.labels.map((label) => (
                       <span
                         key={label.name}
-                        className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold border"
+                        className="px-2 py-0.5 rounded-md text-[11px] font-mono font-medium border"
                         style={{
-                          background: `${label.color}18`,
+                          background: `${label.color}14`,
                           color: label.color,
-                          borderColor: `${label.color}30`,
+                          borderColor: `${label.color}28`,
                         }}
                       >
                         {label.name}
@@ -217,18 +210,18 @@ export function PullRequestList() {
 
                   {/* Diff */}
                   <div
-                    className="flex items-center gap-1.5 font-mono text-[11px] font-bold px-2 py-1 rounded-lg shrink-0"
+                    className="flex items-center gap-1.5 font-mono text-[11px] font-bold px-2 py-0.5 rounded-lg shrink-0"
                     style={{
                       background: "rgba(255,255,255,0.03)",
                       border: "1px solid rgba(255,255,255,0.06)",
                     }}
                   >
-                    <span className="flex items-center gap-0.5" style={{ color: "#10d98e" }}>
+                    <span className="flex items-center gap-0.5 text-[#10d98e]">
                       <Plus className="w-2.5 h-2.5" strokeWidth={2.5} />
                       {pr.additions}
                     </span>
                     <span className="text-[var(--text-disabled)]">/</span>
-                    <span className="flex items-center gap-0.5" style={{ color: "#fb7185" }}>
+                    <span className="flex items-center gap-0.5 text-[#fb7185]">
                       <Minus className="w-2.5 h-2.5" strokeWidth={2.5} />
                       {pr.deletions}
                     </span>
@@ -236,7 +229,7 @@ export function PullRequestList() {
 
                   {/* Status Badge */}
                   <span
-                    className="px-2 py-1 rounded-full text-[11px] font-semibold border whitespace-nowrap"
+                    className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold border whitespace-nowrap"
                     style={{
                       background: status.bg,
                       color: status.color,

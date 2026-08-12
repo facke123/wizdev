@@ -5,7 +5,7 @@ import { Search, Bell, ChevronDown, Command } from "lucide-react";
 
 export function Header() {
   const [mounted, setMounted] = useState(false);
-  const [greeting, setGreeting] = useState("");
+  const [greeting, setGreeting] = useState("Good morning");
   const [formattedDate, setFormattedDate] = useState("");
 
   useEffect(() => {
@@ -20,9 +20,8 @@ export function Header() {
     setGreeting(g);
     setFormattedDate(
       new Date().toLocaleDateString("en-US", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
+        weekday: "short",
+        month: "short",
         day: "numeric",
       })
     );
@@ -30,73 +29,57 @@ export function Header() {
 
   return (
     <header
-      className="sticky top-0 z-30 h-[60px] w-full"
+      className="sticky top-0 z-30 h-[64px] w-full"
       style={{
         background: "rgba(7, 11, 20, 0.85)",
         backdropFilter: "blur(20px) saturate(180%)",
         WebkitBackdropFilter: "blur(20px) saturate(180%)",
-        borderBottom: "1px solid rgba(255,255,255,0.05)",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
       }}
     >
-      <div className="flex items-center justify-between h-full w-full px-5 gap-4">
-        {/* ── Left: Greeting ──────────────────────── */}
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-1.5 text-[11px] text-[var(--text-tertiary)] mb-0.5">
-            <span className="hidden sm:inline">Workspace</span>
-            <span className="hidden sm:inline text-[var(--text-disabled)]">/</span>
-            <span
-              className="font-semibold"
-              style={{ color: "var(--brand-violet)" }}
-            >
-              Overview
-            </span>
-            {formattedDate && (
-              <>
-                <span className="hidden lg:inline text-[var(--text-disabled)]">
-                  ·
-                </span>
-                <span className="hidden lg:inline">{formattedDate}</span>
-              </>
-            )}
+      <div className="w-full max-w-[1600px] mx-auto px-5 sm:px-7 lg:px-9 h-full flex items-center justify-between gap-4">
+        {/* ── Left: Greeting & Breadcrumb ─────────────── */}
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 text-[11px] text-[var(--text-tertiary)] leading-none mb-1">
+              <span className="font-medium text-[var(--text-secondary)]">Workspace</span>
+              <span className="text-[var(--text-disabled)]">/</span>
+              <span className="font-semibold text-[var(--brand-violet)]">Overview</span>
+              {mounted && formattedDate && (
+                <>
+                  <span className="text-[var(--text-disabled)]">·</span>
+                  <span className="font-mono text-[var(--text-tertiary)]">{formattedDate}</span>
+                </>
+              )}
+            </div>
+            <h1 className="text-[15px] font-bold text-white tracking-tight leading-none truncate">
+              {mounted ? greeting : "Good morning"}
+              <span className="hidden sm:inline font-normal text-[var(--text-tertiary)] ml-2 text-[13px]">
+                — Here&apos;s your daily overview
+              </span>
+            </h1>
           </div>
-          <h1 className="text-[15px] font-semibold text-[var(--text-primary)] tracking-tight truncate leading-tight">
-            {mounted ? greeting : "Dashboard"}{" "}
-            <span className="text-[var(--text-secondary)] font-normal">
-              — Here&apos;s your daily overview
-            </span>
-          </h1>
         </div>
 
-        {/* ── Right: Controls ─────────────────────── */}
-        <div className="flex items-center gap-2 shrink-0">
-          {/* Search */}
+        {/* ── Right: Controls ──────────────────────────── */}
+        <div className="flex items-center gap-3 shrink-0">
+          {/* Search Box */}
           <div
-            className="hidden md:flex items-center gap-2.5 px-3 h-9 rounded-xl cursor-pointer transition-all duration-150 group"
+            className="hidden md:flex items-center gap-2 px-3 h-9 rounded-xl transition-all duration-150 group"
             style={{
               background: "rgba(255,255,255,0.03)",
               border: "1px solid rgba(255,255,255,0.07)",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor =
-                "rgba(124,109,250,0.35)";
-              (e.currentTarget as HTMLElement).style.background =
-                "rgba(255,255,255,0.05)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.borderColor =
-                "rgba(255,255,255,0.07)";
-              (e.currentTarget as HTMLElement).style.background =
-                "rgba(255,255,255,0.03)";
+              width: "200px",
             }}
           >
-            <Search
-              className="w-3.5 h-3.5 text-[var(--text-tertiary)] group-hover:text-[var(--brand-violet)] transition-colors"
+            <Search className="w-3.5 h-3.5 text-[var(--text-tertiary)] group-hover:text-[var(--brand-violet)] transition-colors shrink-0" />
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full bg-transparent text-xs text-[var(--text-primary)] placeholder:text-[var(--text-disabled)] focus:outline-none"
             />
-            <span className="text-xs text-[var(--text-tertiary)] select-none">
-              Search...
-            </span>
             <kbd
-              className="hidden lg:flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-mono text-[var(--text-disabled)]"
+              className="hidden xl:flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-mono text-[var(--text-disabled)] shrink-0"
               style={{
                 background: "rgba(255,255,255,0.05)",
                 border: "1px solid rgba(255,255,255,0.07)",
@@ -106,7 +89,7 @@ export function Header() {
             </kbd>
           </div>
 
-          {/* AI Model Pill */}
+          {/* Model Selector Pill */}
           <div
             className="flex items-center gap-2 px-3 h-9 rounded-xl cursor-pointer transition-all duration-150 shrink-0"
             style={{
@@ -117,17 +100,14 @@ export function Header() {
             <span className="relative flex h-1.5 w-1.5 shrink-0">
               <span
                 className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-                style={{ background: "var(--color-success)" }}
+                style={{ background: "#10d98e" }}
               />
               <span
                 className="relative inline-flex rounded-full h-1.5 w-1.5"
-                style={{ background: "var(--color-success)" }}
+                style={{ background: "#10d98e" }}
               />
             </span>
-            <span
-              className="text-xs font-bold font-mono"
-              style={{ color: "#c4bcff" }}
-            >
+            <span className="text-xs font-bold font-mono text-[#c4bcff]">
               GPT-4o
             </span>
             <ChevronDown className="w-3 h-3 text-[var(--text-tertiary)]" />
@@ -135,28 +115,18 @@ export function Header() {
 
           {/* Notification Bell */}
           <button
-            className="relative p-2 rounded-xl transition-all duration-150"
+            className="relative p-2 rounded-xl transition-all duration-150 shrink-0"
             style={{
               background: "rgba(255,255,255,0.03)",
               border: "1px solid rgba(255,255,255,0.07)",
               color: "var(--text-secondary)",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.background =
-                "rgba(255,255,255,0.06)";
-              (e.currentTarget as HTMLElement).style.color = "var(--text-primary)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.background =
-                "rgba(255,255,255,0.03)";
-              (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)";
             }}
           >
             <Bell className="w-4 h-4" />
             <span
               className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full"
               style={{
-                background: "var(--color-danger)",
+                background: "#fb7185",
                 boxShadow: "0 0 0 2px #070b14",
               }}
             />
@@ -164,16 +134,15 @@ export function Header() {
 
           {/* Divider */}
           <div
-            className="h-6 w-px shrink-0"
-            style={{ background: "rgba(255,255,255,0.07)" }}
+            className="h-5 w-px shrink-0 hidden sm:block"
+            style={{ background: "rgba(255,255,255,0.08)" }}
           />
 
           {/* User Avatar */}
           <div
-            className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-[11px] font-bold cursor-pointer hover:scale-105 transition-transform"
+            className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-[11px] font-bold cursor-pointer hover:scale-105 transition-transform shrink-0"
             style={{
-              background:
-                "linear-gradient(135deg, var(--brand-violet), var(--brand-indigo))",
+              background: "linear-gradient(135deg, #7c6dfa, #5b4fdf)",
               boxShadow: "0 2px 8px rgba(124,109,250,0.35)",
             }}
           >
