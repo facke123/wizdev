@@ -272,25 +272,24 @@ function NavItem({
 
       {!collapsed && (
         <>
-          <span className="truncate flex-1">{label}</span>
+          <span className="truncate flex-1 text-left">{label}</span>
 
           {item.highlight && (
             <Sparkles
-              className="w-3 h-3 shrink-0"
+              className="w-3 h-3 shrink-0 ml-auto"
               style={{ color: "var(--brand-violet)" }}
             />
           )}
 
           {item.badge && (
             <span
-              className="px-1.5 py-0.5 rounded-full text-[10px] font-bold font-mono leading-none shrink-0"
+              className="ml-auto px-2 py-0.5 rounded-full text-[10px] font-bold font-mono leading-none shrink-0 whitespace-nowrap"
               style={{
                 background: item.active
-                  ? "rgba(124,109,250,0.3)"
-                  : "rgba(255,255,255,0.07)",
-                color: item.active
-                  ? "#c4bcff"
-                  : "var(--text-tertiary)",
+                  ? "rgba(124,109,250,0.25)"
+                  : "rgba(255,255,255,0.06)",
+                color: item.active ? "#c4bcff" : "var(--text-tertiary)",
+                border: "1px solid rgba(255,255,255,0.08)",
               }}
             >
               {item.badge}

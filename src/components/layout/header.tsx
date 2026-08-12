@@ -1,15 +1,31 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Search, Bell, ChevronDown, Command } from "lucide-react";
 import { LanguageSelector } from "./language-selector";
 import { useLanguage } from "@/lib/i18n/context";
 
+const ROUTE_CONFIG: Record<string, { breadcrumb: string; title: string }> = {
+  "/":          { breadcrumb: "header.overview", title: "header.subtitle" },
+  "/chat":      { breadcrumb: "nav.copilot",      title: "AI Copilot — Intelligent Engineering Assistant" },
+  "/settings":  { breadcrumb: "nav.settings",     title: "Settings — Manage account, AI providers & preferences" },
+  "/prs":       { breadcrumb: "nav.prs",          title: "Pull Requests — Code reviews & pull requests" },
+  "/issues":    { breadcrumb: "nav.issues",       title: "Issues — Active bug tracking & issue management" },
+  "/ci":        { breadcrumb: "nav.ci",           title: "CI / CD — Continuous integration & workflow runs" },
+  "/planning":  { breadcrumb: "nav.planning",     title: "Project Planning — Sprint milestones & tasks" },
+  "/analytics": { breadcrumb: "nav.analytics",    title: "Analytics — Engineering velocity & metrics" },
+};
+
 export function Header() {
   const { t } = useLanguage();
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [greetingKey, setGreetingKey] = useState("header.greeting.morning");
   const [formattedDate, setFormattedDate] = useState("");
+
+  const pageMeta = ROUTE_CONFIG[pathname] || ROUTE_CONFIG["/"];
+  const isDashboard = pathname === "/";
 
   useEffect(() => {
     setMounted(true);
@@ -40,14 +56,18 @@ export function Header() {
         borderBottom: "1px solid rgba(255,255,255,0.06)",
       }}
     >
-      <div className="w-full max-w-[1600px] mx-auto h-full flex items-center justify-between gap-4" style={{ margin: "2px", padding: "2px" }}>
+      <div className="w-full h-full flex items-center justify-between gap-4 px-6 lg:px-8">
         {/* ── Left: Greeting & Breadcrumb ─────────────── */}
         <div className="flex items-center gap-3 min-w-0 flex-1">
           <div className="min-w-0">
             <div className="flex items-center gap-2 text-[11px] text-[var(--text-tertiary)] leading-none mb-1">
               <span className="font-medium text-[var(--text-secondary)]">{t("header.workspace")}</span>
               <span className="text-[var(--text-disabled)]">/</span>
-              <span className="font-semibold text-[var(--brand-violet)]">{t("header.overview")}</span>
+              <span className="font-semibold text-[var(--brand-violet)]">
+                {pageMeta.breadcrumb.startsWith("header.") || pageMeta.breadcrumb.startsWith("nav.")
+                  ? t(pageMeta.breadcrumb)
+                  : pageMeta.breadcrumb}
+              </span>
               {mounted && formattedDate && (
                 <>
                   <span className="text-[var(--text-disabled)]">·</span>
@@ -56,10 +76,18 @@ export function Header() {
               )}
             </div>
             <h1 className="text-[15px] font-bold text-white tracking-tight leading-none truncate">
-              {mounted ? t(greetingKey) : t("header.greeting.morning")}
-              <span className="hidden sm:inline font-normal text-[var(--text-tertiary)] ml-2 text-[13px]">
-                — {t("header.subtitle")}
-              </span>
+              {isDashboard ? (
+                <>
+                  {mounted ? t(greetingKey) : t("header.greeting.morning")}
+                  <span className="hidden sm:inline font-normal text-[var(--text-tertiary)] ml-2 text-[13px]">
+                    — {t("header.subtitle")}
+                  </span>
+                </>
+              ) : (
+                <span className="text-[14px] font-semibold text-white">
+                  {pageMeta.title.startsWith("header.") ? t(pageMeta.title) : pageMeta.title}
+                </span>
+              )}
             </h1>
           </div>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import {
   User, Bot, Bell, Sliders,
@@ -31,20 +31,20 @@ const PROVIDERS = getAllProviders();
 
 function SettingSection({ title, description, children }: { title: string; description?: string; children: React.ReactNode }) {
   return (
-    <div className="card p-5 sm:p-6 mb-5">
-      <div className="mb-5">
-        <h3 className="text-[14px] font-bold text-[var(--text-primary)]">{title}</h3>
-        {description && <p className="text-[11px] text-[var(--text-tertiary)] mt-0.5">{description}</p>}
+    <div className="card p-6 sm:p-7 mb-6">
+      <div className="mb-6 pb-3 border-b border-white/[0.06]">
+        <h3 className="text-[15px] font-bold text-[var(--text-primary)]">{title}</h3>
+        {description && <p className="text-[12px] text-[var(--text-tertiary)] mt-1">{description}</p>}
       </div>
-      <div className="space-y-4">{children}</div>
+      <div className="space-y-1">{children}</div>
     </div>
   );
 }
 
 function SettingRow({ label, description, children }: { label: string; description?: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-start justify-between gap-4">
-      <div className="min-w-0">
+    <div className="flex items-center justify-between gap-6 py-3.5 border-b border-white/[0.04] last:border-b-0">
+      <div className="min-w-0 flex-1">
         <p className="text-[13px] font-semibold text-[var(--text-primary)]">{label}</p>
         {description && <p className="text-[11px] text-[var(--text-tertiary)] mt-0.5">{description}</p>}
       </div>
@@ -86,6 +86,24 @@ export default function SettingsPage() {
   const [enabledProviders, setEnabled]    = useState<Record<string, boolean>>({ openai: true, ollama: true });
   const [savedFeedback, setSavedFeedback] = useState(false);
 
+  const [baseUrls, setBaseUrls]           = useState<Record<string, string>>({});
+
+  // Load saved API keys and Base URLs from localStorage
+  useEffect(() => {
+    try {
+      const savedKeys = localStorage.getItem("wizdev_ai_keys");
+      if (savedKeys) setApiKeys(JSON.parse(savedKeys));
+
+      const savedUrls = localStorage.getItem("wizdev_ai_base_urls");
+      if (savedUrls) setBaseUrls(JSON.parse(savedUrls));
+
+      const savedEnabled = localStorage.getItem("wizdev_ai_enabled");
+      if (savedEnabled) setEnabled(JSON.parse(savedEnabled));
+    } catch (e) {
+      console.error("Failed to load settings from localStorage", e);
+    }
+  }, []);
+
   // General state
   const [displayName, setDisplayName] = useState("John Doe");
   const [email, setEmail]             = useState("john@example.com");
@@ -102,6 +120,13 @@ export default function SettingsPage() {
   const [density, setDensity] = useState("comfortable");
 
   const handleSave = () => {
+    try {
+      localStorage.setItem("wizdev_ai_keys", JSON.stringify(apiKeys));
+      localStorage.setItem("wizdev_ai_base_urls", JSON.stringify(baseUrls));
+      localStorage.setItem("wizdev_ai_enabled", JSON.stringify(enabledProviders));
+    } catch (e) {
+      console.error("Failed to save settings to localStorage", e);
+    }
     setSavedFeedback(true);
     setTimeout(() => setSavedFeedback(false), 2000);
   };
@@ -146,15 +171,18 @@ export default function SettingsPage() {
           {activeSection === "general" && (
             <>
               <SettingSection title="Profile" description="Your public display information">
-                <div className="flex items-center gap-4 mb-2">
-                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold text-white shrink-0"
+                <div className="flex items-center gap-4 py-3.5 border-b border-white/[0.04]">
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-xl font-bold text-white shrink-0"
                     style={{ background: "linear-gradient(135deg, #7c6dfa, #5b4fdf)", boxShadow: "0 4px 16px rgba(124,109,250,0.35)" }}>
                     JD
                   </div>
-                  <button className="px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all"
-                    style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.10)", color: "var(--text-secondary)" }}>
-                    Change avatar
-                  </button>
+                  <div>
+                    <p className="text-[13px] font-semibold text-[var(--text-primary)] mb-1">Avatar</p>
+                    <button className="px-3 py-1.5 rounded-lg text-[12px] font-semibold transition-all"
+                      style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.10)", color: "var(--text-secondary)" }}>
+                      Change avatar
+                    </button>
+                  </div>
                 </div>
                 <SettingRow label="Display Name">
                   <div className="w-64"><TextInput placeholder="Your name" value={displayName} onChange={setDisplayName} /></div>
@@ -222,22 +250,39 @@ export default function SettingsPage() {
                           onChange={() => setEnabled(prev => ({ ...prev, [p.id]: !prev[p.id] }))} />
                       </div>
                       {isEnabled && p.requiresApiKey && (
-                        <div className="relative flex items-center gap-2">
-                          <div className="flex-1 relative">
-                            <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--text-tertiary)]" />
+                        <div className="space-y-2 mt-3">
+                          <div className="relative flex items-center gap-2">
+                            <div className="flex-1 relative">
+                              <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--text-tertiary)]" />
+                              <input
+                                type={showKey ? "text" : "password"}
+                                value={key}
+                                onChange={e => setApiKeys(prev => ({ ...prev, [p.id]: e.target.value }))}
+                                placeholder={`Enter ${p.name} API Key`}
+                                className="w-full pl-9 pr-4 py-2 rounded-xl text-[12px] text-[var(--text-primary)] placeholder:text-[var(--text-disabled)] focus:outline-none transition-all"
+                                style={{ background: "rgba(7,11,20,0.7)", border: "1px solid rgba(255,255,255,0.10)" }}
+                              />
+                            </div>
+                            <button onClick={() => setShowKeys(prev => ({ ...prev, [p.id]: !prev[p.id] }))}
+                              className="p-2 rounded-lg transition-all" style={{ color: "var(--text-tertiary)" }}>
+                              {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            </button>
+                          </div>
+                          <div className="flex items-center gap-2">
                             <input
-                              type={showKey ? "text" : "password"}
-                              value={key}
-                              onChange={e => setApiKeys(prev => ({ ...prev, [p.id]: e.target.value }))}
-                              placeholder={`Enter ${p.name} API key`}
-                              className="w-full pl-9 pr-4 py-2 rounded-xl text-[12px] text-[var(--text-primary)] placeholder:text-[var(--text-disabled)] focus:outline-none transition-all"
-                              style={{ background: "rgba(7,11,20,0.7)", border: "1px solid rgba(255,255,255,0.10)" }}
+                              type="text"
+                              value={baseUrls[p.id] || ""}
+                              onChange={e => setBaseUrls(prev => ({ ...prev, [p.id]: e.target.value }))}
+                              placeholder={`Optional Custom Base URL / Proxy (e.g. https://api.openai-proxy.com/v1)`}
+                              className="w-full px-3 py-1.5 rounded-xl text-[11px] font-mono text-[var(--text-secondary)] placeholder:text-[var(--text-disabled)] focus:outline-none transition-all"
+                              style={{ background: "rgba(7,11,20,0.5)", border: "1px solid rgba(255,255,255,0.06)" }}
                             />
                           </div>
-                          <button onClick={() => setShowKeys(prev => ({ ...prev, [p.id]: !prev[p.id] }))}
-                            className="p-2 rounded-lg transition-all" style={{ color: "var(--text-tertiary)" }}>
-                            {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                          </button>
+                          {p.id === "openai" && (
+                            <p className="text-[10px] text-[var(--text-tertiary)] mt-1">
+                              💡 提示：若收到 <code className="text-[#fb7185]">403 This model is not available in your region</code>，说明使用的中转节点被 OpenAI 封禁了地区 IP。建议使用支持地区解封的中转或切换为 <strong>DeepSeek</strong>。
+                            </p>
+                          )}
                         </div>
                       )}
                       {isEnabled && !p.requiresApiKey && (

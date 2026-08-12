@@ -58,12 +58,25 @@ export default function ChatPage() {
   const [showProviders, setShowProviders] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const activeConv = conversations.find(c => c.id === activeId)!;
-  const currentProvider = PROVIDERS.find(p => p.id === provider)!;
+  const activeConv = conversations.find(c => c.id === activeId) || conversations[0] || { id: "1", title: "New Chat", preview: "", time: "", messages: [] };
+  const currentProvider = PROVIDERS.find(p => p.id === provider) || PROVIDERS[0];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [activeConv?.messages, isTyping]);
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const query = params.get("q");
+      if (query) {
+        setInput(query);
+      }
+    }
+  }, []);
 
   const sendMessage = async () => {
     if (!input.trim() || isTyping) return;
@@ -71,24 +84,81 @@ export default function ChatPage() {
     const newInput = input;
     setInput("");
 
+    const updatedMessages = [...(activeConv?.messages || []), userMsg];
+
     setConversations(prev => prev.map(c =>
-      c.id === activeId ? { ...c, messages: [...c.messages, userMsg], preview: newInput } : c
+      c.id === activeId ? { ...c, messages: updatedMessages, preview: newInput } : c
     ));
     setIsTyping(true);
 
-    // Simulate AI response
-    setTimeout(() => {
+    try {
+      // Get saved API keys and Custom Base URLs from localStorage
+      let apiKey = "";
+      let customBaseUrl = "";
+      try {
+        const savedKeys = localStorage.getItem("wizdev_ai_keys");
+        if (savedKeys) {
+          const parsed = JSON.parse(savedKeys);
+          apiKey = parsed[provider] || "";
+        }
+        const savedUrls = localStorage.getItem("wizdev_ai_base_urls");
+        if (savedUrls) {
+          const parsed = JSON.parse(savedUrls);
+          customBaseUrl = parsed[provider] || "";
+        }
+      } catch (e) {
+        console.error("Error reading API keys from localStorage", e);
+      }
+
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          provider,
+          apiKey,
+          customBaseUrl,
+          messages: updatedMessages.map(m => ({ role: m.role, content: m.content })),
+        }),
+      });
+
+      const resText = await res.text();
+      let data: { content?: string; error?: string } = {};
+      try {
+        data = resText ? JSON.parse(resText) : {};
+      } catch {
+        data = { error: resText || `Server returned invalid response (HTTP ${res.status})` };
+      }
+
+      let replyContent = "";
+      if (!res.ok || data.error) {
+        replyContent = `⚠️ **Error calling ${currentProvider.name}:**\n\n${data.error || "Failed to generate AI response."}\n\n*Please ensure you have entered a valid API Key in **Settings → AI Providers** and saved your changes.*`;
+      } else {
+        replyContent = data.content || "No response content received.";
+      }
+
       const reply: Message = {
         id: (Date.now() + 1).toString(),
         role: "assistant",
-        content: `I've analyzed your request: **"${newInput}"**\n\nThis is a simulated response from ${currentProvider.name} (${currentProvider.defaultModel}). In production, this would connect to the real API endpoint and return actual insights based on your GitHub data.\n\nTo enable real AI responses, add your API key in **Settings → AI Providers**.`,
+        content: replyContent,
         timestamp: new Date().toISOString(),
       };
+
       setConversations(prev => prev.map(c =>
         c.id === activeId ? { ...c, messages: [...c.messages, reply] } : c
       ));
+    } catch (err: unknown) {
+      const errorMsg: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: `⚠️ **Network Error:** ${err instanceof Error ? err.message : "Unable to reach AI service."}`,
+        timestamp: new Date().toISOString(),
+      };
+      setConversations(prev => prev.map(c =>
+        c.id === activeId ? { ...c, messages: [...c.messages, errorMsg] } : c
+      ));
+    } finally {
       setIsTyping(false);
-    }, 1800);
+    }
   };
 
   const newConversation = () => {
@@ -100,9 +170,9 @@ export default function ChatPage() {
 
   return (
     <AppShell>
-      <div className="flex gap-6 h-[calc(100vh-140px)] min-h-[500px]">
+      <div className="flex gap-6 h-[calc(100vh-124px)] min-h-[500px] overflow-hidden">
         {/* ── Left: Conversation List ─────────────── */}
-        <div className="hidden lg:flex flex-col w-64 shrink-0 card p-0 overflow-hidden">
+        <div className="hidden lg:flex flex-col w-64 shrink-0 card p-0 overflow-hidden h-full">
           {/* Header */}
           <div className="p-4 border-b flex items-center justify-between" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
             <h2 className="text-sm font-bold text-[var(--text-primary)]">Conversations</h2>
@@ -133,7 +203,7 @@ export default function ChatPage() {
           {/* New chat button */}
           <div className="p-3 border-t" style={{ borderColor: "rgba(255,255,255,0.05)" }}>
             <button onClick={newConversation}
-              className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-[12px] font-semibold transition-all"
+              className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-[12px] font-semibold transition-all justify-center"
               style={{ background: "rgba(124,109,250,0.10)", color: "#c4bcff", border: "1px solid rgba(124,109,250,0.22)" }}>
               <Plus className="w-3.5 h-3.5" />
               New conversation
@@ -142,9 +212,9 @@ export default function ChatPage() {
         </div>
 
         {/* ── Right: Chat Area ────────────────────── */}
-        <div className="flex-1 flex flex-col card p-0 overflow-hidden min-w-0">
+        <div className="flex-1 flex flex-col card p-0 overflow-hidden min-w-0 h-full">
           {/* Chat header */}
-          <div className="px-5 py-4 border-b flex items-center justify-between gap-3 shrink-0"
+          <div className="px-5 py-3.5 border-b flex items-center justify-between gap-3 shrink-0"
             style={{ borderColor: "rgba(255,255,255,0.05)" }}>
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-8 h-8 rounded-xl flex items-center justify-center text-sm shrink-0"
@@ -152,8 +222,8 @@ export default function ChatPage() {
                 🤖
               </div>
               <div className="min-w-0">
-                <p className="text-sm font-bold text-[var(--text-primary)] truncate">{activeConv.title}</p>
-                <p className="text-[10px] text-[var(--text-tertiary)]">{activeConv.messages.length} messages</p>
+                <p className="text-sm font-bold text-[var(--text-primary)] truncate">{activeConv?.title || "AI Chat"}</p>
+                <p className="text-[10px] text-[var(--text-tertiary)]">{activeConv?.messages.length || 0} messages</p>
               </div>
             </div>
 
@@ -194,9 +264,9 @@ export default function ChatPage() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-5 space-y-5">
-            {activeConv.messages.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full gap-6">
+          <div className="flex-1 overflow-y-auto p-5 space-y-4">
+            {activeConv?.messages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full gap-6 py-8">
                 <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl"
                   style={{ background: "linear-gradient(135deg, rgba(124,109,250,0.2), rgba(34,211,238,0.1))", border: "1px solid rgba(124,109,250,0.25)" }}>
                   🤖
@@ -217,34 +287,46 @@ export default function ChatPage() {
               </div>
             ) : (
               <>
-                {activeConv.messages.map(msg => (
-                  <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
-                    <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm shrink-0 mt-0.5 ${
-                      msg.role === "assistant"
-                        ? ""
-                        : ""
-                    }`} style={
-                      msg.role === "assistant"
-                        ? { background: "linear-gradient(135deg, rgba(124,109,250,0.25), rgba(34,211,238,0.15))", border: "1px solid rgba(124,109,250,0.3)" }
-                        : { background: "linear-gradient(135deg, #7c6dfa, #5b4fdf)" }
-                    }>
-                      {msg.role === "assistant" ? "🤖" : <User className="w-4 h-4 text-white" />}
-                    </div>
-                    <div className={`max-w-[80%] px-4 py-3 rounded-2xl ${msg.role === "user" ? "rounded-tr-sm" : "rounded-tl-sm"}`}
-                      style={
-                        msg.role === "user"
-                          ? { background: "linear-gradient(135deg, #7c6dfa, #5b4fdf)", color: "white" }
-                          : { background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", color: "var(--text-primary)" }
+                {activeConv?.messages.map(msg => {
+                  const isError = msg.content.includes("⚠️") || msg.content.includes("Error") || msg.content.includes("403");
+                  return (
+                    <div key={msg.id} className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}>
+                      <div className="w-8 h-8 rounded-xl flex items-center justify-center text-sm shrink-0 mt-0.5" style={
+                        msg.role === "assistant"
+                          ? { background: "linear-gradient(135deg, rgba(124,109,250,0.25), rgba(34,211,238,0.15))", border: "1px solid rgba(124,109,250,0.3)" }
+                          : { background: "linear-gradient(135deg, #7c6dfa, #5b4fdf)" }
                       }>
-                      <p className="text-[13px] leading-relaxed whitespace-pre-wrap"
-                        dangerouslySetInnerHTML={{ __html: msg.content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br/>") }}
-                      />
-                      <p className="text-[10px] mt-2 opacity-50" suppressHydrationWarning>
-                        {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                      </p>
+                        {msg.role === "assistant" ? "🤖" : <User className="w-4 h-4 text-white" />}
+                      </div>
+                      <div className={`max-w-[78%] px-4 py-3 rounded-2xl ${msg.role === "user" ? "rounded-tr-sm" : "rounded-tl-sm"}`}
+                        style={
+                          msg.role === "user"
+                            ? { background: "linear-gradient(135deg, #7c6dfa, #5b4fdf)", color: "white" }
+                            : isError
+                              ? { background: "rgba(251,113,133,0.08)", border: "1px solid rgba(251,113,133,0.20)", color: "var(--text-primary)" }
+                              : { background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", color: "var(--text-primary)" }
+                        }>
+                        <p className="text-[13px] leading-relaxed whitespace-pre-wrap"
+                          dangerouslySetInnerHTML={{ __html: msg.content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br/>") }}
+                        />
+                        {isError && (
+                          <div className="mt-3 pt-2 border-t border-red-500/20 flex items-center gap-2">
+                            <button
+                              onClick={() => setProvider("deepseek")}
+                              className="px-3 py-1 rounded-lg text-xs font-bold text-white transition-all hover:scale-105"
+                              style={{ background: "linear-gradient(135deg, #3b82f6, #1d4ed8)", boxShadow: "0 2px 8px rgba(59,130,246,0.4)" }}
+                            >
+                              🔵 一键切换至 DeepSeek (免代理)
+                            </button>
+                          </div>
+                        )}
+                        <p className="text-[10px] mt-2 opacity-50" suppressHydrationWarning>
+                          {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
 
                 {/* Typing indicator */}
                 {isTyping && (

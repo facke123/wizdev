@@ -26,8 +26,8 @@ export function AppShell({ children }: AppShellProps) {
         />
         <div className="flex-1 flex flex-col min-w-0 relative z-10">
           <Header />
-          <main className="flex-1 overflow-y-auto">
-            <div className="w-full max-w-[1600px] mx-auto" style={{ margin: "2px", padding: "2px" }}>
+          <main className="flex-1 overflow-y-auto px-6 py-6 lg:px-8 lg:py-8">
+            <div className="w-full max-w-[1600px] mx-auto space-y-6">
               {children}
             </div>
           </main>

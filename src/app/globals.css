@@ -71,8 +71,8 @@
 /* ── Reset ────────────────────────────────────────────────── */
 *, *::before, *::after {
   box-sizing: border-box;
-  margin: 2px;
-  padding: 2px;
+  margin: 0;
+  padding: 0;
 }
 
 html {
@@ -149,7 +149,7 @@ body {
   );
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
-  padding: 1.25rem 1.5rem;
+  padding: 1.5rem;
   box-shadow: var(--shadow-card);
   transition: var(--transition-normal);
   position: relative;

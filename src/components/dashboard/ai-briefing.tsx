@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { RefreshCw, ChevronUp, ChevronDown, Sparkles, Send } from "lucide-react";
 import { useLanguage } from "@/lib/i18n/context";
+import { useOvernightSummary } from "@/hooks/use-github";
+import { DemoBanner } from "@/components/ui/skeleton";
 
 const mockBriefing = {
   defaultGeneratedAt: "09:00 AM",
@@ -15,6 +17,7 @@ export function AIBriefing() {
   const [isExpanded, setIsExpanded] = useState(true);
   const [generatedAt, setGeneratedAt] = useState(mockBriefing.defaultGeneratedAt);
   const [inputValue, setInputValue] = useState("");
+  const { data: overnight, refresh: refreshOvernight } = useOvernightSummary();
 
   useEffect(() => {
     setGeneratedAt(new Date().toLocaleTimeString());
@@ -22,6 +25,7 @@ export function AIBriefing() {
 
   const handleRefresh = () => {
     setIsRefreshing(true);
+    refreshOvernight();
     setTimeout(() => {
       setGeneratedAt(new Date().toLocaleTimeString());
       setIsRefreshing(false);
@@ -173,13 +177,29 @@ export function AIBriefing() {
               <h3 className="text-[11px] font-extrabold uppercase tracking-[0.12em]" style={{ color: "#22d3ee" }}>
                 {t("briefing.overnightSummary")}
               </h3>
+              {overnight?.isDemo && <DemoBanner />}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 min-w-0">
               {[
-                { labelKey: "briefing.commitsPushed", value: "7", sub: "Across 3 repos", color: "#7c6dfa" },
-                { labelKey: "briefing.prsMerged", value: "2", sub: "#142 Analytics, #156 Fix", color: "#10d98e" },
-                { labelKey: "briefing.newIssues", value: "1", sub: "#203 Perf Regression", color: "#fbbf24" },
+                {
+                  labelKey: "briefing.commitsPushed",
+                  value: overnight ? String(overnight.commits) : "—",
+                  sub: "Last 24h across repos",
+                  color: "#7c6dfa",
+                },
+                {
+                  labelKey: "briefing.prsMerged",
+                  value: overnight ? String(overnight.prsMerged) : "—",
+                  sub: "Merged pull requests",
+                  color: "#10d98e",
+                },
+                {
+                  labelKey: "briefing.newIssues",
+                  value: overnight ? String(overnight.newIssues) : "—",
+                  sub: "New issues opened",
+                  color: "#fbbf24",
+                },
               ].map((card) => (
                 <div
                   key={card.labelKey}
@@ -201,7 +221,13 @@ export function AIBriefing() {
 
           {/* Integrated AI Query Row */}
           <div className="pt-1 min-w-0">
-            <div
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (inputValue.trim()) {
+                  window.location.href = `/chat?q=${encodeURIComponent(inputValue.trim())}`;
+                }
+              }}
               className="p-2 pl-3 rounded-xl flex items-center gap-2 sm:gap-3 transition-all min-w-0"
               style={{
                 background: "rgba(7, 11, 20, 0.75)",
@@ -216,6 +242,7 @@ export function AIBriefing() {
                 className="flex-1 min-w-0 bg-transparent text-xs text-[var(--text-primary)] placeholder:text-[var(--text-disabled)] focus:outline-none"
               />
               <button
+                type="submit"
                 className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold text-white shrink-0 whitespace-nowrap transition-all hover:opacity-90 active:scale-95"
                 style={{
                   background: "linear-gradient(135deg, #7c6dfa, #5b4fdf)",
@@ -225,7 +252,7 @@ export function AIBriefing() {
                 <Send className="w-3.5 h-3.5 shrink-0" />
                 <span className="whitespace-nowrap font-bold">{t("briefing.askBtn")}</span>
               </button>
-            </div>
+            </form>
           </div>
         </div>
       )}

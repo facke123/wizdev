@@ -1,7 +1,6 @@
 "use client";
 
 import { FileText, TrendingUp, ShieldAlert, GitBranch, ArrowRight, Sparkles } from "lucide-react";
-import { motion } from "framer-motion";
 import { useLanguage } from "@/lib/i18n/context";
 
 export function QuickActions() {
@@ -54,7 +53,7 @@ export function QuickActions() {
         border: "1px solid rgba(255,255,255,0.08)",
       }}
     >
-      {/* Top right floating bot badge with notification '1' */}
+      {/* Top right floating bot badge */}
       <div
         className="absolute -top-3 -right-3 w-9 h-9 rounded-full flex items-center justify-center text-sm shadow-lg border border-white/20 z-10 cursor-pointer hover:scale-110 transition-transform"
         style={{
@@ -71,7 +70,7 @@ export function QuickActions() {
       {/* ── Header ─────────────────────────────────── */}
       <div className="flex items-center gap-3 mb-4">
         <div
-          className="p-2 rounded-xl flex items-center justify-center"
+          className="p-2 rounded-xl flex items-center justify-center shrink-0"
           style={{
             background: "rgba(124,109,250,0.12)",
             border: "1px solid rgba(124,109,250,0.22)",
@@ -79,7 +78,7 @@ export function QuickActions() {
         >
           <Sparkles className="w-4 h-4 text-[var(--brand-violet)]" />
         </div>
-        <div>
+        <div className="min-w-0">
           <h2 className="text-[15px] font-bold text-white tracking-tight leading-none">
             {t("copilot.title")}
           </h2>
@@ -96,13 +95,18 @@ export function QuickActions() {
           return (
             <button
               key={i}
-              className="w-full p-3 rounded-xl flex items-center gap-3 text-left transition-all duration-150 group border border-white/[0.05] hover:border-white/[0.12]"
-              style={{ background: "rgba(255,255,255,0.02)" }}
+              className="w-full p-3 rounded-xl flex items-center gap-3 text-left transition-all duration-150 group border border-white/[0.05] hover:border-white/[0.12] hover:bg-white/[0.02]"
             >
+              {/* Icon box */}
               <div
                 className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                 style={{ background: action.bg, border: `1px solid ${action.border}` }}
               >
+                <Icon className="w-4 h-4 shrink-0" style={{ color: action.color }} />
+              </div>
+
+              {/* Text content */}
+              <div className="flex-1 min-w-0 text-left">
                 <p className="text-[12px] font-semibold text-[var(--text-primary)] group-hover:text-white transition-colors truncate">
                   {t(action.titleKey)}
                 </p>
@@ -110,12 +114,12 @@ export function QuickActions() {
                   {t(action.descKey)}
                 </p>
               </div>
-              <div className="flex items-center gap-1 shrink-0">
-                <ArrowRight
-                  className="w-3.5 h-3.5 text-[var(--text-tertiary)] group-hover:text-white transition-all group-hover:translate-x-0.5"
-                  strokeWidth={2}
-                />
-              </div>
+
+              {/* Arrow */}
+              <ArrowRight
+                className="w-3.5 h-3.5 text-[var(--text-tertiary)] group-hover:text-white transition-all group-hover:translate-x-0.5 shrink-0"
+                strokeWidth={2}
+              />
             </button>
           );
         })}
