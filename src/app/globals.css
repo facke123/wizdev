@@ -295,3 +295,8 @@ body {
   outline: 2px solid var(--brand-violet);
   outline-offset: 2px;
 }
+
+@keyframes barGrow {
+  from { transform: scaleY(0); transform-origin: bottom; }
+  to   { transform: scaleY(1); transform-origin: bottom; }
+}
