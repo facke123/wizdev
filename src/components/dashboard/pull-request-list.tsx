@@ -1,6 +1,6 @@
 "use client";
 
-import { GitPullRequest, ArrowRight, MessageSquare } from "lucide-react";
+import { GitPullRequest, ArrowRight, MessageSquare, Plus, Minus } from "lucide-react";
 
 const mockPRs = [
   {
@@ -16,8 +16,8 @@ const mockPRs = [
     comments: 5,
     createdAt: "2 hours ago",
     labels: [
-      { name: "feature", color: "#635bff" },
-      { name: "frontend", color: "#06b6d4" },
+      { name: "feature", color: "#7c6dfa" },
+      { name: "frontend", color: "#22d3ee" },
     ],
   },
   {
@@ -33,8 +33,8 @@ const mockPRs = [
     comments: 3,
     createdAt: "5 hours ago",
     labels: [
-      { name: "bug", color: "#ef4444" },
-      { name: "critical", color: "#f59e0b" },
+      { name: "bug", color: "#fb7185" },
+      { name: "critical", color: "#fbbf24" },
     ],
   },
   {
@@ -49,7 +49,7 @@ const mockPRs = [
     deletions: 312,
     comments: 12,
     createdAt: "1 day ago",
-    labels: [{ name: "refactor", color: "#8b5cf6" }],
+    labels: [{ name: "refactor", color: "#a78bfa" }],
   },
   {
     id: 4,
@@ -63,113 +63,151 @@ const mockPRs = [
     deletions: 0,
     comments: 0,
     createdAt: "3 hours ago",
-    labels: [{ name: "ai", color: "#10b981" }],
+    labels: [{ name: "ai", color: "#10d98e" }],
   },
 ];
 
-const statusConfig: Record<
-  string,
-  { label: string; badgeClass: string }
-> = {
-  review: { label: "Review Required", badgeClass: "badge--warning" },
-  approved: { label: "Approved", badgeClass: "badge--success" },
-  changes: { label: "Changes Requested", badgeClass: "badge--danger" },
-  draft: { label: "Draft", badgeClass: "badge--info" },
+const statusConfig = {
+  review:   { label: "Review Required", bg: "rgba(251,191,36,0.12)",  color: "#fcd34d", border: "rgba(251,191,36,0.25)" },
+  approved: { label: "Approved",        bg: "rgba(16,217,142,0.12)",  color: "#6ee7b7", border: "rgba(16,217,142,0.25)" },
+  changes:  { label: "Changes Needed",  bg: "rgba(251,113,133,0.12)", color: "#fca5a5", border: "rgba(251,113,133,0.25)" },
+  draft:    { label: "Draft",           bg: "rgba(34,211,238,0.10)",  color: "#67e8f9", border: "rgba(34,211,238,0.22)" },
 };
 
-const avatarColors = [
-  "from-[#635bff] to-[#7a73ff]",
-  "from-[#00d97e] to-[#00c26a]",
-  "from-[#f5a623] to-[#e09510]",
-  "from-[#00d4ff] to-[#00b8e0]",
+const avatarGradients = [
+  "linear-gradient(135deg, #7c6dfa, #5b4fdf)",
+  "linear-gradient(135deg, #10d98e, #059669)",
+  "linear-gradient(135deg, #fbbf24, #d97706)",
+  "linear-gradient(135deg, #22d3ee, #0891b2)",
 ];
 
 export function PullRequestList() {
   return (
     <div className="card p-5 sm:p-6 lg:p-7">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 mb-5 border-b border-white/[0.06]">
-        <div className="flex items-center gap-3.5 min-w-0">
-          <div className="p-2 rounded-lg bg-[var(--color-accent-muted)] border border-[var(--color-accent-border)]">
-            <GitPullRequest className="w-[18px] h-[18px] text-[var(--color-accent-hover)]" strokeWidth={1.75} />
+      {/* ── Header ─────────────────────────────────── */}
+      <div className="flex items-center justify-between gap-4 mb-5">
+        <div className="flex items-center gap-3 min-w-0">
+          <div
+            className="p-2 rounded-xl"
+            style={{
+              background: "rgba(124,109,250,0.12)",
+              border: "1px solid rgba(124,109,250,0.22)",
+            }}
+          >
+            <GitPullRequest
+              className="w-[17px] h-[17px]"
+              style={{ color: "#9d91fc" }}
+              strokeWidth={1.75}
+            />
           </div>
           <div className="min-w-0">
-            <h2 className="text-sm sm:text-base font-semibold text-[var(--text-primary)] tracking-tight truncate">
+            <h2 className="text-[14px] font-semibold text-[var(--text-primary)] tracking-tight">
               Active Pull Requests
             </h2>
-            <p className="text-[11px] text-[var(--text-tertiary)] truncate">
+            <p className="text-[11px] text-[var(--text-tertiary)]">
               4 open PRs across active repositories
             </p>
           </div>
         </div>
 
-        <button className="btn btn--ghost text-xs">
+        <button
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[12px] font-semibold transition-all shrink-0"
+          style={{
+            background: "rgba(255,255,255,0.03)",
+            border: "1px solid rgba(255,255,255,0.07)",
+            color: "var(--text-secondary)",
+          }}
+        >
           View All
           <ArrowRight className="w-3.5 h-3.5" strokeWidth={2} />
         </button>
       </div>
 
-      {/* PR List */}
-      <div className="space-y-2.5">
+      {/* ── PR List ────────────────────────────────── */}
+      <div className="space-y-2">
         {mockPRs.map((pr, idx) => {
           const status = statusConfig[pr.status];
           return (
             <div
               key={pr.id}
-              className="p-4 rounded-2xl bg-[var(--surface-base)]/40 border border-white/[0.04] hover:border-[var(--color-accent-border)] hover:bg-[var(--surface-base)] transition-all duration-150 cursor-pointer group"
+              className="p-4 rounded-xl transition-all duration-150 cursor-pointer group"
+              style={{
+                background: "rgba(255,255,255,0.018)",
+                border: "1px solid rgba(255,255,255,0.05)",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "rgba(124,109,250,0.06)";
+                (e.currentTarget as HTMLElement).style.borderColor = "rgba(124,109,250,0.22)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.018)";
+                (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.05)";
+              }}
             >
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+              <div className="flex flex-col lg:flex-row lg:items-center gap-3">
                 {/* Left: PR Info */}
                 <div className="flex items-start gap-3 flex-1 min-w-0">
+                  {/* Avatar */}
                   <div
-                    className={`w-8 h-8 rounded-lg bg-gradient-to-br ${avatarColors[idx % avatarColors.length]} p-[1px] shrink-0 mt-0.5`}
+                    className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0 mt-0.5"
+                    style={{ background: avatarGradients[idx % avatarGradients.length] }}
                   >
-                    <div className="w-full h-full bg-[var(--surface-card)] rounded-[7px] flex items-center justify-center text-[var(--text-primary)] text-[11px] font-bold">
-                      {pr.avatar}
-                    </div>
+                    {pr.avatar}
                   </div>
 
-                  <div className="space-y-1 flex-1 min-w-0">
+                  <div className="space-y-1.5 flex-1 min-w-0">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="font-mono text-[11px] font-semibold text-[var(--color-accent-hover)] shrink-0">
+                      <span
+                        className="font-mono text-[11px] font-bold shrink-0"
+                        style={{ color: "#9d91fc" }}
+                      >
                         #{pr.number}
                       </span>
-                      <h3 className="text-xs sm:text-[13px] font-semibold text-[var(--text-primary)] group-hover:text-[var(--color-accent-hover)] transition-colors truncate">
+                      <h3 className="text-[13px] font-semibold text-[var(--text-primary)] group-hover:text-white transition-colors truncate">
                         {pr.title}
                       </h3>
                     </div>
 
-                    <div className="flex items-center gap-2.5 text-[11px] text-[var(--text-tertiary)] flex-wrap">
-                      <span className="font-mono text-[var(--text-secondary)] bg-white/[0.04] px-1.5 py-0.5 rounded border border-white/[0.05] shrink-0">
+                    <div className="flex items-center gap-2 text-[11px] text-[var(--text-tertiary)] flex-wrap">
+                      <span
+                        className="font-mono text-[11px] font-medium px-1.5 py-0.5 rounded border"
+                        style={{
+                          color: "var(--text-secondary)",
+                          background: "rgba(255,255,255,0.04)",
+                          borderColor: "rgba(255,255,255,0.07)",
+                        }}
+                      >
                         {pr.repo}
                       </span>
-                      <span className="truncate">
-                        opened by{" "}
-                        <strong className="text-[var(--text-secondary)]">
+                      <span>
+                        by{" "}
+                        <strong className="text-[var(--text-secondary)] font-semibold">
                           @{pr.author}
                         </strong>
                       </span>
-                      <span className="shrink-0">{pr.createdAt}</span>
-                      <span className="inline-flex items-center gap-1 shrink-0">
-                        <MessageSquare className="w-3 h-3" strokeWidth={1.5} />
-                        {pr.comments}
-                      </span>
+                      <span>{pr.createdAt}</span>
+                      {pr.comments > 0 && (
+                        <span className="flex items-center gap-1">
+                          <MessageSquare className="w-3 h-3" strokeWidth={1.5} />
+                          {pr.comments}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
 
-                {/* Right: Meta */}
-                <div className="flex items-center gap-2.5 flex-wrap lg:flex-nowrap shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-white/[0.04]">
+                {/* Right: Labels + Diff + Status */}
+                <div className="flex items-center gap-2 flex-wrap lg:flex-nowrap shrink-0 pl-11 lg:pl-0">
                   {/* Labels */}
                   <div className="flex items-center gap-1 flex-wrap">
                     {pr.labels.map((label) => (
                       <span
                         key={label.name}
-                        className="px-1.5 py-0.5 rounded text-[10px] font-mono font-medium border shrink-0 whitespace-nowrap"
+                        className="px-1.5 py-0.5 rounded text-[10px] font-mono font-semibold border"
                         style={{
-                          backgroundColor: label.color + "18",
+                          background: `${label.color}18`,
                           color: label.color,
-                          borderColor: label.color + "30",
+                          borderColor: `${label.color}30`,
                         }}
                       >
                         {label.name}
@@ -177,18 +215,34 @@ export function PullRequestList() {
                     ))}
                   </div>
 
-                  {/* Diff Stats */}
-                  <div className="flex items-center gap-2 font-mono text-[11px] font-semibold px-2 py-1 rounded bg-white/[0.03] border border-white/[0.05] shrink-0 whitespace-nowrap">
-                    <span className="text-[var(--color-success)]">
-                      +{pr.additions}
+                  {/* Diff */}
+                  <div
+                    className="flex items-center gap-1.5 font-mono text-[11px] font-bold px-2 py-1 rounded-lg shrink-0"
+                    style={{
+                      background: "rgba(255,255,255,0.03)",
+                      border: "1px solid rgba(255,255,255,0.06)",
+                    }}
+                  >
+                    <span className="flex items-center gap-0.5" style={{ color: "#10d98e" }}>
+                      <Plus className="w-2.5 h-2.5" strokeWidth={2.5} />
+                      {pr.additions}
                     </span>
-                    <span className="text-[var(--color-danger)]">
-                      -{pr.deletions}
+                    <span className="text-[var(--text-disabled)]">/</span>
+                    <span className="flex items-center gap-0.5" style={{ color: "#fb7185" }}>
+                      <Minus className="w-2.5 h-2.5" strokeWidth={2.5} />
+                      {pr.deletions}
                     </span>
                   </div>
 
-                  {/* Status */}
-                  <span className={`badge ${status.badgeClass}`}>
+                  {/* Status Badge */}
+                  <span
+                    className="px-2 py-1 rounded-full text-[11px] font-semibold border whitespace-nowrap"
+                    style={{
+                      background: status.bg,
+                      color: status.color,
+                      borderColor: status.border,
+                    }}
+                  >
                     {status.label}
                   </span>
                 </div>

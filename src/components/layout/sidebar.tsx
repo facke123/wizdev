@@ -8,8 +8,9 @@ import {
   BarChart3,
   Bot,
   Settings,
-  PanelLeftClose,
-  PanelLeft,
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -23,6 +24,7 @@ const navItems = [
     label: "Dashboard",
     href: "/",
     active: true,
+    group: "main",
   },
   {
     icon: GitPullRequest,
@@ -30,6 +32,7 @@ const navItems = [
     href: "/prs",
     active: false,
     badge: "12",
+    group: "main",
   },
   {
     icon: Bug,
@@ -37,141 +40,245 @@ const navItems = [
     href: "/issues",
     active: false,
     badge: "28",
+    group: "main",
   },
   {
     icon: Zap,
-    label: "CI/CD",
+    label: "CI / CD",
     href: "/ci",
     active: false,
+    group: "main",
   },
   {
     icon: BarChart3,
     label: "Analytics",
     href: "/analytics",
     active: false,
+    group: "tools",
   },
   {
     icon: Bot,
     label: "AI Copilot",
     href: "/chat",
     active: false,
+    group: "tools",
+    highlight: true,
   },
   {
     icon: Settings,
     label: "Settings",
     href: "/settings",
     active: false,
+    group: "tools",
   },
 ];
+
+const mainItems = navItems.filter((i) => i.group === "main");
+const toolItems = navItems.filter((i) => i.group === "tools");
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside
       className={`
-        h-[100dvh] sticky top-0
-        bg-[var(--surface-base)]/95 backdrop-blur-xl
-        border-r border-white/[0.06]
-        flex flex-col z-40
+        h-[100dvh] sticky top-0 z-40
+        flex flex-col
         transition-all duration-300 ease-out
-        ${collapsed ? "w-[68px]" : "w-[248px]"}
+        border-r border-white/[0.05]
+        ${collapsed ? "w-[64px]" : "w-[240px]"}
       `}
+      style={{
+        background: "linear-gradient(180deg, #0b0f1e 0%, #080c18 100%)",
+      }}
     >
-      {/* Logo Area */}
+      {/* ── Logo ──────────────────────────────────── */}
       <div
-        className={`flex items-center h-16 border-b border-white/[0.05] ${
-          collapsed ? "justify-center px-0" : "gap-3 px-5"
+        className={`flex items-center h-[60px] border-b border-white/[0.05] shrink-0 ${
+          collapsed ? "justify-center px-0" : "px-4 gap-3"
         }`}
       >
-        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--color-accent)] via-[var(--color-accent-hover)] to-[var(--color-info)] flex items-center justify-center shadow-lg shadow-[var(--color-accent)]/20 flex-shrink-0">
-          <span className="text-white font-black text-sm tracking-tighter">
+        {/* Logo icon with animated gradient */}
+        <div className="relative shrink-0">
+          <div
+            className="w-8 h-8 rounded-[10px] flex items-center justify-center text-white font-black text-sm"
+            style={{
+              background:
+                "linear-gradient(135deg, #7c6dfa 0%, #5b4fdf 50%, #22d3ee 100%)",
+              boxShadow:
+                "0 4px 12px rgba(124, 109, 250, 0.45), 0 0 0 1px rgba(255,255,255,0.10) inset",
+            }}
+          >
             W
-          </span>
+          </div>
+          <div
+            className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#080c18]"
+            style={{ background: "var(--color-success)" }}
+          />
         </div>
+
         {!collapsed && (
           <div className="flex flex-col min-w-0">
-            <span className="font-bold text-sm text-[var(--text-primary)] tracking-tight leading-tight">
+            <span className="font-bold text-[13px] text-white tracking-tight leading-tight">
               WizDev
             </span>
-            <span className="text-[10px] text-[var(--color-accent-hover)] font-mono font-medium tracking-wide leading-tight">
-              v1.0
+            <span
+              className="text-[10px] font-mono font-medium tracking-widest leading-tight"
+              style={{ color: "var(--brand-violet)" }}
+            >
+              BETA v1.0
             </span>
           </div>
         )}
       </div>
 
-      {/* Navigation Links */}
-      <nav className="flex-1 py-4 px-2.5 space-y-0.5 overflow-y-auto">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <a
-              key={item.label}
-              href={item.href}
-              className={`
-                flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
-                transition-all duration-150 group relative
-                ${
-                  item.active
-                    ? "bg-[var(--color-accent-muted)] text-[var(--text-primary)] border border-[var(--color-accent-border)]"
-                    : "text-[var(--text-tertiary)] hover:bg-white/[0.04] hover:text-[var(--text-secondary)] border border-transparent"
-                }
-                ${collapsed ? "justify-center" : ""}
-              `}
-            >
-              <Icon
-                className={`w-[18px] h-[18px] flex-shrink-0 transition-transform duration-150 group-hover:scale-110 ${
-                  item.active
-                    ? "text-[var(--color-accent-hover)]"
-                    : "text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)]"
-                }`}
-                strokeWidth={item.active ? 2 : 1.75}
-              />
+      {/* ── Navigation ────────────────────────────── */}
+      <nav className="flex-1 py-3 px-2 overflow-y-auto space-y-4">
+        {/* Main group */}
+        <div className="space-y-0.5">
+          {!collapsed && (
+            <p className="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-[var(--text-disabled)]">
+              Workspace
+            </p>
+          )}
+          {mainItems.map((item) => (
+            <NavItem key={item.label} item={item} collapsed={collapsed} />
+          ))}
+        </div>
 
-              {!collapsed && (
-                <>
-                  <span className="truncate">{item.label}</span>
-                  {item.badge && (
-                    <span
-                      className={`
-                        ml-auto px-1.5 py-0.5 rounded-full text-[11px] font-semibold font-mono leading-none
-                        ${
-                          item.active
-                            ? "bg-[rgba(99,91,255,0.25)] text-[#a5b4fc]"
-                            : "bg-white/[0.06] text-[var(--text-tertiary)] group-hover:bg-white/[0.10] group-hover:text-[var(--text-secondary)]"
-                        }
-                      `}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
-                </>
-              )}
-
-              {/* Active indicator */}
-              {item.active && collapsed && (
-                <div className="absolute left-0 top-1.5 bottom-1.5 w-0.5 bg-[var(--color-accent)] rounded-r-full" />
-              )}
-            </a>
-          );
-        })}
+        {/* Tools group */}
+        <div className="space-y-0.5">
+          {!collapsed && (
+            <p className="px-3 mb-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-[var(--text-disabled)]">
+              Tools
+            </p>
+          )}
+          {toolItems.map((item) => (
+            <NavItem key={item.label} item={item} collapsed={collapsed} />
+          ))}
+        </div>
       </nav>
 
-      {/* Collapse Action Footer */}
-      <div className="p-3 border-t border-white/[0.05]">
+      {/* ── User Profile Area ──────────────────────── */}
+      {!collapsed && (
+        <div className="mx-2 mb-3 p-3 rounded-xl border border-white/[0.05] bg-white/[0.02] flex items-center gap-3">
+          <div
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-white text-[11px] font-bold shrink-0"
+            style={{
+              background:
+                "linear-gradient(135deg, var(--brand-violet), var(--brand-indigo))",
+            }}
+          >
+            JD
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-[12px] font-semibold text-[var(--text-primary)] truncate">
+              John Doe
+            </p>
+            <p className="text-[10px] text-[var(--text-tertiary)] truncate">
+              Pro Plan
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── Collapse Button ────────────────────────── */}
+      <div className="p-2 border-t border-white/[0.05] shrink-0">
         <button
           onClick={onToggle}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-[var(--text-tertiary)] hover:bg-white/[0.04] hover:text-[var(--text-secondary)] border border-transparent hover:border-white/[0.08] transition-all duration-150 text-xs font-medium"
+          className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-[var(--text-tertiary)] hover:bg-white/[0.05] hover:text-[var(--text-secondary)] transition-all duration-150 text-xs font-medium"
         >
           {collapsed ? (
-            <PanelLeft className="w-4 h-4" />
+            <ChevronRight className="w-4 h-4" />
           ) : (
             <>
-              <PanelLeftClose className="w-4 h-4" />
+              <ChevronLeft className="w-4 h-4" />
               <span>Collapse</span>
             </>
           )}
         </button>
       </div>
     </aside>
+  );
+}
+
+function NavItem({
+  item,
+  collapsed,
+}: {
+  item: (typeof navItems)[0];
+  collapsed: boolean;
+}) {
+  const Icon = item.icon;
+  return (
+    <a
+      href={item.href}
+      title={collapsed ? item.label : undefined}
+      className={`
+        relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium
+        transition-all duration-150 group
+        ${collapsed ? "justify-center" : ""}
+        ${
+          item.active
+            ? "text-white"
+            : "text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] hover:bg-white/[0.03]"
+        }
+      `}
+      style={
+        item.active
+          ? {
+              background:
+                "linear-gradient(135deg, rgba(124,109,250,0.18) 0%, rgba(124,109,250,0.08) 100%)",
+              border: "1px solid rgba(124,109,250,0.25)",
+              boxShadow: "0 2px 8px rgba(124,109,250,0.12)",
+            }
+          : { border: "1px solid transparent" }
+      }
+    >
+      {/* Active left bar */}
+      {item.active && !collapsed && (
+        <div
+          className="absolute left-0 top-2 bottom-2 w-0.5 rounded-r-full"
+          style={{ background: "var(--brand-violet)" }}
+        />
+      )}
+
+      <Icon
+        className={`flex-shrink-0 transition-transform duration-150 group-hover:scale-110 ${
+          item.active
+            ? "text-[var(--brand-violet)]"
+            : "text-[var(--text-tertiary)] group-hover:text-[var(--text-secondary)]"
+        }`}
+        style={{ width: 16, height: 16 }}
+        strokeWidth={item.active ? 2.25 : 1.75}
+      />
+
+      {!collapsed && (
+        <>
+          <span className="truncate flex-1">{item.label}</span>
+
+          {item.highlight && (
+            <Sparkles
+              className="w-3 h-3 shrink-0"
+              style={{ color: "var(--brand-violet)" }}
+            />
+          )}
+
+          {item.badge && (
+            <span
+              className="px-1.5 py-0.5 rounded-full text-[10px] font-bold font-mono leading-none shrink-0"
+              style={{
+                background: item.active
+                  ? "rgba(124,109,250,0.3)"
+                  : "rgba(255,255,255,0.07)",
+                color: item.active
+                  ? "#c4bcff"
+                  : "var(--text-tertiary)",
+              }}
+            >
+              {item.badge}
+            </span>
+          )}
+        </>
+      )}
+    </a>
   );
 }

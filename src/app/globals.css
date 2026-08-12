@@ -1,49 +1,75 @@
 @import "tailwindcss";
 
-/* ============================================
-   WizDev — Stripe Premium Dark Design System (v2)
-   ============================================ */
+/* ============================================================
+   WizDev — Ultra Premium Dark Design System v3
+   Inspired by: Linear, Vercel, Stripe, Arc Browser
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Stripe Brand Palette */
-  --stripe-violet: #635bff;
-  --stripe-indigo: #7a73ff;
-  --stripe-cyan: #00d4ff;
-  --stripe-emerald: #10b981;
-  --stripe-amber: #f59e0b;
-  --stripe-rose: #ef4444;
+  /* ── Core Brand ───────────────────────────────────────── */
+  --brand-violet:   #7c6dfa;
+  --brand-indigo:   #6b8aff;
+  --brand-cyan:     #22d3ee;
+  --brand-emerald:  #10d98e;
+  --brand-amber:    #fbbf24;
+  --brand-rose:     #fb7185;
 
-  /* Theme Surfaces - Higher Contrast & Rich Depth */
-  --bg-dark-base: #0a0d16;
-  --bg-dark-surface: #101524;
-  --bg-dark-card: #141a2e;
-  --bg-dark-elevated: #1a223c;
-  --bg-dark-hover: #222b4a;
+  /* ── Background Surfaces ──────────────────────────────── */
+  --surface-root:     #070b14;
+  --surface-base:     #0c1120;
+  --surface-card:     #111827;
+  --surface-elevated: #161e30;
+  --surface-hover:    #1c2638;
+  --surface-overlay:  rgba(7, 11, 20, 0.85);
 
-  /* Borders */
-  --border-subtle: rgba(255, 255, 255, 0.09);
-  --border-medium: rgba(255, 255, 255, 0.15);
-  --border-highlight: rgba(99, 91, 255, 0.45);
+  /* ── Semantic Colors ──────────────────────────────────── */
+  --color-accent:        #7c6dfa;
+  --color-accent-hover:  #9d91fc;
+  --color-accent-muted:  rgba(124, 109, 250, 0.10);
+  --color-accent-border: rgba(124, 109, 250, 0.25);
 
-  /* Typography */
-  --text-white: #ffffff;
-  --text-main: #f3f4f6;
-  --text-muted: #9ca3af;
-  --text-dim: #6b7280;
+  --color-success:  #10d98e;
+  --color-warning:  #fbbf24;
+  --color-danger:   #fb7185;
+  --color-info:     #22d3ee;
 
-  /* Stripe Glass Shadow */
-  --stripe-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  --stripe-shadow-hover: 0 20px 40px -10px rgba(99, 91, 255, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  /* ── Typography ───────────────────────────────────────── */
+  --text-primary:   #f0f2f7;
+  --text-secondary: #9ba3b5;
+  --text-tertiary:  #5a6278;
+  --text-disabled:  #3a4155;
+  --text-white:     #ffffff;
 
-  /* Radius */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
-  --radius-xl: 24px;
+  /* ── Borders ──────────────────────────────────────────── */
+  --border-subtle:    rgba(255, 255, 255, 0.05);
+  --border-medium:    rgba(255, 255, 255, 0.10);
+  --border-strong:    rgba(255, 255, 255, 0.18);
+  --border-highlight: rgba(124, 109, 250, 0.40);
+
+  /* ── Shadows ──────────────────────────────────────────── */
+  --shadow-card:    0 1px 3px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.35);
+  --shadow-hover:   0 4px 12px rgba(0,0,0,0.5), 0 16px 40px rgba(124,109,250,0.18);
+  --shadow-glow:    0 0 20px rgba(124, 109, 250, 0.35);
+  --shadow-btn:     0 2px 8px rgba(124,109,250,0.45), 0 0 0 1px rgba(255,255,255,0.08) inset;
+
+  /* ── Radius ───────────────────────────────────────────── */
+  --radius-xs:  4px;
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  20px;
+  --radius-2xl: 24px;
+
+  /* ── Transitions ──────────────────────────────────────── */
+  --transition-fast:   all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-slow:   all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Global Reset */
-* {
+/* ── Reset ────────────────────────────────────────────────── */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -53,165 +79,219 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: var(--bg-dark-base);
-  color: var(--text-main);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--surface-root);
+  color: var(--text-primary);
   line-height: 1.6;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.011em;
   min-height: 100vh;
   overflow-x: hidden;
 }
 
-/* Background Mesh Gradients */
-.stripe-bg-mesh {
+/* ── Animated Background ──────────────────────────────────── */
+.bg-mesh {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: -1;
-  background: 
-    radial-gradient(circle at 12% 12%, rgba(99, 91, 255, 0.15) 0%, transparent 45%),
-    radial-gradient(circle at 88% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 40%),
-    radial-gradient(circle at 50% 85%, rgba(122, 115, 255, 0.08) 0%, transparent 50%);
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(124, 109, 250, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 15%, rgba(34, 211, 238, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 60% at 50% 110%, rgba(107, 138, 255, 0.06) 0%, transparent 50%);
 }
 
-/* Stripe Card Container */
-.stripe-card {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035) 0%, rgba(255, 255, 255, 0) 100%), var(--bg-dark-card);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+/* ── Card System ──────────────────────────────────────────── */
+.card {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.03) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  ), var(--surface-card);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--stripe-shadow);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.stripe-card:hover {
-  border-color: var(--border-highlight);
-  box-shadow: var(--stripe-shadow-hover);
-}
-
-/* Stat Card Specific */
-.stripe-stat-card {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.04) 0%, rgba(16, 21, 37, 0.95) 100%);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  padding: 1.75rem;
-  box-shadow: var(--stripe-shadow);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-normal);
   position: relative;
   overflow: hidden;
 }
 
-.stripe-stat-card::after {
-  content: "";
+.card::before {
+  content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 2.5px;
-  background: linear-gradient(90deg, var(--stripe-violet), var(--stripe-cyan));
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 50%);
+  pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
-.stripe-stat-card:hover {
-  border-color: rgba(99, 91, 255, 0.4);
-  transform: translateY(-3px);
-  box-shadow: 0 18px 40px -8px rgba(99, 91, 255, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+.card:hover {
+  border-color: var(--border-medium);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-1px);
 }
 
-.stripe-stat-card:hover::after {
+.card:hover::before {
   opacity: 1;
 }
 
-/* Stripe Gradient Text */
-.stripe-gradient-text {
-  background: linear-gradient(135deg, #ffffff 0%, #dbeafe 50%, #93c5fd 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* ── Stat Card ────────────────────────────────────────────── */
+.stat-card {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.035) 0%,
+    rgba(17, 24, 39, 0.98) 100%
+  );
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  cursor: default;
 }
 
-.stripe-gradient-accent {
-  background: linear-gradient(135deg, var(--stripe-cyan) 0%, var(--stripe-indigo) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
 }
 
-/* Stripe Pill Badge */
-.stripe-badge {
+.stat-card:hover {
+  border-color: var(--border-highlight);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+/* ── Badge System ─────────────────────────────────────────── */
+.badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.3rem 0.8rem;
+  gap: 4px;
+  padding: 3px 9px;
   border-radius: 9999px;
-  font-size: 0.75rem;
+  font-size: 11px;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   border: 1px solid transparent;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
-.stripe-badge-primary {
-  background: rgba(99, 91, 255, 0.18);
-  color: #c7d2fe;
-  border-color: rgba(99, 91, 255, 0.35);
+.badge--accent {
+  background: rgba(124, 109, 250, 0.14);
+  color: #b5adff;
+  border-color: rgba(124, 109, 250, 0.28);
 }
-
-.stripe-badge-success {
-  background: rgba(16, 185, 129, 0.18);
+.badge--success {
+  background: rgba(16, 217, 142, 0.12);
   color: #6ee7b7;
-  border-color: rgba(16, 185, 129, 0.35);
+  border-color: rgba(16, 217, 142, 0.25);
 }
-
-.stripe-badge-warning {
-  background: rgba(245, 158, 11, 0.18);
-  color: #fde68a;
-  border-color: rgba(245, 158, 11, 0.35);
+.badge--warning {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fcd34d;
+  border-color: rgba(251, 191, 36, 0.25);
 }
-
-.stripe-badge-danger {
-  background: rgba(239, 68, 68, 0.18);
+.badge--danger {
+  background: rgba(251, 113, 133, 0.12);
   color: #fca5a5;
-  border-color: rgba(239, 68, 68, 0.35);
+  border-color: rgba(251, 113, 133, 0.25);
+}
+.badge--info {
+  background: rgba(34, 211, 238, 0.10);
+  color: #67e8f9;
+  border-color: rgba(34, 211, 238, 0.22);
 }
 
-/* Button Stripe Glow */
-.stripe-btn-primary {
-  background: linear-gradient(135deg, var(--stripe-violet) 0%, var(--stripe-indigo) 100%);
-  color: #ffffff;
-  font-weight: 600;
+/* ── Button System ────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
   border-radius: var(--radius-md);
-  box-shadow: 0 4px 16px rgba(99, 91, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  border: 1px solid transparent;
   white-space: nowrap;
-  flex-shrink: 0;
+  text-decoration: none;
 }
 
-.stripe-btn-primary:hover {
-  box-shadow: 0 6px 24px rgba(99, 91, 255, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+.btn--primary {
+  background: linear-gradient(135deg, var(--brand-violet) 0%, #5b4fdf 100%);
+  color: #fff;
+  box-shadow: var(--shadow-btn);
+}
+.btn--primary:hover {
+  box-shadow: 0 4px 16px rgba(124,109,250,0.6), 0 0 0 1px rgba(255,255,255,0.12) inset;
   transform: translateY(-1px);
 }
 
-/* Subtle Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track {
+.btn--ghost {
   background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border-subtle);
+}
+.btn--ghost:hover {
+  background: rgba(255,255,255,0.04);
+  color: var(--text-primary);
+  border-color: var(--border-medium);
 }
 
+/* ── Gradient Text ────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, #e2e8f0 0%, #c7d2fe 40%, #a5b4fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-accent {
+  background: linear-gradient(135deg, var(--brand-cyan) 0%, var(--brand-violet) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Scrollbar ────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255,255,255,0.10);
   border-radius: 4px;
 }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.35);
+/* ── Pulse Animation ──────────────────────────────────────── */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(124, 109, 250, 0.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(124, 109, 250, 0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.06) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2.5s infinite;
+}
+
+/* ── Focus Ring ───────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--brand-violet);
+  outline-offset: 2px;
 }

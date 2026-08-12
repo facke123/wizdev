@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
-
 import { StatsOverview } from "@/components/dashboard/stats-overview";
 import { AIBriefing } from "@/components/dashboard/ai-briefing";
 import { PullRequestList } from "@/components/dashboard/pull-request-list";
@@ -15,46 +14,48 @@ export default function DashboardPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
-    <div className="flex min-h-[100dvh] w-full bg-[var(--surface-root)] overflow-x-hidden">
-      {/* Sidebar Navigation */}
+    <div
+      className="flex min-h-[100dvh] w-full overflow-x-hidden"
+      style={{ background: "var(--surface-root)" }}
+    >
+      {/* Ambient background mesh */}
+      <div className="bg-mesh" />
+
+      {/* Sidebar */}
       <Sidebar
         collapsed={sidebarCollapsed}
         onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
       />
 
-      {/* Main Content Area — Full Screen Width */}
-      <div className="flex-1 flex flex-col min-w-0 w-full">
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-w-0 relative z-10">
         <Header />
 
-        {/* Full-Screen Scrollable Content with Generous Inter-Module Spacing */}
-        <main className="flex-1 overflow-y-auto w-full">
-          <div className="w-full p-6 sm:p-8 lg:p-10 xl:p-12 space-y-8 sm:space-y-10 lg:space-y-12">
-            {/* Top Metric Cards (Full Width Row) */}
-            <StatsOverview />
+        <main className="flex-1 overflow-y-auto">
+          <div className="w-full max-w-[1600px] mx-auto px-5 sm:px-7 lg:px-9 py-8 sm:py-10 space-y-8 sm:space-y-10">
 
-            {/* Unified 2-Column Dashboard Layout */}
-            <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 lg:gap-10 w-full items-start">
-              {/* Main Feed Column (Left — 8/12) */}
-              <div className="xl:col-span-8 space-y-8 sm:space-y-10 lg:space-y-12 w-full min-w-0">
-                {/* 1. Daily Executive Briefing */}
+            {/* ── Stats Row ───────────────────────────── */}
+            <section>
+              <StatsOverview />
+            </section>
+
+            {/* ── Main 2-Column Grid ───────────────────── */}
+            <section className="grid grid-cols-1 xl:grid-cols-12 gap-6 lg:gap-8 items-start">
+
+              {/* Left Column — 8/12 */}
+              <div className="xl:col-span-8 space-y-7 lg:space-y-8 min-w-0">
                 <AIBriefing />
-
-                {/* 2. Engineering Velocity Chart */}
                 <ActivityChart />
-
-                {/* 3. Active Pull Requests */}
                 <PullRequestList />
               </div>
 
-              {/* Tools & Status Sidebar Column (Right — 4/12) */}
-              <div className="xl:col-span-4 space-y-8 sm:space-y-10 lg:space-y-12 w-full min-w-0">
-                {/* 1. Quick Copilot Actions */}
+              {/* Right Column — 4/12 */}
+              <div className="xl:col-span-4 space-y-7 lg:space-y-8 min-w-0">
                 <QuickActions />
-
-                {/* 2. CI/CD Pipelines Status */}
                 <CIStatusPanel />
               </div>
-            </div>
+
+            </section>
           </div>
         </main>
       </div>
