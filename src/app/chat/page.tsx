@@ -9,7 +9,7 @@ interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
-  timestamp: Date;
+  timestamp: string;  // ISO string — avoids SSR/client Date mismatch
 }
 
 interface Conversation {
@@ -20,19 +20,21 @@ interface Conversation {
   messages: Message[];
 }
 
+const FIXED_TS = "2026-08-12T02:00:00.000Z";
+
 const INITIAL_CONVERSATIONS: Conversation[] = [
   {
     id: "1", title: "PR #142 Analysis", preview: "Summarize the key changes...", time: "2h ago",
     messages: [
-      { id: "m1", role: "user",      content: "Summarize the key changes in PR #142",       timestamp: new Date() },
-      { id: "m2", role: "assistant", content: "PR #142 adds a comprehensive user analytics dashboard featuring:\n\n• **Retention funnel charts** — Multi-step funnel visualization with drop-off percentages\n• **User segmentation** — Cohort analysis grouped by acquisition channel\n• **Real-time activity feed** — WebSocket-powered live event stream\n\nThe PR adds **342 lines** and removes **28 lines**, primarily in `src/components/analytics/` and a new `useRetention` hook.\n\n⚠️ One concern: the funnel component re-renders on every WebSocket message. Consider memoizing with `useMemo`.", timestamp: new Date() },
+      { id: "m1", role: "user",      content: "Summarize the key changes in PR #142",       timestamp: FIXED_TS },
+      { id: "m2", role: "assistant", content: "PR #142 adds a comprehensive user analytics dashboard featuring:\n\n• **Retention funnel charts** — Multi-step funnel visualization with drop-off percentages\n• **User segmentation** — Cohort analysis grouped by acquisition channel\n• **Real-time activity feed** — WebSocket-powered live event stream\n\nThe PR adds **342 lines** and removes **28 lines**, primarily in `src/components/analytics/` and a new `useRetention` hook.\n\n⚠️ One concern: the funnel component re-renders on every WebSocket message. Consider memoizing with `useMemo`.", timestamp: FIXED_TS },
     ],
   },
   {
     id: "2", title: "Daily Standup Draft", preview: "Generate my standup note...", time: "Yesterday",
     messages: [
-      { id: "m3", role: "user",      content: "Generate my standup note for today",          timestamp: new Date() },
-      { id: "m4", role: "assistant", content: "Here's your standup note based on recent activity:\n\n**Yesterday:**\n- Reviewed PR #156 (WebSocket memory leak fix) — left 3 review comments\n- Merged PR #167 (dark mode improvements)\n- Triaged 5 new issues from bug tracker\n\n**Today:**\n- Finish review on PR #142 (analytics dashboard)\n- Start OAuth 2.1 migration task (Issue #158)\n- Team sync at 2PM\n\n**Blockers:**\n- Waiting on design mockups for the notification center", timestamp: new Date() },
+      { id: "m3", role: "user",      content: "Generate my standup note for today",          timestamp: FIXED_TS },
+      { id: "m4", role: "assistant", content: "Here's your standup note based on recent activity:\n\n**Yesterday:**\n- Reviewed PR #156 (WebSocket memory leak fix) — left 3 review comments\n- Merged PR #167 (dark mode improvements)\n- Triaged 5 new issues from bug tracker\n\n**Today:**\n- Finish review on PR #142 (analytics dashboard)\n- Start OAuth 2.1 migration task (Issue #158)\n- Team sync at 2PM\n\n**Blockers:**\n- Waiting on design mockups for the notification center", timestamp: FIXED_TS },
     ],
   },
 ];
@@ -65,7 +67,7 @@ export default function ChatPage() {
 
   const sendMessage = async () => {
     if (!input.trim() || isTyping) return;
-    const userMsg: Message = { id: Date.now().toString(), role: "user", content: input, timestamp: new Date() };
+    const userMsg: Message = { id: Date.now().toString(), role: "user", content: input, timestamp: new Date().toISOString() };
     const newInput = input;
     setInput("");
 
@@ -80,7 +82,7 @@ export default function ChatPage() {
         id: (Date.now() + 1).toString(),
         role: "assistant",
         content: `I've analyzed your request: **"${newInput}"**\n\nThis is a simulated response from ${currentProvider.name} (${currentProvider.defaultModel}). In production, this would connect to the real API endpoint and return actual insights based on your GitHub data.\n\nTo enable real AI responses, add your API key in **Settings → AI Providers**.`,
-        timestamp: new Date(),
+        timestamp: new Date().toISOString(),
       };
       setConversations(prev => prev.map(c =>
         c.id === activeId ? { ...c, messages: [...c.messages, reply] } : c
@@ -237,8 +239,8 @@ export default function ChatPage() {
                       <p className="text-[13px] leading-relaxed whitespace-pre-wrap"
                         dangerouslySetInnerHTML={{ __html: msg.content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br/>") }}
                       />
-                      <p className="text-[10px] mt-2 opacity-50">
-                        {msg.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                      <p className="text-[10px] mt-2 opacity-50" suppressHydrationWarning>
+                        {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                       </p>
                     </div>
                   </div>
